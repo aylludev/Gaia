@@ -1,0 +1,91 @@
+{% extends 'pages/index2.html' %}
+
+{% load static %}
+  {% block head %}
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="{% static 'lib/fontawesome-5.15.3/css/all.min.css' %}">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{% static 'lib/adminlte-3.1.0/css/adminlte.min.css' %}">
+  <!-- Google Font: Source Sans Pro -->
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+  <!-- jQuery -->
+  <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
+    <!-- Sweetalert2 -->
+    <script src="{% static 'lib/sweetalert2-11.0.16/sweetalert2.all.min.js' %}"></script>
+  <!-- Bootstrap 4 -->
+  <script src="{% static 'lib/bootstrap-4.6.0/js/bootstrap.min.js' %}"></script>
+  <!-- AdminLTE App -->
+  <script src="{% static 'lib/adminlte-3.1.0/js/adminlte.min.js' %}"></script>
+  <!-- Jquery Confirm -->
+  <script src="{% static 'lib/jquery-confirm-3.3.4/jquery-confirm.min.js' %}"></script>
+  <!-- Functions -->
+  <script src="{% static 'js/functions.js' %}"></script>
+    <!-- My css -->
+  <link rel="stylesheet" href="{% static 'css/mystyle.css' %}">
+  <script src="{% static 'lib/highcharts-9.1.1/highcharts.js' %}"></script>
+  <script src="{% static 'lib/highcharts-9.1.1/modules/exporting.js' %}"></script>
+  <script src="{% static 'lib/highcharts-9.1.1/modules/export-data.js' %}"></script>
+  <script src="{% static 'lib/highcharts-9.1.1/modules/accessibility.js' %}"></script>
+  {% endblock %}
+{% block appcontent %}
+  <div class="container-fluid">
+    <!--begin::Row-->
+      <div class="row">
+<div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-warning">
+              <div class="inner">
+                <h3>{{ total_farms }}<sup style="font-size: 20px"> Finca(s)</sup></h3>
+
+                <p>Administrar Fincas</p>
+              </div>
+              <div class="icon">
+                <i class="fas fa-home"></i>
+              </div>
+              <a href={% url 'erp:farm_list' %} class="small-box-footer">Administar Fincas <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+        <div class="col-6">
+          <!-- Default box -->
+          <div class="card">
+            <div class="card-header card-green">
+              <h3 class="card-title">Title</h3>
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse" title="Collapse">
+                    <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
+                    <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
+                  </button>
+                  <button type="button" class="btn btn-tool" data-lte-toggle="card-remove" title="Remove">
+                    <i class="bi bi-x-lg"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">Start creating your amazing application!</div>
+            <!-- /.card-body -->
+              <div class="card-footer">Footer</div>
+              <!-- /.card-footer-->
+              </div>
+            <!-- /.card -->
+            </div>
+        </div>
+        <!--end::Row-->
+    </div>
+    <!--end::Container-->
+{% endblock %}
+{% block footer %}
+
+    <script>
+        {% if messages %}
+            var html = '<p>';
+            {% for message in messages %}
+                html += '{{ message }}<br>';
+            {% endfor %}
+            html += '</p>';
+            Swal.fire({
+                title: 'Error!',
+                html: html,
+                icon: 'error'
+            });
+        {% endif %}
+    </script>
+{% endblock %}
