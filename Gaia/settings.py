@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'crum.CurrentRequestUserMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -107,7 +108,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es-co'
 
 TIME_ZONE = 'UTC'
 
@@ -132,13 +133,11 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static")
 ]
 
-LOGIN_REDIRECT_URL = '/erp/dashboard/'
+LOGIN_REDIRECT_URL = '/dashboard'
 
-LOGOUT_REDIRECT_URL = '/login/'
+LOGOUT_REDIRECT_URL = '/login'
 
-LOGIN_URL = '/login/'
-
-LOGIN_REDIRECT_URL = "/core/dashboard/"  # Cambia esto según tu aplicación
+LOGIN_URL = '/hades/login'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
@@ -147,6 +146,3 @@ MEDIA_URL = '/media/'
 # Custom user model
 
 AUTH_USER_MODEL = 'hades.User'
-
-
-

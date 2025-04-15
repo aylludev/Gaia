@@ -9,7 +9,7 @@ from django.urls import reverse_lazy
 from django.http import JsonResponse
 
 class LoginFormView(LoginView):
-    template_name = "users/login.html"
+    template_name = "user/login.html"
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
@@ -22,39 +22,8 @@ class LoginFormView(LoginView):
         return context
 
 class LogoutView(RedirectView):
-    pattern_name = 'login'
+    pattern_name = 'hades:login'
 
     def dispatch(self, request, *args, **kwargs):
         logout(request)
         return super().dispatch(request, *args, **kwargs)
-
-class UserCreateView(CreateView):
-    model = User
-    form_class = UserForm
-    template_name = 'register.html'
-    success_url = reverse_lazy('accounts/login')
-    url_redirect = success_url
-
-    def dispatch(self, request, *args, **kwargs):
-        return super().dispatch(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        data = {}
-        try:
-            action = request.POST['action']
-            if action == 'add':
-                form = self.get_form()
-                data = form.save()
-            else:
-                data['error'] = 'No ha ingresado a ninguna opción'
-        except Exception as e:
-            data['error'] = str(e)
-        return JsonResponse(data)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Registro Usuarios'
-        context['entity'] = 'Usuarios'
-        context['list_url'] = self.success_url
-        context['action'] = 'add'
-        return context

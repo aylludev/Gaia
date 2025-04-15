@@ -1,0 +1,27 @@
+{% extends "list.html" %}
+{% load static %}
+{% block head_list %}
+    <script src="{% static 'user/js/list.js' %}"></script>
+
+{% endblock head_list %}
+
+{% block columns %}
+    <tr>
+        <th scope="col" style="width: 10%">Id</th>
+        <th scope="col" style="width: 15%">Nombre</th>
+        <th scope="col" style="width: 15%">Apellido</th>
+        <th scope="col" style="width: 15%">Username</th>        
+        <th scope="col" style="width: 10%">Grupos</th>
+        <th scope="col" style="width: 15%">Fecha de Registro</th>
+        <th scope="col" style="width: 20%">Imagen</th>
+        <th scope="col" style="width: 10%">Acciones</th>
+
+{% endblock columns %}
+
+{% block rows %}
+
+{% endblock rows %}
+
+{% block javascript %}
+
+{% endblock javascript %}

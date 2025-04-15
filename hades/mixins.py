@@ -1,10 +1,10 @@
 from datetime import datetime
-from django.contrib.auth.models import Group
 from crum import get_current_request
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
+from django.contrib.auth.models import Group
 
 class IsSuperuserMixin:
     def dispatch(self, request, *args, **kwargs):
@@ -18,42 +18,33 @@ class IsSuperuserMixin:
         return context
 
 class ValidatePermissionsMixin:
-    permission_required = ''
-    url_redirect = None
+    permission_required = ''  # Puede ser 'codename' o ['codename1', 'codename2']
+    url_redirect = None  # URL a redirigir si no tiene permiso
 
     def get_perms(self):
-        perms=[]
-        if isinstance(self.permission_required, list):
+        perms = []
+        if isinstance(self.permission_required, str):
             perms.append(self.permission_required)
         else:
             perms = list(self.permission_required)
         return perms
-    
+
     def get_url_redirect(self):
-        if self.url_redirect is None:
-            return reverse_lazy('core:dashboard')
-        return self.url_redirect
+        return self.url_redirect or reverse_lazy('dashboard')
 
     def dispatch(self, request, *args, **kwargs):
-        request = get_current_request()
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        if 'group' in request.session:
-            group_data = request.session['group']
-
-            # Verificar si es un id y convertirlo a un objeto Group
-            if isinstance(group_data, int):
-                group = Group.objects.get(id=group_data)
-            elif isinstance(group_data, dict):
-                group = Group.objects.get(id=group_data['id'])
-            else:
-                group = group_data
-
-            perms = self.get_perms()
-            for p in perms:
-                if not group.permissions.filter(codename=p).exists():
-                    messages.error(request, 'No tienes permisos para acceder a esta sección.')
-                    return HttpResponseRedirect(self.get_url_redirect())
+        
+        group_data = request.session.get('group')
+        if group_data:
+            group_id = group_data[0]['id']
+            group = Group.objects.filter(id=group_id).first()
+            if group:
+                for perm in self.get_perms():
+                    if not group.permissions.filter(codename=perm).exists():
+                        messages.error(request, 'No tiene permiso para ingresar a este módulo')
+                        return HttpResponseRedirect(self.get_url_redirect())
                 return super().dispatch(request, *args, **kwargs)
-            messages.error(request, 'No tienes permisos para acceder a esta sección.')
-            return HttpResponseRedirect(self.get_url_redirect())
+        messages.error(request, 'Debe tener un grupo asignado en sesión')
+        return HttpResponseRedirect(self.get_url_redirect())

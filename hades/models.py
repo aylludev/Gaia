@@ -15,22 +15,21 @@ class User(AbstractUser):
         return'{}{}'.format(STATIC_URL, 'img/user.png')
     
     def to_json(self):
-        item = model_to_dict(self)
+        item = model_to_dict(self, exclude=['password', 'user_permissions'])
         item['image'] = self.get_image()
-        item['is_superuser'] = self.is_superuser
-        item['is_staff'] = self.is_staff
-        item['is_active'] = self.is_active
         item['last_login'] = self.last_login.strftime('%Y-%m-%d %H:%M:%S') if self.last_login else None
         item['date_joined'] = self.date_joined.strftime('%Y-%m-%d %H:%M:%S')
-        item['groups'] = [{'id': group.id, 'name': group.name} for group in self.groups.all()]
+        item['groups'] = [{'id':g.id, 'name':g.name} for g in self.groups.all()]
         return item
     
     def get_group_sessions(self):
         try:
             request = get_current_request()
             groups = self.groups.all()
-            if groups.exists:
-                if groups not in request.session:
-                    request.session['group'] = [{'id': groups[0].id, 'name': groups[0].name}]
-        except:
-            pass 
+            if groups.exists():
+                if 'group' not in request.session:
+                    group = groups.first()
+                    request.session['group'] = [{'id': group.id, 'name': group.name}]
+        except Exception as e:
+            print(f"Error en get_group_sessions: {e}")
+            pass
