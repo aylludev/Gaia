@@ -1,0 +1,31 @@
+{% extends 'list.html' %}
+{% load static %}
+{% block head_list %}
+    <script src="{% static 'product/js/list.js' %}"></script>
+{% endblock %}
+
+{% block columns %}
+    <tr>
+        <th scope="col" style="width: 10%;">Nro</th>
+        <th scope="col" style="width: 20%;">Nombre</th>
+        <th scope="col" style="width: 15%;">Categoria</th>
+        <th scope="col" style="width: 10%;">Precio de Compra</th>
+        <th scope="col" style="width: 10%;">Stock</th>
+        <th scope="col" style="width: 15%;">Precio</th>
+        <th scope="col" style="width: 20%;">Opciones</th>
+    </tr>
+{% endblock %}
+
+{% block buttons_list %}
+    <a href="{{ create_url }}" class="btn btn-primary btn-flat btnTest"> <i class="fas fa-plus"></i> Nuevo registro </a>
+    <a href="{{ list_url }}" class="btn btn-success btn-flat"> <i class="fas fa-sync"></i> Actualizar </a>
+    <a href= {% url 'artemisa:product_pdf' %} class="btn btn-warning btn-flat"> <i class="fas fa-file-pdf"></i> Generar PDF </a>
+{% endblock buttons_list %}
+
+{% block javascript %}
+
+{% endblock javascript%}
+
+{% block script %}
+
+{% endblock script %}

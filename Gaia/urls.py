@@ -10,6 +10,7 @@ urlpatterns = [
     path('', IndexView.as_view(), name='homepage'),
     path('dashboard', DashboardView.as_view(), name='dashboard'),
     path('hades/', include('hades.urls', namespace='hades')),
+    path('artemisa/', include('artemisa.urls', namespace='artemisa')),
 ]
 
 

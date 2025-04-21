@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        * {
+            color: black;
+        }
+
+        body {
+            font-family: "Roboto", "Lucida Grande", Verdana, Arial, sans-serif;
+            padding: 0;
+            font-size: 13px;
+            margin: 0;
+            color: black;
+        }
+        table thead tr th td{
+            border: 1px solid black !important;
+            text-align: center;
+        }
+
+        table tbody tr td {
+            border: 1px solid black !important;
+            padding: 3px;
+            font-weight: normal;
+            
+        }
+
+    </style>
+</head>
+<body>
+  <table style="width: 100%;">
+    <thead>
+            <td rowspan="4" style="border: 1px solid black; width:7%;" > <img src="{% static 'img/img-minimal.png' %}" class="img-fluid d-block img-logo"> </th>
+            <tr>
+                <td colspan="2" style="border: 1px solid black; width: 75%;" class="text-center" ><b>SISTEMA DE GESTIÓN DE DOCUMENTOS</b></td>
+                <td style="border: 1px solid black;" ><b>Versión:</b> 01</td>
+            </tr>
+            <tr>
+                <td colspan="2" style="border: 1px solid black;" class="text-center"> INVENTARIO - {{comp.name}}</td>
+                <td style="border: 1px solid black;" ><b>Fecha:</b> {{date}}</td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid black;"><b> Elaborado por:</b> Sistema GAIA </td>
+                <td style="border: 1px solid black;"><b> Aprobado por:</b> {{ comp.vendor }} </td>
+                <td style="border: 1px solid black;" ><b>Página:</b> 01</td>
+            </tr>
+        </thead>
+    </table>
+  <br>
+    <table style="width: 100%;">
+        <tbody>
+        <tr style="border: 1px solid black;">
+            <td style="width: 5%;"  class="text-center"><b> Código </b></td>
+            <td style="width: 25%;" class="text-center"><b> Producto </b></td>
+            <td style="width: 10%;" class="text-center"><b> Cantidad </b></td>
+            <td style="width: 15%;" class="text-center"><b> P.Unitario de Compra </b></td>
+            <td style="width: 15%;" class="text-center" class="text-right"><b> Subtotal </b></th>
+        </tr>
+        </tbody>
+        <tbody>
+            {% for p in products %}
+            <tr>
+                <td>{{ p.code }}</td>
+                <td>{{ p.name }}</td>
+                <td>{{ p.stock }}</td>
+                <td>${{ p.purchase_price}}</td>
+                <td>${{ p.value }}</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="4" style="text-align: right;"><b>Total:</b></td>
+                <td>${{ total }}</td>
+        </tbody>
+      </table>
+</div>
+</body>
+</html>

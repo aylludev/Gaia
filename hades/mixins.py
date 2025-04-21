@@ -17,7 +17,7 @@ class IsSuperuserMixin:
         context['date_now'] = datetime.now()
         return context
 
-class ValidatePermissionsMixin:
+class ValidatePermissionRequiredMixin:
     permission_required = ''  # Puede ser 'codename' o ['codename1', 'codename2']
     url_redirect = None  # URL a redirigir si no tiene permiso
 

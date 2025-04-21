@@ -1,9 +1,9 @@
 {% extends 'dashboard.html' %}
 {% load widget_tweaks %}
-{% block content %}
+{% block app-content %}
     <form method="post" action=".">
         <div class="card card-primary">
-            <div class="card-header">
+            <div class="card-header text-bg-success">
                 <h3 class="card-title">
                     <i class="fas fa-trash"></i>
                     {{ title }}
@@ -40,4 +40,7 @@
             </div>
         </div>
     </form>
+{% block script %}
+
+{% endblock script %}
 {% endblock %}

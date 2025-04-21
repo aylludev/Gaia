@@ -3,15 +3,14 @@
 {% load static %}
 {% block head %}
     {% block head_form %}
-    <script src="{% static 'lib/moment-2.25.3/moment-with-locales.js' %}"></script>
-    <script src="{% static 'lib/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.js' %}"></script>
-    <link href="{% static 'lib/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.css' %}" rel="stylesheet"/>
     {% endblock %}
 {% endblock %}
 {% block app-content %}
+<div class="container-fluid">
+
     <form method="post" action="." enctype="multipart/form-data">
-        <div class="card card-primary">
-            <div class="card-header">
+        <div class="card">
+            <div class="card-header text-bg-success">
                 <h3 class="card-title">
                     {% if action == 'add' %}
                         <i class="fas fa-plus"></i>
@@ -55,7 +54,11 @@
             </div>
         </div>
     </form>
-    <script>
+</div>
+{% endblock app-content %}
+
+{% block script %}
+<script>
 
 $(function () {
     $('#date_joined').datetimepicker({
@@ -93,4 +96,5 @@ $(function () {
             });
         });
     </script>
-{% endblock %}
+{% endblock script %}
+

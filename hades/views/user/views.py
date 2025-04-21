@@ -5,11 +5,12 @@ from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, TemplateView, FormView, View
 from hades.models import User
 from hades.forms import UserForm, UserProfileForm
-from hades.mixins import ValidatePermissionsMixin
+from hades.mixins import ValidatePermissionRequiredMixin
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import Group
+from datetime import datetime
 
-class UserListView(LoginRequiredMixin, ValidatePermissionsMixin, ListView):
+class UserListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, ListView):
     model = User
     template_name = 'user/list.html'
     permission_required = 'view_user'
@@ -40,12 +41,12 @@ class UserListView(LoginRequiredMixin, ValidatePermissionsMixin, ListView):
         context['list_url'] = reverse_lazy('hades:user_list')
         return context
     
-class UserCreateView(LoginRequiredMixin, ValidatePermissionsMixin, CreateView):
+class UserCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, CreateView):
     model = User
     form_class = UserForm
     template_name = 'user/create.html'
     success_url = reverse_lazy('hades:user_list')
-    permission_required = 'hades.add_user'
+    permission_required = 'add_user'
     url_redirect = success_url
 
     def dispatch(self, request, *args, **kwargs):
@@ -57,6 +58,7 @@ class UserCreateView(LoginRequiredMixin, ValidatePermissionsMixin, CreateView):
             action = request.POST['action']
             if action == 'add':
                 form = self.get_form()
+                form.instance.created_by = request.user
                 data = form.save()
             else:
                 data['error'] = 'No ha ingresado a ninguna opción'
@@ -72,12 +74,12 @@ class UserCreateView(LoginRequiredMixin, ValidatePermissionsMixin, CreateView):
         context['action'] = 'add'
         return context
 
-class UserUpdateView(LoginRequiredMixin, ValidatePermissionsMixin, UpdateView):
+class UserUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, UpdateView):
     model = User
     form_class = UserForm
     template_name = 'user/create.html'
     success_url = reverse_lazy('hades:user_list')
-    permission_required = 'hades.change_user'
+    permission_required = 'change_user'
     url_redirect = success_url
 
     def dispatch(self, request, *args, **kwargs):
@@ -90,6 +92,8 @@ class UserUpdateView(LoginRequiredMixin, ValidatePermissionsMixin, UpdateView):
             action = request.POST['action']
             if action == 'edit':
                 form = self.get_form()
+                form.instance.updated_by = request.user
+                form.instance.update_ad = datetime.now()
                 data = form.save()
             else:
                 data['error'] = 'No ha ingresado a ninguna opción'
@@ -124,6 +128,8 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
             action = request.POST['action']
             if action == 'edit':
                 form = self.get_form()
+                form.instance.updated_by = request.user
+                form.instance.update_ad = datetime.now()
                 data = form.save()
             else:
                 data['error'] = 'No ha ingresado a ninguna opción'
