@@ -1,0 +1,232 @@
+{% extends 'list.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block head_list %}
+    <link href="{% static 'lib/jquery-ui-1.12.1/jquery-ui.min.css' %}" rel="stylesheet"/>
+    <script src="{% static 'lib/jquery-ui-1.12.1/jquery-ui.min.js' %}"></script>
+    <link href="{% static 'lib/select2-4.1.0/css/select2.min.css' %}" rel="stylesheet"/>
+    <link href="{% static 'lib/select2-4.1.0/css/select2-bootstrap4.min.css' %}" rel="stylesheet"/>
+    <script src="{% static 'lib/select2-4.1.0/js/select2.min.js' %}"></script>
+    <script src="{% static 'lib/select2-4.1.0/js/i18n/es.js' %}"></script>
+    <link href="{% static 'lib/bootstrap-touchspin-4.3.0/jquery.bootstrap-touchspin.css' %}" rel="stylesheet"/>
+    <script src="{% static 'lib/bootstrap-touchspin-4.3.0/jquery.bootstrap-touchspin.js' %}"></script>
+    <script src="{% static 'sale/js/form.js' %}"></script>
+    <script src="{% static 'js/functions.js' %}"></script>
+{% endblock %}
+
+{% block app-content %}
+    <form id="frmSale" method="post">
+        <div class="card card-primary">
+            <div class="card-header text-bg-success">
+                <h3 class="card-title">
+                    {% if action == 'add' %}
+                        <i class="fas fa-plus"></i>
+                    {% else %}
+                        <i class="fas fa-edit"></i>
+                    {% endif %}
+                    {{ title }}
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-9">
+                        <div class="card">
+                            <div class="card-header bg-primary">
+                                <h3 class="card-title"><i class="fas fa-boxes"></i> Detalle de productos</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>Buscador de productos:</label>
+                                    <div class="input-group">
+                                        <select class="form-control select2" name="search"></select>
+{#                                        <input type="text" class="form-control" autocomplete="off"#}
+{#                                               placeholder="Ingrese una descripción" maxlength="50" name="search">#}
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary dropdown-toggle" type="button"
+                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Opciones
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item btnSearchProducts">
+                                                    <i class="fas fa-search"></i> Buscar productos
+                                                </a>
+                                                <a class="dropdown-item btnClearSearch">
+                                                    <i class="fas fa-times"></i> Limpiar búsqueda
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <button type="button" class="btn btn-danger btn-xs btn-flat btnRemoveAll">
+                                    <i class="fas fa-trash"></i> Eliminar todos mis items
+                                </button>
+                                <hr>
+                                <table class="table table-bordered" id="tblProducts">
+                                    <thead>
+                                    <tr style="width:100%;">
+                                        <th>Eliminar</th>
+                                        <th>Producto</th>
+                                        <th>Stock</th>
+                                        <th>Precio</th>
+                                        <th style="width:15%;">Cantidad</th>
+                                        <th style="width:15%;" >Desc. al producto (%)</th>
+                                        <th>Valor Bruto</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                                </div>
+                            </div>
+                                <div class="form-group">
+                                    <label>Notas: </label>
+                                    {{ form.observation }}
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title"><i class="fas fa-shopping-cart"></i> Datos de la factura</h3>
+                            </div>
+                            <div class="card-body">
+                                <input type="hidden" name="action" value="{{ action }}">
+                                <div class="form-group">
+                                    <label>Fecha de venta:</label>
+                                    {{ form.date_joined }}
+                                </div>
+                                <div class="form-group">
+                                    <label>Cliente:</label>
+                                    <div class="input-group">
+                                        {{ form.cli }}
+                                        <div class="input-group-append">
+                                            <button class="btn btn-success btn-flat btnAddClient" type="button">
+                                                <i class="fas fa-user-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="form-group">
+                                    <label>Subtotal:</label>
+                                    {{ form.subtotal }}
+                                </div>
+                                <div class="form-group">
+                                    <label>IVA:</label>
+                                    {{ form.iva }}
+                                </div>
+                                <div class="form-group">
+                                    <label>IVA Calculado:</label>
+                                    <input type="text" class="form-control" readonly name="ivacalc" value="0.00">
+                                </div>
+                                <div class="form-group">
+                                    <label>Descuento a la compra:</label>
+                                    <input type="text" name="discountall" class="form-control" value="{{ form.discountall.value }}" oninput="formatCurrency(this)">
+                                </div>
+                                <div class="form-group">
+                                    <label>Total a pagar:</label>
+                                    {{ form.total }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header bg-warning">
+                                <h3 class="card-title"><i class="fas fa-file-invoice"></i> Acuerdo de pago </h3>
+                            </div>
+                            <div class="card-body">
+                              <div id="type_payment" class="form-group">
+                                <label>Tipo de pago:</label>
+                                {{ form.type_payment }}
+                              </div>
+                                <div id="down_payment" class="form-group">
+                                  <label>Valor de la cuota inicial:</label>
+                                  <input type="text" id="down_payment_input" name="down_payment" class="form-control" value="{{ form.down_payment.value|default:0 }}" oninput="formatCurrency(this)">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="submit" class="btn btn-primary btn-flat">
+                    <i class="fas fa-save"></i> Guardar registro
+                </button>
+                <a href="{{ list_url }}" class="btn btn-danger btn-flat">
+                    <i class="fas fa-times"></i> Cancelar
+                </a>
+            </div>
+        </div>
+    </form>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModalClient" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <form id="frmClient" enctype="multipart/form-data" method="post">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">
+                            <b><i class="fas fa-user-plus"></i> Nuevo registro de un cliente</b>
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        {% for field in frmClient.visible_fields %}
+                            <div class="form-group">
+                                <label for="email">{{ field.label }}:</label>
+                                {{ field|add_class:'form-control'|attr:'autocomplete:off' }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary btn-block btn-flat">
+                            <i class="fas fa-save"></i> Guardar Cliente
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal fade" id="myModalSearchProducts" tabindex="-1" role="dialog"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        <b><i class="fas fa-search"></i> Búsqueda de Productos</b>
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered table-hover" id="tblSearchProducts">
+                        <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Imagen</th>
+                            <th>Stock</th>
+                            <th>Precio Unitario</th>
+                            <th>Opciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  <script>
+        vents.items.products = {{ det|safe }};
+        // Se removio el vents.list(); para calcular bien el iva en el editar. Revisar al final del archivo form.js se lo puso.$(document).ready(function() {
+    function formatCurrency(input) {
+      let value = input.value.replace(/\D/g, ''); // Eliminar todo lo que no sea número
+      value = new Intl.NumberFormat('es-CO').format(value); // Formato COP sin símbolo
+      input.value = value;
+    }   
+  </script>
+{% endblock %}

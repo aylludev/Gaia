@@ -8,7 +8,7 @@ from hades.models import BaseModel
 class Client(BaseModel):
     names = models.CharField(max_length=150, verbose_name='Nombres')
     last_names = models.CharField(max_length=150, verbose_name='Apellidos')
-    dni = models.CharField(max_length=10, unique=True, verbose_name='Cedula')
+    dni = models.CharField(max_length=10, unique=True, null=True, blank=True, verbose_name='Cedula')
     email = models.EmailField(max_length=254, null=True, blank=True, unique=True, verbose_name='Correo electrónico')
     address = models.CharField(max_length=150, null=True, blank=True, verbose_name='Dirección')
     city = models.CharField(max_length=150, null=True, blank=True, verbose_name='Ciudad')
@@ -22,7 +22,7 @@ class Client(BaseModel):
     def get_full_name(self):
         return '{} {} / {}'.format(self.names, self.last_names, self.dni)
 
-    def toJSON(self):
+    def to_json(self):
         item = model_to_dict(self)
         item['gender'] = {'id': self.gender, 'name': self.get_gender_display()}
         item['full_name'] = self.get_full_name()
@@ -52,7 +52,7 @@ class Sale(BaseModel):
     def __str__(self):
         return self.cli.names
 
-    def toJSON(self):
+    def to_json(self):
         item = model_to_dict(self)
         item['cli'] = self.cli.to_json()
         item['subtotal'] = format(self.subtotal, '.2f')

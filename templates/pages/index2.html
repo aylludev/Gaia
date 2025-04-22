@@ -270,7 +270,7 @@
         <nav class="mt-2">
           <!--begin::Sidebar Menu-->
           <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu" data-accordion="false">
-            <li class="nav-item {% if request.resolver_match.url_name == 'dashboard' %} active menu-open {% endif %}">
+            <li class="nav-item {% if '/dashboard' in request.path %} active menu-open {% endif %}">
               <a href="#" class="nav-link">
                 <i class="nav-icon bi bi-speedometer"></i>
                 <p>
@@ -299,8 +299,8 @@
                 </li>
               </ul>
             </li>
-            <li class="nav-item menu">
-              <a href="#" class="nav-link bg-purple">
+            <li class="nav-item menu {% if '/artemisa/' in request.path %} active menu-open {% endif %}">
+              <a href={% url 'artemisa' %} class="nav-link bg-purple">
                 <i class="nav-icon bi bi-clipboard-fill"></i>
                 <p>
                   ARTEMISA - ERP
@@ -309,33 +309,62 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href={% url 'artemisa:provider_list' %} class="nav-link {% if request.resolver_match.url_name == 'artemisa:category_list' %}active bg-purple {% endif %}">
+                  <a href={% url 'artemisa:provider_list' %} class="nav-link {% if request.resolver_match.url_name == 'provider_list' %} active {% endif %}">
+                    <i class="nav-icon bi bi-circle"></i>
+                    <p>Proveedores</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href={% url 'artemisa:category_list' %} class="nav-link {% if request.resolver_match.url_name == 'category_list' %} active {% endif %}">
                     <i class="nav-icon bi bi-circle"></i>
                     <p>Categorias</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href={% url 'artemisa:category_list' %} class="nav-link {% if request.resolver_match.url_name == 'artemisa:category_list' %}active bg-purple {% endif %}">
-                    <i class="nav-icon bi bi-circle"></i>
-                    <p>Categorias</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href= {% url 'artemisa:product_list' %} class="nav-link">
+                  <a href= {% url 'artemisa:product_list' %} class="nav-link {% if request.resolver_match.url_name == 'product_list' %} active {% endif %}">
                     <i class="nav-icon bi bi-circle"></i>
                     <p>Productos</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href={% url 'artemisa:unit_list' %} class="nav-link">
+                  <a href={% url 'artemisa:unit_list' %} class="nav-link {% if request.resolver_match.url_name == 'unit_list' %} active {% endif %}">
                     <i class="nav-icon bi bi-circle"></i>
                     <p>Unidad de medida</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href={% url 'artemisa:purchase_list' %} class="nav-link">
+                  <a href={% url 'artemisa:purchase_list' %} class="nav-link {% if request.resolver_match.url_name == 'purchase_list' %} active {% endif %}">
                     <i class="nav-icon bi bi-circle"></i>
                     <p>Compras</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item {% if '/ilitia/' in request.path %} active menu-open {% endif %}">
+              <a href="#" class="nav-link bg-info">
+                <i class="nav-icon bi bi-speedometer"></i>
+                <p>
+                  Ilitía - CRM
+                  <i class="nav-arrow bi bi-chevron-right"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href={% url 'ilitia:client_list' %} class="nav-link {% if request.resolver_match.url_name == 'client_list' %} active {% endif %}">
+                    <i class="nav-icon bi bi-circle"></i>
+                    <p>Clientes</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href={% url 'ilitia:sale_list'  %} class="nav-link">
+                    <i class="nav-icon bi bi-circle"></i>
+                    <p>Ventas</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="./index3.html" class="nav-link">
+                    <i class="nav-icon bi bi-circle"></i>
+                    <p>Dashboard v3</p>
                   </a>
                 </li>
               </ul>
@@ -558,7 +587,7 @@
             </li>
             <li class="nav-header">HADES</li>
             <li class="nav-item">
-              <a href="{% url 'hades:user_list' %}" class="nav-link {% if request.resolver_match.url_name == 'user_list' %}active bg-danger {% endif %}">
+              <a href="{% url 'hades:user_list' %}" class="nav-link {% if request.resolver_match.url_name == 'user_list' %} active bg-danger {% endif %}">
                 <i class="nav-icon bi bi-person"></i>
                 <p>Usuarios</p>
               </a>
