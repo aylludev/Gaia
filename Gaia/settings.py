@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'hades',
     'artemisa',
     'ilitia',
+    'hermes',
 ]
 
 MIDDLEWARE = [

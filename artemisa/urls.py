@@ -35,5 +35,4 @@ urlpatterns = [
     path('purchase/update/<int:pk>/', PurchaseUpdateView.as_view(), name='purchase_update'),
     path('purchase/delete/<int:pk>/', PurchaseDeleteView.as_view(), name='purchase_delete'),
     path('purchase/detail/<int:pk>/', PurchaseDetailView.as_view(), name='purchase_detail'),
-
 ]

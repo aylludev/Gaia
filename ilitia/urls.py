@@ -1,6 +1,7 @@
 from django.urls import path
 from ilitia.views.client.views import *
 from ilitia.views.sale.views import *
+
 app_name = 'ilitia'
 
 urlpatterns = [

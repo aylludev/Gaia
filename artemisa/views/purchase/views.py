@@ -1,11 +1,10 @@
 import json
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction
-from django.db.models import Q
-from django.http import HttpResponse
-from django.http import JsonResponse, HttpResponseRedirect
+from django.db.models import Q, Sum, F, DecimalField
+from django.http import JsonResponse
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView, DeleteView, DetailView, View, UpdateView
+from django.views.generic import CreateView, ListView, DeleteView, DetailView, UpdateView
 from artemisa.forms import PurchaseForm, ProviderForm
 from hades.mixins import ValidatePermissionRequiredMixin
 from artemisa.models import Purchase, Product, PurchaseDetail, Provider
@@ -249,7 +248,7 @@ class PurchaseUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Up
 
 class PurchaseDeleteView(LoginRequiredMixin, ValidatePermissionRequiredMixin, DeleteView):
     model = Purchase
-    template_name = 'purchase/delete.html'
+    template_name = 'delete.html'
     success_url = reverse_lazy('artemisa:purchase_list')
     permission_required = 'delete_purchase'
     url_redirect = success_url
@@ -283,10 +282,30 @@ class PurchaseDetailView(LoginRequiredMixin, ValidatePermissionRequiredMixin, De
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         purchase = self.get_object()
+
+        # Obtener los detalles de la compra
+        details = purchase.purchasedetail_set.all().values(
+            'product__name', 'price', 'cant', 'discount', 'subtotal'
+        )
+
+        # Calcular el total del descuento
+        total_discount = purchase.purchasedetail_set.aggregate(
+            total_discount=Sum(F('discount') * F('price') * F('cant') / 100, output_field=DecimalField())
+        )['total_discount'] or 0  # Si no hay descuentos, devolver 0
+
+        # Agregar datos al contexto
         context['purchase'] = purchase
-        context['details'] = purchase.purchasedetail_set.all().values('product__name', 'price', 'cant', 'discount', 'subtotal')
+        context['details'] = details
+        context['total_discount'] = total_discount  # Enviar el total del descuento al template
         context['title'] = 'Detalle de la Compra'
-        context['comp'] = {'name': 'AGROINSUMOS MERKO SUR', 'nit': '1085928681-1', 'address': 'La Victoria', 'city': 'Ipiales', 'vendor': 'Alexander Palles', 'tel': '3156692427'}
+        context['comp'] = {
+            'name': 'AGROINSUMOS MERKO SUR',
+            'nit': '1085928681-1',
+            'address': 'La Victoria',
+            'city': 'Ipiales',
+            'vendor': 'Alexander Palles',
+            'tel': '3156692427',
+        }
         context['entity'] = 'Compra'
         context['list_url'] = self.url_redirect
         context['action'] = 'detail'

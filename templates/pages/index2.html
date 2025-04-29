@@ -344,7 +344,7 @@
               <a href="#" class="nav-link bg-info">
                 <i class="nav-icon bi bi-speedometer"></i>
                 <p>
-                  Ilitía - CRM
+                  ILITÍA - CRM
                   <i class="nav-arrow bi bi-chevron-right"></i>
                 </p>
               </a>
@@ -361,20 +361,32 @@
                     <p>Ventas</p>
                   </a>
                 </li>
+              </ul>
+            </li>
+            <li class="nav-item {% if '/hermes/' in request.path %} active menu-open {% endif %}">
+              <a href="#" class="nav-link bg-warning">
+                <i class="nav-icon bi bi-speedometer"></i>
+                <p>
+                  HERMES - FINANZAS
+                  <i class="nav-arrow bi bi-chevron-right"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="./index3.html" class="nav-link">
+                  <a href={% url 'hermes:purchasepayment_list' %} class="nav-link {% if request.resolver_match.url_name == 'account_list' %} active {% endif %}">
                     <i class="nav-icon bi bi-circle"></i>
-                    <p>Dashboard v3</p>
+                    <p>Cuentas por Pagar</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href={% url 'ilitia:sale_list'  %} class="nav-link">
+                    <i class="nav-icon bi bi-circle"></i>
+                    <p>Ventas</p>
                   </a>
                 </li>
               </ul>
             </li>
-            <li class="nav-item menu-open">
-              <a href={% url 'artemisa:category_list' %} class="nav-link">
-                <i class="nav-icon bi bi-palette"></i>
-                <p>Artemisa</p>
-              </a>
-            </li>
+
             <li class="nav-item">
               <a href="#" class="nav-link">
                 <i class="nav-icon bi bi-box-seam-fill"></i>

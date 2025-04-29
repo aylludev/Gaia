@@ -1,6 +1,7 @@
 {% extends "list.html" %}
 
 {% block app-content %}
+{% load humanize %}
 
 <div class="row">
     <div class="col-12">
@@ -60,9 +61,9 @@
             <table class="table table-striped">
               <thead>
               <tr>
-                <th>Qty</th>
-                <th>Product</th>
-                <th>Description</th>
+                <th>Cantidad</th>
+                <th>Producto</th>
+                <th>Valor unitario</th>
                 <th>Descuento %</th>
                 <th>Subtotal</th>
               </tr>
@@ -87,7 +88,7 @@
         <div class="row">
           <!-- accepted payments column -->
           <div class="col-5">
-            <p class="lead">Acuerdo de Pago:</p>
+            <p class="lead">Acuerdo de Pago: {{ purchase.type_payment }} </p>
             <div class="table-responsive">
                 <table class="table">
                   <tbody><tr>
@@ -118,19 +119,19 @@
               <table class="table">
                 <tbody><tr>
                   <th style="width:50%">Subtotal:</th>
-                  <td>$ {{ purchase.subtotal }}</td>
+                  <td>$ {{ purchase.subtotal|floatformat:2|intcomma }}</td>
                 </tr>
                 <tr>
                   <th>IVA</th>
-                  <td>$ {{ purchase.iva }}</td>
+                  <td>$ {{ purchase.iva|floatformat:2|intcomma }}</td>
                 </tr>
                 <tr>
                   <th>Descuento:</th>
-                  <td>$ {{ purchase.discount_total }}</td>
+                  <td>$ {{ total_discount|floatformat:2|intcomma }}</td>
                 </tr>
                 <tr>
                   <th>Total:</th>
-                  <td>$ {{ purchase.total }}</td>
+                  <td>$ {{ purchase.total|floatformat:2|intcomma }}</td>
                 </tr>
                 </tbody>
             </table>
@@ -143,10 +144,7 @@
         <!-- this row will not appear when printing -->
         <div class="row no-print">
           <div class="col-12">
-            <a href= {% url 'artemisa:purchase_list' %} type="button" class="btn btn-warning float-right"><i class="far fa-credit-card"></i> Volver </a>
-            <button type="button" class="btn btn-primary float-right" style="margin-right: 5px;">
-              <i class="fas fa-download"></i> Generate PDF
-            </button>
+            <a href= {% url 'artemisa:purchase_list' %} type="button" class="btn btn-success float-right"><i class="far fa-credit-card"></i> Volver </a>
           </div>
         </div>
       </div>

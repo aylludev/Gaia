@@ -1,0 +1,145 @@
+{% extends "list.html" %}
+
+{% block app-content %}
+{% load humanize %}
+
+<div class="row">
+    <div class="col-12">
+      <!-- Main content -->
+      <div class="invoice p-3 mb-3">
+        <!-- title row -->
+        <div class="row">
+          <div class="col-12">
+            <h4>
+              <i class="fas fa-globe"></i> {{ comp.name}}
+              <small class="float-right">Fecha: {{ purchase.date }}</small>
+            </h4>
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- info row -->
+        <div class="row invoice-info">
+          <div class="col-sm-4 invoice-col">
+            Proveedor
+            <address>
+              <strong>{{ purchase.provider.names }}</strong><br>
+              NIT: {{ purchase.provider.dni }}<br>
+              Dirección: {{ purchase.provider.address }}<br>
+              Teléfono: {{ purchase.provider.cellphone }}<br>
+              Email: {{ purchase.provider.email}}
+            </address>
+          </div>
+          <!-- /.col -->
+          <div class="col-sm-4 invoice-col">
+            Cliente
+            <address>
+              <strong>{{ comp.name }}</strong><br>
+              NIT: {{ comp.nit }}<br>
+              Dirección: {{ comp.address }} - {{ comp.city }} <br>
+              Phone: {{ comp.tel }}<br>
+              Administrador: {{ comp.vendor }}
+            </address>
+          </div>
+          <!-- /.col -->
+          <div class="col-sm-4 invoice-col">
+            <b>Factura No. </b>{{ purchase.invoice_number }}<br>
+            <b>Fecha de compra:</b> {{ purchase.date }}<br>
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+
+        <!-- Table row -->
+        <div class="row">
+          <div class="col-12 table-responsive">
+            <table class="table table-striped">
+              <thead>
+              <tr>
+                <th>No. Factura</th>
+                <th>Fecha de Pago</th>
+                <th>Dias Vencidos  
+                <th>Valor</th>
+                <th>Observaciones</th>
+              </tr>
+              </thead>
+              <tbody>
+                {% for prod in purchase_payment %}
+                    <tr>
+                        <td> {{ prod.invoice }}</td>
+                        <td> {{ prod.payment_date }}</td>
+                        <td> {{ prod.days_to_expiration }}</td>
+                        <td> {{ prod.amount|floatformat:2|intcomma }}</td>
+                        <td> {{ prod.notes }}</td>
+                    </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+
+        <div class="row">
+          <!-- accepted payments column -->
+          <div class="col-5">
+            <p class="lead">Acuerdo de Pago: {{ purchase.type_payment }} </p>
+            <div class="table-responsive">
+                <table class="table">
+                  <tbody><tr>
+                    <th style="width:50%">Subtotal:</th>
+                    <td> {{ purchase.type_payment }}</td>
+                  </tr>
+                  <tr>
+                    <th>Primera Cuota:</th>
+                    <td>$ {{ purchase.down_payment }}</td>
+                  </tr>
+                  <tr>
+                    <th>Saldo:</th>
+                    <td>$ {{ purchase.discount_total }}</td>
+                  </tr>
+                  </tbody>
+              </table>
+            </div>
+
+            <p class="text-muted well well-sm shadow-none" style="margin-top: 10px;">
+            </p>
+          </div>
+          <div class="col-1"> </div>
+          <!-- /.col -->
+          <div class="col-6">
+            <p class="lead">Fecha de venta {{ purchase.date }}</p>
+
+            <div class="table-responsive">
+              <table class="table">
+                <tbody><tr>
+                  <th style="width:50%">Valor de credito:</th>
+                  <td>$ {{ purchase.total|floatformat:2|intcomma }}</td>
+                </tr>
+                <tr>
+                  <th>Abonado: </th>
+                  <td>$ {{ purchase_payments|floatformat:2|intcomma }}</td>
+                </tr>
+                <tr>
+                  <th>Saldo pendiente:</th>
+                  <td>$ {{ pending_balance|floatformat:2|intcomma }}</td>
+                </tr>
+                </tbody>
+            </table>
+            </div>
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+
+        <!-- this row will not appear when printing -->
+        <div class="row no-print">
+          <div class="col-12">
+            <a href= {{ list_url }} type="button" class="btn btn-success float-right"><i class="far fa-credit-card"></i> Volver </a>
+          </div>
+        </div>
+      </div>
+      <!-- /.invoice -->
+    </div><!-- /.col -->
+  </div>
+
+{% endblock app-content %}

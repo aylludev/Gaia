@@ -5,6 +5,24 @@ from hades.models import BaseModel
 from artemisa.choices import *
 from django.utils import timezone
 
+class Warehouse(BaseModel):
+    name = models.CharField(max_length=150, unique=True)
+    location = models.CharField(max_length=500, null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+    def to_json(self):
+        item = model_to_dict(self)
+        item['created_at'] = self.created_at.strftime('%Y-%m-%d')
+        item['updated_at'] = self.updated_at.strftime('%Y-%m-%d')
+        return item
+
+    class Meta:
+        verbose_name = 'Almacen'
+        verbose_name_plural = 'Almacenes'
+        ordering = ['id']
+
 class Category(BaseModel):
     name = models.CharField(max_length=150, unique=True)
     desc = models.CharField(max_length=500, null=True, blank=True)
@@ -41,8 +59,8 @@ class UnitMeasure(BaseModel):
 class Product(BaseModel):
     code = models.CharField(max_length=50, unique=True, null=True, blank=True, verbose_name='Código')
     name = models.CharField(max_length=100, verbose_name='Nombre')
+    unit = models.ForeignKey(UnitMeasure, on_delete=models.CASCADE, verbose_name='Unidad de medida')
     cat = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Categoria')
-    unit = models.ForeignKey(UnitMeasure, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Unidad de medida')
     stock = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name='Stock')
     purchase_price = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name='Precio de compra')
     sale_price = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name='Precio de venta')
@@ -57,13 +75,14 @@ class Product(BaseModel):
 
     def to_json(self):
         item = model_to_dict(self)
+        item['code'] = self.code
         item['name'] = self.__str__()
+        item['unit'] = self.unit.to_json()
         item['cat'] = self.cat.to_json()
         item['stock'] = format(self.stock, '.0f')
         item['sale_price'] = format(self.sale_price, '.0f')
         item['purchase_price'] = format(self.purchase_price, '.0f')
         item['value'] = format(self.stock * self.purchase_price, '.0f')
-        item['unit'] = self.unit.to_json()
         return item
 
 class PriceHistory(BaseModel):
@@ -117,7 +136,7 @@ class InventoryLog(BaseModel):
 # Modelo Proveedor
 class Provider(BaseModel):
     names = models.CharField(max_length=150, verbose_name='Nombres')
-    dni = models.CharField(max_length=10, unique=True, verbose_name='NIT')
+    dni = models.CharField(max_length=50, unique=True, verbose_name='NIT')
     email = models.EmailField(max_length=254, null=True, blank=True, unique=True, verbose_name='Correo electrónico')
     address = models.CharField(max_length=150, null=True, blank=True, verbose_name='Dirección')
     city = models.CharField(max_length=150, null=True, blank=True, verbose_name='Ciudad')
@@ -143,13 +162,14 @@ class Provider(BaseModel):
 # Modelo Compra
 class Purchase(BaseModel):
     provider = models.ForeignKey(Provider, on_delete=models.CASCADE, verbose_name='Proveedor')
-    invoice_number = models.CharField(max_length=50, unique=True, verbose_name='Numero de factura', null=True, blank=True)
+    invoice_number = models.CharField(max_length=50, unique=True, verbose_name='Número de factura', null=True, blank=True)
     date = models.DateField(verbose_name='Fecha')
     subtotal = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name='Subtotal')
     iva = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name='IVA')
     discount_total = models.DecimalField(default=0.00, max_digits=9, decimal_places=2, verbose_name='Descuento')
     total = models.DecimalField(default=0.00, max_digits=9, decimal_places=2, verbose_name='Total')
     type_payment = models.CharField(max_length=10, choices=TYPE_PAYMENT, default='CREDIT')
+    days_to_pay = models.IntegerField(default=0, verbose_name='Días para pagar')
     down_payment = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
     observation = models.CharField(max_length=254, null=True, blank=True, verbose_name='Observaciones')
 
@@ -198,21 +218,3 @@ class PurchaseDetail(BaseModel):
         verbose_name_plural = 'Detalles de la Compra'
         ordering = ['id']
 
-class PurchasePayment(BaseModel):
-    purchase = models.ForeignKey(Purchase, on_delete=models.CASCADE, related_name='payments')
-    payment_date = models.DateField()
-    amount = models.DecimalField(max_digits=12, decimal_places=2)
-    method = models.CharField(max_length=50)  # Ej: efectivo, transferencia, etc.
-    note = models.TextField(blank=True, null=True)
-
-    def to_json(self):
-        item = model_to_dict(self)
-        item['purchase'] = self.purchase.to_json()
-        item['payment_date'] = self.payment_date.strftime('%Y-%m-%d')
-        item['amount'] = format(self.amount, '.2f')
-        return item
-    
-    class Meta:
-        verbose_name = 'Pago de Compra'
-        verbose_name_plural = 'Pagos de Compras'
-        ordering = ['payment_date']

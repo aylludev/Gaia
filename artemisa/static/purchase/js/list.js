@@ -54,7 +54,7 @@ $(function() {
         "defaultContent": ''
       },
       { "data": "invoice_number" },
-      { "data": "provider.names" },
+      { "data": "provider.full_name" },
       { "data": "date" },
       { "data": "subtotal" },
       { "data": "iva" },

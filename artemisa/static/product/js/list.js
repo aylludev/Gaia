@@ -17,6 +17,7 @@ $(function() {
       },
       columns: [
         { "data": "id" },
+        { "data": "code" },
         { "data": "name" },
         { "data": "cat.name" },
         { "data": "purchase_price" },

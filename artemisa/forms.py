@@ -61,7 +61,7 @@ class ProductForm(ModelForm):
 
     class Meta:
         model = Product
-        fields = 'code', 'name', 'cat', 'unit', 'stock', 'purchase_price', 'sale_price'
+        fields = 'code', 'name', 'unit', 'cat', 'stock', 'purchase_price', 'sale_price'
         widgets = {
             'name': forms.TextInput(attrs={'placeholder': 'Ingrese un nombre',}),
             'cat': forms.Select(attrs={'class': 'select2', 'style': 'width: 100%'}),
@@ -146,6 +146,7 @@ class PurchaseForm(ModelForm):
             'discount_total': forms.NumberInput(attrs={ 'class': 'form-control', }),
             'total': forms.TextInput(attrs={'readonly': True, 'class': 'form-control', }),
             'type_payment': forms.Select(attrs={'class': 'form-control', }),
+            'days_to_pay': forms.NumberInput(attrs={'value': 0, 'class': 'form-control', }),
             'down_payment': forms.TextInput(attrs={'value': 0, 'class': 'form-control', }),
             'observation' : forms.TextInput(attrs={'class': 'form-control'}),
         }

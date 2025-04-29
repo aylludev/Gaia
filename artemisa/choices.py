@@ -1,7 +1,6 @@
 UNIT_MEASURE_CHOICES = [
     ('Kg', 'Kilogramo'),
     ('g', 'Gramo'),
-    ('qq', 'Quintal'),
     ('T', 'Tonelada'),
     ('Lt', 'Litro'),
     ('mL', 'Mililitro'),
@@ -17,6 +16,7 @@ UNIT_MEASURE_CHOICES = [
     ('saco', 'Saco'),
     ('Bot', 'Botella'),
     ('bidon', 'Bidón'),
+    ('qq', 'Quintal'),
 ]
 
 TYPE_PAYMENT = [

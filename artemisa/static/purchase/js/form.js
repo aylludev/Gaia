@@ -26,10 +26,10 @@ var vents = {
     var iva = ($('input[name="iva"]').val()) || 0;
     var type_payment = ($('select[name="type_payment"]').val()) || 0;
     var discount_total = ($('input[name="discount_total"]').val()) || 0;
-    var purchase_price = ($('input[name="purchase_price"]').val()) || 0;
 
     $.each(this.items.products, function(pos, dict) {
       dict.pos = pos;
+      var purchase_price = dict.purchase_price || 0;
       var discount = dict.discount || 0;
       var subtotalproduct = dict.cant * parseFloat(purchase_price);
       dict.subtotal = subtotalproduct - ((discount / 100) * subtotalproduct);
