@@ -1,18 +1,19 @@
 {% extends 'list.html' %}
 {% load static %}
 {% block head_list %}
-    <script src="{% static 'cashclosing/js/list.js' %}"></script>
+    <script src="{% static 'account/js/list.js' %}"></script>
 {% endblock %}
 
 {% block columns %}
     <tr>
         <th scope="col" style="width: 5%;">Nro</th>
-        <th scope="col" style="width: 15%;">Nombres</th>
-        <th scope="col" style="width: 10%;">NIT</th>
-        <th scope="col" style="width: 10%;">Email</th>
-        <th scope="col" style="width: 15%;">Dirección</th>
-        <th scope="col" style="width: 10%;">Teléfono</th>
-        <th scope="col" style="width: 15%;">Observaciones</th>
+        <th scope="col" style="width: 15%;">No. Factura</th>
+        <th scope="col" style="width: 10%;">Proveedor</th>
+        <th scope="col" style="width: 10%;">Fecha de Compra</th>
+        <th scope="col" style="width: 15%;">Valor</th>
+        <th scope="col" style="width: 10%;">Abonado</th>
+        <th scope="col" style="width: 10%;">Saldo</th>
+        <th scope="col" style="width: 15%;">Estado</th>
         <th scope="col" style="width: 5%;">Opciones</th>
     </tr>
 {% endblock %}

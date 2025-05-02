@@ -140,7 +140,7 @@ class PurchaseUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Up
     form_class = PurchaseForm
     template_name = 'purchase/create.html'
     success_url = reverse_lazy('artemisa:purchase_list')
-    permission_required = 'add_purchase'
+    permission_required = 'change_purchase'
     url_redirect = success_url
 
     def get_form(self, form_class=None):

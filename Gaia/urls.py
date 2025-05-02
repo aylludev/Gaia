@@ -1,9 +1,11 @@
 from django.contrib import admin
 from django.urls import path, include
-from homepage.views import IndexView
+from homepage.views import IndexView, page_not_found_view
 from core.views import DashboardView, ArtemisaView
 from django.conf import settings
 from django.conf.urls.static import static
+from django.conf.urls import handler404
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -16,6 +18,8 @@ urlpatterns = [
     path('ilitia/', include('ilitia.urls', namespace='ilitia')),
     path('hermes/', include('hermes.urls', namespace='hermes')),
 ]
+
+handler404 = page_not_found_view
 
 
 if settings.DEBUG:

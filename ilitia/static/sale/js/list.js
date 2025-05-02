@@ -54,7 +54,7 @@ $(function() {
         "defaultContent": ''
       },
       { "data": "invoice_number" },
-      { "data": "cli.names" },
+      { "data": "cli.full_name" },
       { "data": "date_joined" },
       { "data": "subtotal" },
       { "data": "iva" },

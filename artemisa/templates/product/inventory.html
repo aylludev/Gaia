@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
+{% load humanize %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -53,6 +54,7 @@
     <table style="width: 100%;">
         <tbody>
         <tr style="border: 1px solid black;">
+            <td style="width: 5%;"  class="text-center"><b> Id </b></td>
             <td style="width: 5%;"  class="text-center"><b> Código </b></td>
             <td style="width: 25%;" class="text-center"><b> Producto </b></td>
             <td style="width: 10%;" class="text-center"><b> Cantidad </b></td>
@@ -63,16 +65,17 @@
         <tbody>
             {% for p in products %}
             <tr>
+                <td>{{ p.id }}</td>
                 <td>{{ p.code }}</td>
                 <td>{{ p.name }}</td>
                 <td>{{ p.stock }}</td>
-                <td>${{ p.purchase_price}}</td>
-                <td>${{ p.value }}</td>
+                <td>${{ p.purchase_price|floatformat:2|intcomma}}</td>
+                <td>${{ p.value|floatformat:2|intcomma }}</td>
             </tr>
             {% endfor %}
             <tr>
                 <td colspan="4" style="text-align: right;"><b>Total:</b></td>
-                <td>${{ total }}</td>
+                <td>${{ total|floatformat:2|intcomma }}</td>
         </tbody>
       </table>
 </div>

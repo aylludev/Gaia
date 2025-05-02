@@ -63,6 +63,15 @@
               </tr>
               </thead>
               <tbody>
+                {% if purchase.type_payment == "CREDIT"%}
+                <tr>
+                  <td> {{ purchase.invoice_number }}</td>
+                  <td> {{ purchase.date }}</td>
+                  <td> 0 </td>
+                  <td> {{ purchase.down_payment|floatformat:2|intcomma }}</td>
+                  <td> Primera cuota </td>
+              </tr>
+          {% endif %}
                 {% for prod in purchase_payment %}
                     <tr>
                         <td> {{ prod.invoice }}</td>

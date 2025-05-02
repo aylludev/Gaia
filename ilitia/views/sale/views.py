@@ -42,10 +42,10 @@ class SaleListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, ListView
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Listado de Compras'
+        context['title'] = 'Listado de Ventas'
         context['create_url'] = reverse_lazy('ilitia:sale_create')
         context['list_url'] = reverse_lazy('ilitia:sale_list')
-        context['entity'] = 'Compras'
+        context['entity'] = 'Ventas'
         return context
 
 

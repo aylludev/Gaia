@@ -15,7 +15,7 @@ from django.db.models.functions import Coalesce
 class CashClosingListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, ListView):
     model = CashClosing
     template_name = 'cashclosing/list.html'
-    permission_required = 'view_clashclosing'
+    permission_required = 'view_cashclosing'
 
     def post(self, request, *args, **kwargs):
         data = []
@@ -27,7 +27,6 @@ class CashClosingListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, L
                     user = i.created_by.to_json()
                     data.append(i.to_json())
                     data[-1]['created_by'] = user
-                    print(data)
             else:
                 data['error'] = 'Ha ocurrido un error'
         except Exception as e:
@@ -46,14 +45,13 @@ class CashClosingCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin,
     model = CashClosing
     form_class = CashClosingForm
     template_name = 'cashclosing/create copy.html'
-    success_url = reverse_lazy('hermes:salepayment_list')
+    success_url = reverse_lazy('hermes:cashclosing_list')
     permission_required = 'add_cashclosing'
     url_redirect = success_url
 
     def dispatch(self, request, *args, **kwargs):
         # Obtener el último cierre de caja del usuario
         self.last_cash_closing = CashClosing.objects.filter(created_by=request.user).first()
-        print(self.last_cash_closing.date)
 
         if self.last_cash_closing:
             self.sales = Sale.objects.filter(created_by=request.user, date_joined__gt=self.last_cash_closing.date)
@@ -117,7 +115,7 @@ class SalePaymentDetailView(LoginRequiredMixin, ValidatePermissionRequiredMixin,
     model = Sale
     template_name = 'salepayment/detail.html'
     permission_required = 'view_sale'
-    url_redirect = reverse_lazy('hermes:salepayment_list')
+    url_redirect = reverse_lazy('hermes:cashclosing_list')
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
