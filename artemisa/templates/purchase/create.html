@@ -2,6 +2,10 @@
 {% load static %}
 {% load widget_tweaks %}
 {% block head_list %}
+     <!-- Tempus dominus-->
+    <script src="{% static 'lib/moment-2.25.3/moment-with-locales.js' %}"></script>
+    <script src="{% static 'lib/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.js' %}"></script>
+    <link href="{% static 'lib/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.css' %}" rel="stylesheet"/>
     <link href="{% static 'lib/jquery-ui-1.12.1/jquery-ui.min.css' %}" rel="stylesheet"/>
     <script src="{% static 'lib/jquery-ui-1.12.1/jquery-ui.min.js' %}"></script>
     <link href="{% static 'lib/select2-4.1.0/css/select2.min.css' %}" rel="stylesheet"/>
@@ -140,7 +144,7 @@
                                     <label>Tipo de pago:</label>
                                     {{ form.type_payment }}
                                 </div>
-                                <div id="type_payment" class="form-group">
+                                <div id="form.days_to_pay" class="form-group">
                                     <label>Días de Pago:</label>
                                     {{ form.days_to_pay }}
                                 </div>

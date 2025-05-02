@@ -186,6 +186,7 @@ class Purchase(BaseModel):
         item['discount_total'] = format(self.discount_total, '.2f')
         item['date'] = self.date.strftime('%Y-%m-%d')
         item['type_payment'] = self.type_payment
+        item['days_to_pay'] = self.days_to_pay
         item['down_payment'] = format(self.down_payment, '.2f')
         item['det'] = [i.to_json() for i in self.purchasedetail_set.all()]
         return item
@@ -193,7 +194,7 @@ class Purchase(BaseModel):
     class Meta:
         verbose_name = 'Compra'
         verbose_name_plural = 'Compras'
-        ordering = ['date']
+        ordering = ['-id']
 
 class PurchaseDetail(BaseModel):
     purchase = models.ForeignKey(Purchase, on_delete=models.CASCADE, verbose_name='Compra')

@@ -40,13 +40,15 @@ class Sale(BaseModel):
     ]
 
     cli = models.ForeignKey(Client, on_delete=models.CASCADE)
-    date_joined = models.DateField(default=datetime.now)
+    date_joined = models.DateTimeField(default=datetime.now)
+    invoice_number = models.CharField(max_length=50, blank=True, null=True)
     subtotal = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
     iva = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
     discountall = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
     total = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
     type_payment = models.CharField(max_length=10, choices=TYPE_PAYMENT, default='CREDIT')
     down_payment = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
+    days_to_pay = models.IntegerField(default=0)
     observation = models.CharField(max_length=254, null=True, blank=True)
 
     def __str__(self):
@@ -55,13 +57,15 @@ class Sale(BaseModel):
     def to_json(self):
         item = model_to_dict(self)
         item['cli'] = self.cli.to_json()
+        item['invoice_number'] = self.invoice_number
         item['subtotal'] = format(self.subtotal, '.2f')
         item['iva'] = format(self.iva, '.2f')
         item['total'] = format(self.total, '.2f')
         item['discountall'] = format(self.discountall, '.2f')
-        item['date_joined'] = self.date_joined.strftime('%Y-%m-%d')
+        item['date_joined'] = self.date_joined.strftime('%Y-%m-%d %H:%M')
         item['type_payment'] = self.type_payment
         item['down_payment'] = format(self.down_payment, '.2f')
+        item['days_to_pay'] = format(self.days_to_pay, '.2f')
         item['det'] = [i.to_json() for i in self.detsale_set.all()]
         return item
 

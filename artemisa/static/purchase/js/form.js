@@ -10,6 +10,7 @@ var vents = {
     discount_total: 0.00,
     total: 0.00,
     type_payment: '',
+    days_to_pay: 0,
     down_payment: 0.00,
     observation: '',
     products: []
@@ -26,6 +27,7 @@ var vents = {
     var iva = ($('input[name="iva"]').val()) || 0;
     var type_payment = ($('select[name="type_payment"]').val()) || 0;
     var discount_total = ($('input[name="discount_total"]').val()) || 0;
+    var days_to_pay = ($('input[name="days_to_pay"]').val()) || 0;
 
     $.each(this.items.products, function(pos, dict) {
       dict.pos = pos;
@@ -42,6 +44,7 @@ var vents = {
     this.items.discount_total = discount_total;
     this.items.total = this.items.total - this.items.discount_total;
     this.items.type_payment = type_payment;
+    this.items.days_to_pay = days_to_pay;
 
     $('input[name="subtotal"]').val(this.items.subtotal.toLocaleString('es-CO'));
     $('input[name="ivacalc"]').val((this.items.subtotal * (iva / 100)).toLocaleString('es-CO'));
@@ -150,12 +153,7 @@ function formatRepo(repo) {
 
   var option = $(
     '<div class="wrapper container">' +
-    '<div class="row">' +
-    '<div class="col-lg-1">' +
-    '<img src="' + repo.image + '" class="img-fluid img-thumbnail d-block mx-auto rounded">' +
-    '</div>' +
-    '<div class="col-lg-11 text-left shadow-sm">' +
-    //'<br>' +
+    '<div class="col-lg-12 text-left shadow-sm">' +
     '<p style="margin-bottom: 0;">' +
     '<b>Nombre:</b> ' + repo.name + '<br>' +
     '<b>Stock:</b> ' + repo.stock + '<br>' +
@@ -403,8 +401,8 @@ $(function() {
     parameters.append('vents', JSON.stringify(vents.items));
     submit_with_ajax(window.location.pathname, 'Notificación',
       '¿Estas seguro de realizar la siguiente acción?', parameters, function(response) {
-        alert_action('Notificación', '¿Desea imprimir la boleta de venta?', function() {
-          window.open('/artemisa/purchase/invoice/pdf/' + response.id + '/', '_blank');
+        alert_action('Notificación', '¿Desea revisar la boleta de venta?', function() {
+          window.open('/artemisa/purchase/detail/' + response.id + '/', '_blank');
           location.href = '/artemisa/purchase/list/';
         }, function() {
           location.href = '/artemisa/purchase/list/';

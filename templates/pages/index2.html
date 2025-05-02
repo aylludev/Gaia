@@ -379,9 +379,15 @@
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href={% url 'ilitia:sale_list'  %} class="nav-link">
+                  <a href={% url 'hermes:salepayment_list'  %} class="nav-link">
                     <i class="nav-icon bi bi-circle"></i>
-                    <p>Ventas</p>
+                    <p>Cuentas por Cobrar</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href={% url 'hermes:cashclosing_list'  %} class="nav-link">
+                    <i class="nav-icon bi bi-circle"></i>
+                    <p>Cierre de Caja</p>
                   </a>
                 </li>
               </ul>

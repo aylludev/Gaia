@@ -21,11 +21,11 @@ class PurchaseListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, List
             action = request.POST['action']
             if action == 'searchdata':
                 data = []
-                for i in Purchase.objects.all():
+                for i in Purchase.objects.filter():
                     data.append(i.to_json())
             elif action == 'search_details_prod':
                 data = []
-                for i in PurchaseDetail.objects.filter(sale_id=request.POST['id']):
+                for i in PurchaseDetail.objects.filter(purchase_id=request.POST['id']):
                     data.append(i.to_json())
             else:
                 data['error'] = 'Ha ocurrido un error'
@@ -89,6 +89,7 @@ class PurchaseCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Cr
                     purchase.discount_total = float(buy['discount_total'])
                     purchase.total = float(buy['total'])
                     purchase.type_payment = buy['type_payment']
+                    purchase.days_to_pay = int(buy['days_to_pay'])
                     purchase.down_payment = float(buy['down_payment'])
                     purchase.observation = buy['observation']
                     purchase.created_by = request.user
@@ -186,6 +187,7 @@ class PurchaseUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Up
                     purchase.discount_total = float(buy['discount_total'])
                     purchase.total = float(buy['total'])
                     purchase.type_payment = buy['type_payment']
+                    purchase.days_to_pay = int(buy['days_to_pay'])
                     purchase.down_payment = float(buy['down_payment'])
                     purchase.observation = buy['observation']
                     purchase.updated_by = request.user

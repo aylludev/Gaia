@@ -27,6 +27,7 @@ class BaseModel(models.Model):
 
 class User(AbstractUser, BaseModel):
     image = models.ImageField(upload_to='users/%Y/%m/%d', null=True, blank=True)
+    dni = models.CharField(max_length=20, unique=True, null=True, blank=True)
     token = models.UUIDField(primary_key=False, default=None, editable=False, null=True)
 
     def get_image(self):
@@ -36,6 +37,7 @@ class User(AbstractUser, BaseModel):
     
     def to_json(self):
         item = model_to_dict(self, exclude=['password', 'user_permissions'])
+        item['full_name'] = f'{self.first_name} {self.last_name}'
         item['image'] = self.get_image()
         item['last_login'] = self.last_login.strftime('%Y-%m-%d %H:%M:%S') if self.last_login else None
         item['date_joined'] = self.date_joined.strftime('%Y-%m-%d %H:%M:%S')

@@ -29,7 +29,7 @@ function format(d) {
 $(function() {
 
   tblSale = $('#data').DataTable({
-    order: [[2, 'desc']],
+    order: [[3, 'desc']],
     //responsive: true,
     scrollX: true,
     autoWidth: false,
@@ -59,9 +59,21 @@ $(function() {
       { "data": "total" },
       { "data": "total_paid" },
       { "data": "pending_balance" },
+      { "data": "days_to_expiration"},
       { "data": "id" },
     ],
     columnDefs: [
+      {
+        targets: [-2],
+        class: 'text-center',
+        orderable: false,
+        render: function(data, type, row) {
+          if (row.days_to_expiration >= 0) {
+            return '<span class="badge badge-success">' + data + ' días' + '</span>'
+          }
+          return '<span class="badge badge-danger">' + data + ' días' + '</span>'
+        }
+      },
       {
         targets: [4, 6],
         class: 'text-center',

@@ -14,6 +14,7 @@ from weasyprint import HTML, CSS
 from ilitia.forms import SaleForm, ClientForm
 from hades.mixins import ValidatePermissionRequiredMixin
 from ilitia.models import Sale, Product, DetSale, Client
+from datetime import datetime
 
 
 class SaleListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, ListView):
@@ -41,10 +42,10 @@ class SaleListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, ListView
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Listado de Ventas'
+        context['title'] = 'Listado de Compras'
         context['create_url'] = reverse_lazy('ilitia:sale_create')
         context['list_url'] = reverse_lazy('ilitia:sale_list')
-        context['entity'] = 'Ventas'
+        context['entity'] = 'Compras'
         return context
 
 
@@ -87,15 +88,17 @@ class SaleCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Create
                     vents = json.loads(request.POST['vents'])
                     print(vents)
                     sale = Sale()
-                    sale.date_joined = vents['date_joined']
                     sale.cli_id = vents['cli']
+                    sale.invoice_number = vents['invoice_number']
                     sale.subtotal = float(vents['subtotal'])
                     sale.iva = float(vents['iva'])
                     sale.discountall = float(vents['discountall'])
                     sale.total = float(vents['total'])
                     sale.type_payment = vents['type_payment']
+                    sale.days_to_pay = int(vents['days_to_pay'])
                     sale.down_payment = float(vents['down_payment'])
                     sale.observation = vents['observation']
+                    sale.created_by = request.user
                     sale.save()
                     for i in vents['products']:
                         det = DetSale()
@@ -184,17 +187,18 @@ class SaleUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Update
                     vents = json.loads(request.POST['vents'])
                     # sale = Sale.objects.get(pk=self.get_object().id)
                     sale = self.get_object()
-                    sale.date_joined = vents['date_joined']
                     sale.cli_id = vents['cli']
+                    sale.invoice_number = vents['invoice_number']
                     sale.subtotal = float(vents['subtotal'])
                     sale.iva = float(vents['iva'])
                     sale.discountall = float(vents['discountall'])
                     sale.total = float(vents['total'])
                     sale.type_payment = vents['type_payment']
+                    sale.days_to_pay = int(vents['days_to_pay'])
                     sale.down_payment = vents['down_payment']
-                    if vents['type_payment'] == 'CASH':
-                        sale.down_payment = vents['total']
                     sale.observation = vents['observation']
+                    sale.update_by = request.user
+                    sale.update_at = datetime.now()
                     sale.save()
                     sale.detsale_set.all().delete()
                     for i in vents['products']:

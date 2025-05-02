@@ -10,6 +10,7 @@ from django.db.models import Sum, DecimalField
 from django.db.models.functions import Coalesce
 from decimal import Decimal
 from django.shortcuts import get_object_or_404
+from datetime import datetime, timedelta
 
 class PurchasePaymentListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, ListView):
     model = Purchase
@@ -25,8 +26,9 @@ class PurchasePaymentListView(LoginRequiredMixin, ValidatePermissionRequiredMixi
                 for i in Purchase.objects.filter(type_payment='CREDIT'):
                     total_paid = (PurchasePayment.objects.filter(purchase=i).aggregate(total=Coalesce(Sum('amount'), Decimal('0.00'), output_field=DecimalField()))['total']) + i.down_payment
                     pending_balance = i.total - total_paid
+                    days_to_expiration = ((i.date - datetime.now().date() ).days) + i.days_to_pay
                     if pending_balance > 0:
-                        data.append({**i.to_json(), 'total_paid': total_paid, 'pending_balance': pending_balance})
+                        data.append({**i.to_json(), 'total_paid': total_paid, 'pending_balance': pending_balance, 'days_to_expiration': days_to_expiration})
             elif action == 'search_details_prod':
                 data = []
                 purchase_id = request.POST.get('id')

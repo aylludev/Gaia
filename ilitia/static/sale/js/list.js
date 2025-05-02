@@ -29,7 +29,7 @@ function format(d) {
 $(function() {
 
   tblSale = $('#data').DataTable({
-    order: [[2, 'desc']],
+    order: [[3, 'desc']],
     //responsive: true,
     scrollX: true,
     autoWidth: false,
@@ -53,6 +53,7 @@ $(function() {
         "data": null,
         "defaultContent": ''
       },
+      { "data": "invoice_number" },
       { "data": "cli.names" },
       { "data": "date_joined" },
       { "data": "subtotal" },
@@ -60,16 +61,16 @@ $(function() {
       { "data": "discountall" },
       { "data": "total" },
       { "data": "type_payment" },
-      { "data": "down_payment" },
+      { "data": "days_to_pay" },
       { "data": "id" },
     ],
     columnDefs: [
       {
-        targets: [3, 6],
+        targets: [4, 5, 6, 7],
         class: 'text-center',
         orderable: false,
         render: function(data, type, row) {
-          return '$' + parseFloat(data).toFixed(2);
+          return '$' + parseFloat(data).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         }
       },
       {

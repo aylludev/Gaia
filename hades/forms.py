@@ -5,11 +5,12 @@ from hades.models import User
 class UserForm(ModelForm):
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'email', 'password', 'image', 'groups']
+        fields = ['username', 'first_name', 'last_name', 'dni', 'email', 'password', 'image', 'groups']
         widgets = {
             'username': forms.TextInput(attrs={'placeholder': 'Nombre de usuario'}),
             'first_name': forms.TextInput(attrs={'placeholder': 'Nombre'}),
             'last_name': forms.TextInput(attrs={'placeholder': 'Apellido'}),
+            'dni': forms.TextInput(attrs={'placeholder': 'DNI'}),
             'email': forms.EmailInput(attrs={'placeholder': 'Correo electrónico'}),
             'password': forms.PasswordInput(render_value=True),
             'groups': forms.SelectMultiple(attrs={'class': 'form-control select2', 'style': 'width: 100%;', 'multiple': 'multiple'}),

@@ -3,12 +3,13 @@ var tblSearchProducts;
 var vents = {
   items: {
     cli: '',
-    date_joined: '',
+    invoice_number: '',
     subtotal: 0.00,
     iva: 0.00,
     discountall: 0.00,
     total: 0.00,
     type_payment: '',
+    days_to_pay: 0,
     down_payment: 0.00,
     observation: '',
     products: []
@@ -22,8 +23,10 @@ var vents = {
   },
   calculate_invoice: function() {
     var subtotal = 0.00;
+    var invoice_number = $('input[name="invoice_number"]').val() || 0;
     var iva = ($('input[name="iva"]').val()) || 0;
     var type_payment = ($('select[name="type_payment"]').val()) || 0;
+    var days_to_pay = ($('input[name="days_to_pay"]').val()) || 0;
     var discountall = (($('input[name="discountall"]').val()) || 0).replace(/\./g, '').replace(/,/g, '.');  // Quita puntos y cambia la coma decimal
 
     $.each(this.items.products, function(pos, dict) {
@@ -33,17 +36,36 @@ var vents = {
       dict.subtotal = subtotalproduct - ((discount / 100) * subtotalproduct);
       subtotal += dict.subtotal;
     });
-
+    
+    this.items.invoice_number = invoice_number;
     this.items.subtotal = subtotal;
     this.items.iva = parseFloat(iva)* (this.items.subtotal / 100);
     this.items.total = this.items.subtotal + this.items.iva;
     this.items.discountall = parseFloat(discountall);
     this.items.total = this.items.total - this.items.discountall;
     this.items.type_payment = type_payment;
+    this.items.days_to_pay = days_to_pay;
 
     $('input[name="subtotal"]').val(this.items.subtotal.toLocaleString('es-CO'));
     $('input[name="ivacalc"]').val((this.items.subtotal * (iva / 100)).toLocaleString('es-CO'));
     $('input[name="total"]').val(this.items.total.toLocaleString('es-CO'));
+  },
+
+  assign_invoice_number: function() {
+    // Generar un número de factura basado en la fecha y un identificador único
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Mes con dos dígitos
+    const day = date.getDate().toString().padStart(2, '0'); // Día con dos dígitos
+
+    // Generar un identificador único (puedes usar un contador o un valor aleatorio)
+    const uniqueId = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+
+    // Combinar los valores para formar el número de factura
+    const invoiceNumber = `INV-${year}${month}${day}-${uniqueId}`;
+
+    // Asignar el número de factura al campo correspondiente en el formulario
+    $('input[name="invoice_number"]').val(invoiceNumber);
   },
 
   add: function(item) {
@@ -165,16 +187,12 @@ function formatRepo(repo) {
 
 $(function() {
 
+  // Asignar un número de factura al cargar la página
+  vents.assign_invoice_number();
+
   $('.select2').select2({
     theme: "bootstrap4",
     language: 'es'
-  });
-
-  $('#date_joined').datetimepicker({
-    format: 'YYYY-MM-DD',
-    date: moment().format("YYYY-MM-DD"),
-    locale: 'es',
-    //minDate: moment().format("YYYY-MM-DD")
   });
 
 
@@ -420,7 +438,6 @@ $(function() {
     }
 
     var down_payment = (($('input[name="down_payment"]').val()) || 0).replace(/\./g, '').replace(/,/g, '.');  // Quita puntos y cambia la coma decimal
-    vents.items.date_joined = $('input[name="date_joined"]').val();
     vents.items.cli = $('select[name="cli"]').val();
     vents.items.down_payment = down_payment;
     vents.items.observation = $('input[name="observation"]').val();
@@ -481,4 +498,3 @@ $(function() {
   // coger el que pusimos al inicializarlo.
   vents.list();
 });
-

@@ -1,0 +1,153 @@
+{% extends "form.html" %}
+
+{% block app-content %}
+{% load humanize %}
+
+<div class="row">
+    <div class="col-12">
+      <!-- Main content -->
+      <div class="invoice p-3 mb-3">
+        <!-- title row -->
+        <div class="row">
+          <div class="col-12">
+            <h4>
+              <i class="fas fa-globe"></i> {{ comp.name}}
+              <small class="float-right">Fecha: {{ sale.date_joined }}</small>
+            </h4>
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- info row -->
+        <div class="row invoice-info">
+          <div class="col-sm-4 invoice-col">
+            Cliente
+            <address>
+              <strong>{{ sale.cli.names }} {{ sale.cli.last_names }}</strong><br>
+              C.C.: {{ sale.cli.dni }}<br>
+              Dirección: {{ sale.cli.address }}<br>
+              Teléfono: {{ sale.cli.cellphone }}<br>
+              Email: {{ sale.cli.email }}<br>
+            </address>
+          </div>
+          <!-- /.col -->
+          <div class="col-sm-4 invoice-col">
+            Compañia
+            <address>
+              <strong>{{ comp.name }}</strong><br>
+              NIT: {{ comp.nit }}<br>
+              Dirección: {{ comp.address }} - {{ comp.city }} <br>
+              Teléfono: {{ comp.tel }}<br>
+              Administrador: {{ comp.vendor }}
+            </address>
+          </div>
+          <!-- /.col -->
+          <div class="col-sm-4 invoice-col">
+            <b>Factura No. </b>{{ sale.invoice_number }}<br>
+            <b>Fecha de compra:</b> {{ sale.date_joined }}<br>
+            <b>Valor de Factura:</b> ${{ sale.total|floatformat:2|intcomma }}<br>
+            <b>Saldo pendiente:</b> $ {{ pending_balance|floatformat:2|intcomma }}<br>
+
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+
+        <!-- Table row -->
+        <form class="form" action="." enctype="multipart/form-data">
+          <div class="col-12 table-responsive">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="{{ action }}">
+            <table class="table table-striped">
+              <thead>
+              <tr>
+                <th>Numero de Factura</th>
+                <th>Dias vencidos</th>
+                <th>Valor</th>
+                <th>Nota</th>
+              </tr>
+              </thead>
+              <tbody>
+                    <tr>
+                        <td> {{ form.invoice }}</td>
+                        <td> {{ form.days_to_expiration }} </td>
+                        <td> {{ form.amount }}</td>
+                        <td> {{ form.note }}</td>
+                    </tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+        <!-- this row will not appear when printing -->
+        <div class="row no-print">
+          <div class="col-12">
+            <button type="submit" class="btn btn-primary btn-flat"><i class="fas fa-save"></i> Guardar registro </button>
+            <a href="{{ list_url }}" class="btn btn-danger btn-flat"><i class="fas fa-times"></i> Cancelar</a>
+          </div>
+        </div>
+      </div>
+      <!-- /.invoice -->
+    </div><!-- /.col -->
+  </div>
+
+{% endblock app-content %}
+
+{% block script %}
+<script>
+        {% if form.errors %}
+            var errors = '';
+            {% for field in form %}
+                {% for error in field.errors %}
+                    errors += '{{ error }}\n';
+                {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+                errors += '{{ error }}\n';
+            {% endfor %}
+            Swal.fire({
+                title: 'Error!',
+                text: errors,
+                icon: 'error'
+            });
+        {% endif %}
+
+        $('form').on('submit', function (e) {
+            e.preventDefault();
+            var parameters = new FormData(this);
+            submit_with_ajax(window.location.pathname, 'Notificación', '¿Estas seguro de realizar la siguiente acción?', parameters, function () {
+                location.href = '{{ list_url }}';
+            });
+        });
+    </script>
+
+    <script>
+      function generateInvoiceNumber() {
+          // Obtener la fecha actual
+          const date = new Date();
+          const year = date.getFullYear();
+          const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Mes con dos dígitos
+          const day = date.getDate().toString().padStart(2, '0'); // Día con dos dígitos
+  
+          // Generar un identificador único (puedes usar un contador o un valor aleatorio)
+          const uniqueId = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+  
+          // Combinar los valores para formar el número de factura
+          const invoiceNumber = `INV-${year}${month}${day}-${uniqueId}`;
+  
+          // Asignar el número de factura al campo form.invoice
+          const invoiceField = document.querySelector('input[name="invoice"]');
+          if (invoiceField) {
+              invoiceField.value = invoiceNumber;
+          } else {
+              console.error('No se encontró el campo "invoice" en el formulario.');
+          }
+      }
+  
+      // Llamar a la función al cargar la página
+      document.addEventListener('DOMContentLoaded', function () {
+          generateInvoiceNumber();
+      });
+  </script>
+{% endblock script %}
+

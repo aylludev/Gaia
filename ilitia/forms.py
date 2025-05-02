@@ -46,12 +46,13 @@ class SaleForm(ModelForm):
         fields = '__all__'
         widgets = {
             'cli': forms.Select(attrs={'class': 'custom-select select2',}),
-            'date_joined': forms.DateInput(format='%Y-%m-%d', attrs={'value': datetime.now().strftime('%Y-%m-%d'), 'autocomplete': 'off', 'class': 'form-control datetimepicker-input', 'id': 'date_joined', 'data-target': '#date_joined', 'data-toggle': 'datetimepicker' }),
+            'invoice_number': forms.TextInput(attrs={'readonly': True, 'class': 'form-control', }),
             'iva': forms.TextInput(attrs={'class': 'form-control', }),
             'subtotal': forms.TextInput(attrs={'readonly': True, 'class': 'form-control', }),
             'discountall': forms.TextInput(attrs={ 'class': 'form-control', }),
             'total': forms.TextInput(attrs={'readonly': True, 'class': 'form-control', }),
             'type_payment': forms.Select(attrs={'class': 'form-control', }),
+            'days_to_pay': forms.NumberInput(attrs={'value': 0, 'class': 'form-control', }),
             'down_payment': forms.NumberInput(attrs={'value': 0.00, 'class': 'form-control', }),
             'observation' : forms.TextInput(attrs={'class': 'form-control'}),
         }
