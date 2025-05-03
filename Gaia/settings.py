@@ -145,3 +145,13 @@ MEDIA_URL = '/media/'
 # Custom user model
 
 AUTH_USER_MODEL = 'hades.User'
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://agroinsumosmerkosur.com",
+    "https://www.agroinsumosmerkosur.com",
+]
+
+
+CSRF_COOKIE_SECURE = True  # ← esto solo debe estar en producción
+
+SESSION_COOKIE_SECURE = True
