@@ -2,7 +2,7 @@
 
 NAME="gaia"
 DJANGODIR=$(dirname $(cd $(dirname $0) && pwd))
-SOCKFILE=/tmp/gaia-apolo.sock
+SOCKFILE=/tmp/gaia.sock
 LOGDIR=${DJANGODIR}/logs/gunicorn.log
 USER=amawta
 GROUP=amawta
