@@ -1,9 +1,11 @@
 UNIT_MEASURE_CHOICES = [
     ('Kg', 'Kilogramo'),
     ('g', 'Gramo'),
+    ('lb', 'Libra'),
     ('T', 'Tonelada'),
     ('Lt', 'Litro'),
     ('mL', 'Mililitro'),
+    ('cc', 'Centímetro cúbico'),
     ('m', 'Metro'),
     ('cm', 'Centímetro'),
     ('mm', 'Milímetro'),
