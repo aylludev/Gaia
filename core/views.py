@@ -23,15 +23,20 @@ class DashboardView(LoginRequiredMixin, TemplateView):
             # Lunes de esta semana
             hoy = datetime.now().date()
             inicio_semana = hoy - timedelta(days=hoy.weekday())
-            fin_semana = inicio_semana + timedelta(days=6)
+            fin_semana = inicio_semana + timedelta(days=7)
 
             tipo_pago_totales = defaultdict(lambda: [0] * 7)
             ventas = Sale.objects.filter(date_joined__range=[inicio_semana, fin_semana])
 
             for venta in ventas:
                 dia_semana = venta.date_joined.weekday()  # 0 = lunes
-                tipo = (venta.type_payment or "CASH").upper()
-                tipo_pago_totales[tipo][dia_semana] += float(venta.total)
+                if venta.type_payment == 'CASH':
+                    tipo_pago_totales["CASH"][dia_semana] += float(venta.total)
+                else:
+                    tipo_pago_totales["CASH"][dia_semana] += float(venta.down_payment)
+                
+                if venta.type_payment == 'CREDIT':
+                    tipo_pago_totales["CREDIT"][dia_semana] += float(venta.total - venta.down_payment)
 
             data = [{'name': tipo, 'data': dias} for tipo, dias in tipo_pago_totales.items()]
             print(f"Ventas por día de la semana y tipo de pago: {data}")
