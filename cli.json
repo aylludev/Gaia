@@ -1,0 +1,1921 @@
+[
+    {
+        "model": "ilitia.client",
+        "pk": 1,
+        "fields": {
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z",
+            "names": "JAIME ANIBAL",
+            "last_names": "PALLES QUISTIAL",
+            "dni": "87714148",
+            "email": null,
+            "address": "VEREDA LA PALMA -LA VICTORIA",
+            "city": "LA PALMA/LA VICTORIA",
+            "cellphone": "3178776583",
+            "gender": "male",
+            "observation": null
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 2,
+        "fields": {
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z",
+            "names": "DIMER ALEXANDER",
+            "last_names": "PALLES MALES",
+            "dni": "1085928681",
+            "email": null,
+            "address": "LA PALMA - C / LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3156692427",
+            "gender": "male",
+            "observation": null
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 3,
+        "fields": {
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z",
+            "names": "YEFERSON YOVANY",
+            "last_names": "PALLES MALES",
+            "dni": "1085954564",
+            "email": null,
+            "address": "LA PALMA /LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3235038942",
+            "gender": "male",
+            "observation": null
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 4,
+        "fields": {
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z",
+            "names": "JAIRO",
+            "last_names": "PINCHAO CAICEDO",
+            "dni": "3333336",
+            "email": null,
+            "address": "SAN JORGE / LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3225160278",
+            "gender": "male",
+            "observation": null
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 5,
+        "fields": {
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z",
+            "names": "DIEGO ALBEIRO",
+            "last_names": "MEJIA",
+            "dni": "1085946258",
+            "email": null,
+            "address": "LA PALMA/LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "31",
+            "gender": "male",
+            "observation": null
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 6,
+        "fields": {
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z",
+            "names": "RICARDO",
+            "last_names": "ROJAS",
+            "dni": "0185965425",
+            "email": null,
+            "address": "LA PALMA/LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "313583951",
+            "gender": "male",
+            "observation": null
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 7,
+        "fields": {
+            "names": "WILFREDO",
+            "dni": "1085965485",
+            "email": null,
+            "address": "SAN JOSE ALTO/LA VICTORA",
+            "city": "IPIALES",
+            "cellphone": "3135895123",
+            "gender": "male",
+            "observation": null,
+            "last_names": "GOYES",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 8,
+        "fields": {
+            "names": "JOSE BOLIBAR",
+            "dni": "185255886",
+            "email": null,
+            "address": "EL TELIS/LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3167812590",
+            "gender": "male",
+            "observation": null,
+            "last_names": "PINCHAO CAICEDO",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 9,
+        "fields": {
+            "names": "SILVIA EUGENIA",
+            "dni": "085907865",
+            "email": null,
+            "address": "VILLA MORENO/LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3216238830",
+            "gender": "female",
+            "observation": null,
+            "last_names": "CUASAPUD CARDENAS",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 10,
+        "fields": {
+            "names": "VICENTE GABRIEL",
+            "dni": "1085917457",
+            "email": null,
+            "address": "VILLA MORENO/LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3175959077",
+            "gender": "male",
+            "observation": null,
+            "last_names": "CORDOBA USAMA",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 11,
+        "fields": {
+            "names": "NEIVER TUCANES",
+            "dni": "1085937037",
+            "email": null,
+            "address": "La Palma / la victiria",
+            "city": "ipiales",
+            "cellphone": "3206950464",
+            "gender": "male",
+            "observation": null,
+            "last_names": "CHACUA",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 12,
+        "fields": {
+            "names": "CONSUMIDOR FINAL",
+            "dni": "99999999",
+            "email": null,
+            "address": "LA VICTIRIA",
+            "city": "IPIALES",
+            "cellphone": "99999999",
+            "gender": "male",
+            "observation": null,
+            "last_names": "CONSUMIDOR FINAL",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 13,
+        "fields": {
+            "names": "OBEIMAR",
+            "dni": "2222222",
+            "email": null,
+            "address": "SAN JORGE /LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "317382845",
+            "gender": "male",
+            "observation": null,
+            "last_names": "PITACUAR",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 14,
+        "fields": {
+            "names": "PARMENIDES",
+            "dni": "24242424",
+            "email": null,
+            "address": "LA PALAMA /LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": null,
+            "gender": "male",
+            "observation": null,
+            "last_names": "CHASPUENGAL",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 15,
+        "fields": {
+            "names": "DANY ROLANDO",
+            "dni": "32131354",
+            "email": null,
+            "address": "LA PALMA/ LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": null,
+            "gender": "male",
+            "observation": null,
+            "last_names": "USAMA CHACUA",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 16,
+        "fields": {
+            "names": "JEOVANY",
+            "dni": "3516848634",
+            "email": null,
+            "address": "LA PALMA /LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3164832108",
+            "gender": "male",
+            "observation": null,
+            "last_names": "BASTIDAS",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 17,
+        "fields": {
+            "names": "GONZALO",
+            "dni": "1684838452",
+            "email": null,
+            "address": "LA PALMA /LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "000000",
+            "gender": "male",
+            "observation": null,
+            "last_names": "MUESES",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 18,
+        "fields": {
+            "names": "JOSE MARIA",
+            "dni": "087512022",
+            "email": null,
+            "address": "SAN JORGE / LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3214123046",
+            "gender": "male",
+            "observation": null,
+            "last_names": "CUMBALAZA",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 19,
+        "fields": {
+            "names": "LEIDER",
+            "dni": "3522222",
+            "email": null,
+            "address": "LA PALMA /LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3166619465",
+            "gender": "male",
+            "observation": null,
+            "last_names": "TUCANES",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 20,
+        "fields": {
+            "names": "RAUL",
+            "dni": "87718860",
+            "email": null,
+            "address": "LA VICTORIA-CENTRO POBLADO",
+            "city": "IPIALES",
+            "cellphone": "3185819553",
+            "gender": "male",
+            "observation": null,
+            "last_names": "MORAN",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 21,
+        "fields": {
+            "names": "DULIANA",
+            "dni": "33333334",
+            "email": null,
+            "address": "SAN JORGE",
+            "city": "IPIALES",
+            "cellphone": "3234063248",
+            "gender": "female",
+            "observation": null,
+            "last_names": "IBARRA",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 22,
+        "fields": {
+            "names": "EDISON",
+            "dni": "638768",
+            "email": null,
+            "address": "LOS PINOS /LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3113693044",
+            "gender": "male",
+            "observation": null,
+            "last_names": "IBARRA",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 23,
+        "fields": {
+            "names": "JAIRO",
+            "dni": "55565485",
+            "email": null,
+            "address": "LA PALMA /LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": null,
+            "gender": "male",
+            "observation": null,
+            "last_names": "YANDUN CHACUA",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 24,
+        "fields": {
+            "names": "RODRIGO",
+            "dni": "888884",
+            "email": null,
+            "address": "LA PALMA /LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": null,
+            "gender": "male",
+            "observation": null,
+            "last_names": "GUARAMA",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 25,
+        "fields": {
+            "names": "ANGY",
+            "dni": "1085940671",
+            "email": null,
+            "address": "VILLA FLOR /LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3155254136",
+            "gender": "female",
+            "observation": null,
+            "last_names": "GUERRERO",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 26,
+        "fields": {
+            "names": "JUAN CARLOS",
+            "dni": "1088130017",
+            "email": null,
+            "address": "SAN JOSE BAJO /LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3127346247",
+            "gender": "male",
+            "observation": null,
+            "last_names": "BERNAL",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 27,
+        "fields": {
+            "names": "HECTOR",
+            "dni": "87714587",
+            "email": null,
+            "address": "SAN JOSE BAJO /LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3217474006",
+            "gender": "male",
+            "observation": null,
+            "last_names": "CHALAPUD",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 28,
+        "fields": {
+            "names": "ALBEIRO",
+            "dni": "7896725789",
+            "email": null,
+            "address": "LA PALMA / LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3207149080",
+            "gender": "male",
+            "observation": null,
+            "last_names": "TUCANES",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 29,
+        "fields": {
+            "names": "EVER JHON",
+            "dni": "87514929",
+            "email": null,
+            "address": "VILLA MORENO / LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "32081061000",
+            "gender": "male",
+            "observation": null,
+            "last_names": "TAPIA MIMALCHI",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 30,
+        "fields": {
+            "names": "WILSON",
+            "dni": "55544555",
+            "email": null,
+            "address": "LOS PINOS /LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": null,
+            "gender": "male",
+            "observation": "cliente que siembra en el teliz , pero es de la palma",
+            "last_names": "USAMA",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 31,
+        "fields": {
+            "names": "MAURICIO",
+            "dni": "1085965456",
+            "email": null,
+            "address": "EL TELIS/LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3215329774",
+            "gender": "male",
+            "observation": null,
+            "last_names": "ORTEGA",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 32,
+        "fields": {
+            "names": "NUEVO CLIENTE",
+            "dni": "22233351",
+            "email": null,
+            "address": "VILLA MORENO /LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "000000000",
+            "gender": "male",
+            "observation": null,
+            "last_names": "NO",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 33,
+        "fields": {
+            "names": "EMERSON",
+            "dni": "3881569511",
+            "email": null,
+            "address": "LA FAMA /SUCUMBIOS",
+            "city": "LA VICTORIA",
+            "cellphone": "55555555",
+            "gender": "male",
+            "observation": null,
+            "last_names": "ORTIZ",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 34,
+        "fields": {
+            "names": "EDISON ALBEIRO",
+            "dni": "1085940122",
+            "email": null,
+            "address": "BARRIO LOS PINOS/LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3113693044",
+            "gender": "male",
+            "observation": null,
+            "last_names": "IBARRA PINCHAO",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 35,
+        "fields": {
+            "names": "RICHAR DILBERTO",
+            "dni": "1085941584",
+            "email": null,
+            "address": "LA PALMA/LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3147548125",
+            "gender": "male",
+            "observation": null,
+            "last_names": "TUCANES CHACUA",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 36,
+        "fields": {
+            "names": "RICARDO ALEJANDRO",
+            "dni": "8711998",
+            "email": null,
+            "address": "VILLA MORENO/LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "IPIALES",
+            "gender": "male",
+            "observation": null,
+            "last_names": "CHACUA POTOSI",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 37,
+        "fields": {
+            "names": "JESUS NELSON",
+            "dni": "87102544",
+            "email": null,
+            "address": "VEREDA LA PALMA/LA VICTIRIA",
+            "city": "IPIALES",
+            "cellphone": "3152893334",
+            "gender": "male",
+            "observation": null,
+            "last_names": "PUERCHAMBU",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 38,
+        "fields": {
+            "names": "YEXON ByRON",
+            "dni": "1085929501",
+            "email": null,
+            "address": "BARRIO LOS PINOS/LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3165064955",
+            "gender": "male",
+            "observation": null,
+            "last_names": "BETANCUT LEYTON",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 39,
+        "fields": {
+            "names": "MIGUEL ANTO�O",
+            "dni": "53007410",
+            "email": null,
+            "address": "SAN JORGE/LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "000000",
+            "gender": "male",
+            "observation": null,
+            "last_names": "PINCHAO",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 40,
+        "fields": {
+            "names": "DANI ROLANDO",
+            "dni": "1004532378",
+            "email": null,
+            "address": "VILLA MORENO/LA VICTORIA",
+            "city": "I�ALES",
+            "cellphone": "3107163027",
+            "gender": "male",
+            "observation": null,
+            "last_names": "USAMA CHACUA",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 41,
+        "fields": {
+            "names": "YOVANY",
+            "dni": "87218231",
+            "email": null,
+            "address": "LA Palma/la victora",
+            "city": "IPIALES",
+            "cellphone": "3164832108",
+            "gender": "male",
+            "observation": null,
+            "last_names": "BASTIDAS",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 42,
+        "fields": {
+            "names": "FLORENCIO",
+            "dni": "00000",
+            "email": null,
+            "address": "LA PALMA/LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "00000",
+            "gender": "male",
+            "observation": null,
+            "last_names": "PINCHAO",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 43,
+        "fields": {
+            "names": "ALIRIO FELIPE",
+            "dni": "5268130",
+            "email": null,
+            "address": "SAN JORGE",
+            "city": "IPIALES",
+            "cellphone": "3187755470",
+            "gender": "male",
+            "observation": null,
+            "last_names": "ROJAS GUZMAN",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 44,
+        "fields": {
+            "names": "JUAN DANIEL",
+            "dni": "1085928377",
+            "email": null,
+            "address": "SAN JOSE ALTO/LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3206694868",
+            "gender": "male",
+            "observation": null,
+            "last_names": "QUITIAQUES CHAVISNAN",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 45,
+        "fields": {
+            "names": "BOLIBAR ALEXANDER",
+            "dni": "1085934067",
+            "email": null,
+            "address": "LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3205979862",
+            "gender": "male",
+            "observation": null,
+            "last_names": "BURGOS NASAMUES",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 46,
+        "fields": {
+            "names": "GERMAN ORACIO",
+            "dni": "5268058",
+            "email": null,
+            "address": "LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3156010720",
+            "gender": "male",
+            "observation": null,
+            "last_names": "DAVILA PANTOJA",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 47,
+        "fields": {
+            "names": "OSCAR ORLANDO",
+            "dni": "1085906968",
+            "email": null,
+            "address": "LA PALMA /LA VICTIRIA",
+            "city": "IPIALES",
+            "cellphone": "3218875070",
+            "gender": "male",
+            "observation": null,
+            "last_names": "CHACUA",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 48,
+        "fields": {
+            "names": "PEDRO SESAR",
+            "dni": "1085949401",
+            "email": null,
+            "address": "EL ARRAYAN /LA VICTORA",
+            "city": "IPIALES",
+            "cellphone": "3105407809",
+            "gender": "male",
+            "observation": null,
+            "last_names": "FUETES CAICEDO",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 49,
+        "fields": {
+            "names": "EDWIN GEOVANY",
+            "dni": "1085902773",
+            "email": null,
+            "address": "EL TELIZ7LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3127232140",
+            "gender": "male",
+            "observation": null,
+            "last_names": "LOPEZ RODRIGUES",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 50,
+        "fields": {
+            "names": "JAVIER ARMANDO",
+            "dni": "877017800",
+            "email": null,
+            "address": "LA PALMA/LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3225191541",
+            "gender": "male",
+            "observation": null,
+            "last_names": "PINCHAO",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 51,
+        "fields": {
+            "names": "JUAQUIN HERNANDO",
+            "dni": "87103591",
+            "email": null,
+            "address": "LA PALMA/LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3187242926",
+            "gender": "male",
+            "observation": null,
+            "last_names": "CUASQUER ROJAS",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 52,
+        "fields": {
+            "names": "DEYBY RONALDO",
+            "dni": "111111",
+            "email": null,
+            "address": "LA PALMA/LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3235468382",
+            "gender": "male",
+            "observation": null,
+            "last_names": "TUCANES CHACUA",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 53,
+        "fields": {
+            "names": "CAMILO GABRIEL",
+            "dni": "1004673467",
+            "email": null,
+            "address": "PENJAMO/LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3107282293",
+            "gender": "male",
+            "observation": null,
+            "last_names": "PASTAS RODRIGUES",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 54,
+        "fields": {
+            "names": "MARLON ALEXIS",
+            "dni": "1088130358",
+            "email": null,
+            "address": "EL ARRAYAN/LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3226395377",
+            "gender": "male",
+            "observation": null,
+            "last_names": "CHAMORRO ERASO",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 55,
+        "fields": {
+            "names": "ANIBAL FRAILAN",
+            "dni": "5267896",
+            "email": null,
+            "address": "VILLA FLOR /LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3153093545",
+            "gender": "male",
+            "observation": null,
+            "last_names": "YANDUN TORO",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 56,
+        "fields": {
+            "names": "ROBRTH OSWALDO",
+            "dni": "1004673374",
+            "email": null,
+            "address": "la palma/la victoria",
+            "city": "ipiales",
+            "cellphone": "3157814002",
+            "gender": "male",
+            "observation": null,
+            "last_names": "CADENA PINCHAO",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 57,
+        "fields": {
+            "names": "JHONY ANBEIRO",
+            "dni": "1085900458",
+            "email": null,
+            "address": "LA PALMA /LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "321509356",
+            "gender": "male",
+            "observation": null,
+            "last_names": "GOYES PALLES",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 58,
+        "fields": {
+            "names": "JORGE OLMEDO",
+            "dni": "5268223",
+            "email": null,
+            "address": "EL TELIS/LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "0000000",
+            "gender": "male",
+            "observation": null,
+            "last_names": "PAUCARA CHA�AN",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 59,
+        "fields": {
+            "names": "GABRIEL HERNAN",
+            "dni": "87103977",
+            "email": null,
+            "address": "LOS PINOS/LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3234164756",
+            "gender": "male",
+            "observation": null,
+            "last_names": "CADENA INAGAN",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 60,
+        "fields": {
+            "names": "SEGUNDO PABLO",
+            "dni": "87102276",
+            "email": null,
+            "address": "LA PALMA/LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3207514166",
+            "gender": "male",
+            "observation": null,
+            "last_names": "BASTIDAS PINCHAO",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 61,
+        "fields": {
+            "names": "CARLOS HERNAN",
+            "dni": "87717125",
+            "email": null,
+            "address": "EL CULTUN/LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "310461343",
+            "gender": "male",
+            "observation": null,
+            "last_names": "PINCHAO QUI�ONES",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 62,
+        "fields": {
+            "names": "E FRANSISCO",
+            "dni": "4917016",
+            "email": null,
+            "address": "LA CANCHA DE SAN JOSE",
+            "city": "LA VICTORIA",
+            "cellphone": null,
+            "gender": "male",
+            "observation": null,
+            "last_names": "CHAMORRO",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 63,
+        "fields": {
+            "names": "ROMAN",
+            "dni": "1085926264",
+            "email": null,
+            "address": "SAN JOSE BAJO/LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3126543053",
+            "gender": "male",
+            "observation": null,
+            "last_names": "MALPUD",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 64,
+        "fields": {
+            "names": "GERARDO ESTEBAN",
+            "dni": "870060441",
+            "email": null,
+            "address": "EL TELIS/LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3153300677",
+            "gender": "male",
+            "observation": null,
+            "last_names": "BASTIDAS MEGIA",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 65,
+        "fields": {
+            "names": "ROSA  ALBA",
+            "dni": "37014201",
+            "email": null,
+            "address": "PENJAMO/LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3145434682",
+            "gender": "male",
+            "observation": "MADRE DE DULIANA",
+            "last_names": "PINCHAO CAICEDO",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 66,
+        "fields": {
+            "names": "LUIZ",
+            "dni": "1085933507",
+            "email": null,
+            "address": "PENJAMO/LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3233382008",
+            "gender": "male",
+            "observation": null,
+            "last_names": "PASTAS",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 67,
+        "fields": {
+            "names": "MARIA FERNANDA",
+            "dni": "1085928723",
+            "email": "mafedannel@gmail.com",
+            "address": "EL ARRAYAN/LA PALMA",
+            "city": "IPIALES",
+            "cellphone": "3168197000",
+            "gender": "male",
+            "observation": null,
+            "last_names": "YEPEZ LEON",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 68,
+        "fields": {
+            "names": "PAOLA ESTEFANIA",
+            "dni": "1085929310",
+            "email": null,
+            "address": null,
+            "city": null,
+            "cellphone": "3177722037",
+            "gender": "male",
+            "observation": null,
+            "last_names": "TULCAN",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 69,
+        "fields": {
+            "names": "carlos ANDRES",
+            "dni": "87219726",
+            "email": null,
+            "address": null,
+            "city": null,
+            "cellphone": "3217748664",
+            "gender": "male",
+            "observation": null,
+            "last_names": "CUADROS",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 70,
+        "fields": {
+            "names": "EUCLIDES",
+            "dni": "87713388",
+            "email": null,
+            "address": "LA PALMA/LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3215589318",
+            "gender": "male",
+            "observation": null,
+            "last_names": "PALLES",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 71,
+        "fields": {
+            "names": "JAIME ALBEIRO",
+            "dni": "1085896719",
+            "email": null,
+            "address": "SAN JOSE ALTO/LA VICTORIA",
+            "city": "IPILAES",
+            "cellphone": "3219211948",
+            "gender": "male",
+            "observation": null,
+            "last_names": "QUITIAQUES CHAVISNAN",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 72,
+        "fields": {
+            "names": "YERSON",
+            "dni": "87713733",
+            "email": null,
+            "address": "SAN JORJE/LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3185805885",
+            "gender": "male",
+            "observation": null,
+            "last_names": "CEPEDA",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 73,
+        "fields": {
+            "names": "SEGUNDO",
+            "dni": "000",
+            "email": null,
+            "address": "LA PALMA",
+            "city": "IPIALES",
+            "cellphone": "000",
+            "gender": "male",
+            "observation": null,
+            "last_names": "IPIAL",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 74,
+        "fields": {
+            "names": "caicedo calderon",
+            "dni": "5268632",
+            "email": null,
+            "address": "la victoria",
+            "city": "centro poblado",
+            "cellphone": "3185977625",
+            "gender": "male",
+            "observation": null,
+            "last_names": "darwin",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 75,
+        "fields": {
+            "names": "GONSALO HORLANDO",
+            "dni": "87714854",
+            "email": null,
+            "address": "LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3106867473",
+            "gender": "male",
+            "observation": null,
+            "last_names": "HERNANDES CADENA",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 76,
+        "fields": {
+            "names": "FREDY HERNEY",
+            "dni": "87102148",
+            "email": null,
+            "address": "EL ARRAYAN /LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3168874155",
+            "gender": "male",
+            "observation": null,
+            "last_names": "PASTAS",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 77,
+        "fields": {
+            "names": "VICTOR ANDRES",
+            "dni": "1085909683",
+            "email": null,
+            "address": "SAN JOSE ALTO/LA VICTORIA",
+            "city": "IPILAES",
+            "cellphone": "3148866305",
+            "gender": "male",
+            "observation": null,
+            "last_names": "NARVAES CUARAN",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 78,
+        "fields": {
+            "names": "USAMA CUSPUD",
+            "dni": "515618",
+            "email": null,
+            "address": "villa moreno",
+            "city": "ipiales",
+            "cellphone": "3161683160",
+            "gender": "male",
+            "observation": null,
+            "last_names": "JOSE",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 79,
+        "fields": {
+            "names": "JOSE ALFREDO",
+            "dni": "87713501",
+            "email": null,
+            "address": "PENJAMO/LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3206478868",
+            "gender": "male",
+            "observation": null,
+            "last_names": "CHAMPUTIS CADENA",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 80,
+        "fields": {
+            "names": "LUIZ ANTONIO",
+            "dni": "87714777",
+            "email": null,
+            "address": "VILLA MORENO/LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3167789393",
+            "gender": "male",
+            "observation": null,
+            "last_names": "LEON",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 81,
+        "fields": {
+            "names": "PEDRO",
+            "dni": "87711655",
+            "email": null,
+            "address": "LA VICTORIA",
+            "city": "LA VICTORIA",
+            "cellphone": null,
+            "gender": "male",
+            "observation": null,
+            "last_names": "BENITES",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 82,
+        "fields": {
+            "names": "MIGUEL OSCAR",
+            "dni": "87717423",
+            "email": null,
+            "address": "EL ARRAYAN/LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "32324628615",
+            "gender": "male",
+            "observation": null,
+            "last_names": "PASTAS",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 83,
+        "fields": {
+            "names": "LUIZ ENRIQUES",
+            "dni": "13012257",
+            "email": null,
+            "address": "LA VICTORIA",
+            "city": "LA VICTORIA",
+            "cellphone": "3122115540",
+            "gender": "male",
+            "observation": null,
+            "last_names": "BENAVIDES",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 84,
+        "fields": {
+            "names": "ANYELA VIVIANA",
+            "dni": "1085938278",
+            "email": "malesviviana@gmail.com",
+            "address": "LA PALMA",
+            "city": "IPIALES",
+            "cellphone": "3215595458",
+            "gender": "male",
+            "observation": "CREDITO 15 DIAS",
+            "last_names": "MALES IPIAL",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 85,
+        "fields": {
+            "names": "LUIZ SIQUIFREDO",
+            "dni": "87713853",
+            "email": null,
+            "address": "SAN JOSE/LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3182473309",
+            "gender": "male",
+            "observation": null,
+            "last_names": "BERNAL CHACUA",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 86,
+        "fields": {
+            "names": "JAVIER WILSON",
+            "dni": "1085953686",
+            "email": "jpaucara918@gmail.com",
+            "address": "EL TELIS/LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3207934374",
+            "gender": "male",
+            "observation": null,
+            "last_names": "PAUCARA PALACIOS",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 87,
+        "fields": {
+            "names": "ALEXIS DUBAN",
+            "dni": "1004577607",
+            "email": null,
+            "address": "LA PALMA/LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3145553287",
+            "gender": "male",
+            "observation": null,
+            "last_names": "CORDOBA USAMA",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 88,
+        "fields": {
+            "names": "CRISTIAN",
+            "dni": "1004673591",
+            "email": null,
+            "address": "LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3186567418",
+            "gender": "male",
+            "observation": null,
+            "last_names": "CHAMORRO",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 89,
+        "fields": {
+            "names": "JESUS EDUARDO",
+            "dni": "1085939255",
+            "email": null,
+            "address": null,
+            "city": null,
+            "cellphone": "3158909593",
+            "gender": "male",
+            "observation": null,
+            "last_names": "MEGIA BASTIDAS",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 90,
+        "fields": {
+            "names": "HUMBERTO",
+            "dni": "18156595",
+            "email": null,
+            "address": "LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3128901705",
+            "gender": "male",
+            "observation": null,
+            "last_names": "RAMIRES MENDOSA",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 91,
+        "fields": {
+            "names": "HUMBERTO ELADIO",
+            "dni": "87101793",
+            "email": null,
+            "address": "LA PALMA/LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3143701938",
+            "gender": "male",
+            "observation": null,
+            "last_names": "MARTINES TENGANAN",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 92,
+        "fields": {
+            "names": "JOSE JULIAN",
+            "dni": "87719039",
+            "email": null,
+            "address": "LA PALMA/LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3207150309",
+            "gender": "male",
+            "observation": null,
+            "last_names": "ITACUAR REBELO",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 93,
+        "fields": {
+            "names": "HUMBERTO HERALDO",
+            "dni": "18153293",
+            "email": null,
+            "address": "LLORENTE/LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3103661640",
+            "gender": "male",
+            "observation": null,
+            "last_names": "REINA",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 94,
+        "fields": {
+            "names": "JOSE",
+            "dni": "87215269",
+            "email": null,
+            "address": "VEREDA EL CULTUN/LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3127722362",
+            "gender": "male",
+            "observation": null,
+            "last_names": "TULCAN",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 95,
+        "fields": {
+            "names": "CECILIA",
+            "dni": "27254059",
+            "email": null,
+            "address": null,
+            "city": "PENJAMO",
+            "cellphone": "3127840395",
+            "gender": "male",
+            "observation": null,
+            "last_names": "CHAMPUTIZ",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 96,
+        "fields": {
+            "names": "GERMAN",
+            "dni": "13013428",
+            "email": null,
+            "address": "LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3226486286",
+            "gender": "male",
+            "observation": null,
+            "last_names": "DIAS",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 97,
+        "fields": {
+            "names": "HERMES LIBARDO",
+            "dni": "1085907076",
+            "email": null,
+            "address": "EL CULTUN/LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3212757370",
+            "gender": "male",
+            "observation": null,
+            "last_names": "TUCANES",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 98,
+        "fields": {
+            "names": "JOSE ALIRIO",
+            "dni": "1085926078",
+            "email": null,
+            "address": "LA PALMA/LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3124121954",
+            "gender": "male",
+            "observation": null,
+            "last_names": "TAUBUT QUEMAG",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 99,
+        "fields": {
+            "names": "LUIZ BERNARDO",
+            "dni": "5268140",
+            "email": null,
+            "address": "LA PALMA/LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3127271860",
+            "gender": "male",
+            "observation": null,
+            "last_names": "PINCHAO",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 100,
+        "fields": {
+            "names": "GERMAN ANDRES",
+            "dni": "1085926961",
+            "email": null,
+            "address": "BARRIO ORQUIDEAS/LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3186512100",
+            "gender": "male",
+            "observation": null,
+            "last_names": "DAVILA MARTINES",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    },
+    {
+        "model": "ilitia.client",
+        "pk": 101,
+        "fields": {
+            "names": "HERNANDO",
+            "dni": "1085936141",
+            "email": null,
+            "address": "VILA MORENO/LA VICTORIA",
+            "city": "IPIALES",
+            "cellphone": "3105429491",
+            "gender": "male",
+            "observation": null,
+            "last_names": "YANDUN",
+            "created_by": 1,
+            "created_at": "2025-05-04T04:01:37.353171Z",
+            "updated_by": null,
+            "updated_at": "2025-05-04T04:01:37.353171Z"
+        }
+    }
+]
