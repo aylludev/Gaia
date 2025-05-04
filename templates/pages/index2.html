@@ -687,8 +687,8 @@
                   <i class="bi bi-cart-fill"></i>
                 </span>
                 <div class="info-box-content">
-                  <span class="info-box-text">Sales</span>
-                  <span class="info-box-number">760</span>
+                  <span class="info-box-text">Ventas </span>
+                  <span class="info-box-number">{{ num_sales }}</span>
                 </div>
                 <!-- /.info-box-content -->
               </div>
@@ -701,8 +701,8 @@
                   <i class="bi bi-people-fill"></i>
                 </span>
                 <div class="info-box-content">
-                  <span class="info-box-text">New Members</span>
-                  <span class="info-box-number">2,000</span>
+                  <span class="info-box-text">Clientes</span>
+                  <span class="info-box-number">{{ num_cli }}</span>
                 </div>
                 <!-- /.info-box-content -->
               </div>
@@ -1495,7 +1495,6 @@
   <!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
   <script src={% static 'lib/AdminLTE-4.0.0/dist/js/adminlte.js' %}></script>
   <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
-  {% block script %}
   <script>
     const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
     const Default = {
@@ -1529,6 +1528,8 @@
     });
   </script>
   <!--end::OverlayScrollbars Configure-->
+  {% block script %}
+
   <!-- OPTIONAL SCRIPTS -->
   <!-- apexcharts -->
   <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.min.js"
@@ -1546,18 +1547,10 @@
     //-----------------------
     // - MONTHLY SALES CHART -
     //-----------------------
-
+    const sales = {{ sales|safe }};
+    console.log(sales);
     const sales_chart_options = {
-      series: [
-        {
-          name: 'Digital Goods',
-          data: [28, 48, 40, 19, 86, 27, 90],
-        },
-        {
-          name: 'Electronics',
-          data: [65, 59, 80, 81, 56, 55, 40],
-        },
-      ],
+      series: sales,
       chart: {
         height: 180,
         type: 'area',
@@ -1576,20 +1569,20 @@
         curve: 'smooth',
       },
       xaxis: {
-        type: 'datetime',
+        type: 'category',
         categories: [
-          '2023-01-01',
-          '2023-02-01',
-          '2023-03-01',
-          '2023-04-01',
-          '2023-05-01',
-          '2023-06-01',
-          '2023-07-01',
+          'Lunes',
+          'Martes',
+          'Miércoles',
+          'Jueves',
+          'Viernes',
+          'Sábado',
+          'Domingo',
         ],
       },
       tooltip: {
         x: {
-          format: 'MMMM yyyy',
+          format: 'dd',
         },
       },
     };

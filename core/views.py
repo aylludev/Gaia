@@ -6,10 +6,9 @@ from django.http import JsonResponse
 from django.db.models import Sum, DecimalField
 from django.db.models.functions import Coalesce, TruncMonth
 from calendar import monthrange
-from datetime import date, timedelta
+from datetime import datetime, timedelta
 from collections import defaultdict
-import calendar
-
+from ilitia.models import Sale, DetSale, Client
 
 class DashboardView(LoginRequiredMixin, TemplateView):
     template_name='dashboard.html'
@@ -17,6 +16,38 @@ class DashboardView(LoginRequiredMixin, TemplateView):
     def get(self, request, *args, **kwargs):
         request.user.get_group_sessions()
         return super().get(request, *args, **kwargs)
+    
+    def sales_by_week(self):
+        data = []
+        try:
+            # Lunes de esta semana
+            hoy = datetime.now().date()
+            inicio_semana = hoy - timedelta(days=hoy.weekday())
+            fin_semana = inicio_semana + timedelta(days=6)
+
+            tipo_pago_totales = defaultdict(lambda: [0] * 7)
+            ventas = Sale.objects.filter(date_joined__range=[inicio_semana, fin_semana])
+
+            for venta in ventas:
+                dia_semana = venta.date_joined.weekday()  # 0 = lunes
+                tipo = (venta.type_payment or "CASH").upper()
+                tipo_pago_totales[tipo][dia_semana] += float(venta.total)
+
+            data = [{'name': tipo, 'data': dias} for tipo, dias in tipo_pago_totales.items()]
+            print(f"Ventas por día de la semana y tipo de pago: {data}")
+            return data
+        except Exception as e:
+            print(f"Error al obtener ventas semanales: {e}")
+            return data
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['num_sales'] = Sale.objects.filter(date_joined__year=datetime.now().year).count()
+        context['num_cli'] = Client.objects.filter().count()
+        context['sales'] = self.sales_by_week()  # Agregar datos de ventas al contexto
+        return context
+    
+
 
 class ArtemisaView(LoginRequiredMixin, TemplateView):
     template_name = 'artemisa/index.html'
