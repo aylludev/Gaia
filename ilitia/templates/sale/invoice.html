@@ -115,7 +115,7 @@
         {% for det in details %}
             <tr>
                 <td class="text-center">{{ forloop.counter }}</td>
-                <td>{{ det.prod__name }}</td>
+                <td>{{ det.prod__name }} ({{ det.prod__unit__quantity }} {{ det.prod__unit__unit }})</td>
                 <td class="text-center">{{ det.cant }}</td>
                 <td class="text-center">${{ det.price|floatformat:0|intcomma }}</td>
                 <td class="text-center">{{ det.discount|floatformat:0|intcomma }}% </td>

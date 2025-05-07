@@ -291,8 +291,7 @@ class SaleInvoicePdfView(LoginRequiredMixin, View):
             sale = get_object_or_404(Sale, pk=self.kwargs['pk'])
 
             # Obtener detalles de venta y calcular el descuento total
-            details = sale.detsale_set.all().values('prod__name', 'price', 'cant', 'discount', 'subtotal')
-            
+            details = sale.detsale_set.all().values('prod__name', 'prod__unit__quantity', 'prod__unit__unit', 'price', 'cant', 'discount', 'subtotal')
             products_discount=0
             balance = 0
 
