@@ -1,4 +1,4 @@
-{% extends "list.html" %}
+{% extends "form.html" %}
 
 {% block app-content %}
 {% load humanize %}
@@ -30,22 +30,20 @@
             </address>
           </div>
           <!-- /.col -->
-          <div class="col-sm-3 invoice-col">
+          <div class="col-sm-4 invoice-col">
             Almacen
             <address>
               <strong>{{ comp.name }}</strong><br>
               NIT: {{ comp.nit }}<br>
               Dirección: {{ comp.address }} - {{ comp.city }} <br>
-              Phone: {{ comp.tel }}<br>
+              Teléfono: {{ comp.tel }}<br>
               Administrador: {{ comp.vendor }}
             </address>
           </div>
           <!-- /.col -->
-          <div class="col-sm-5 invoice-col"> <br>
-            <b>Factura No. </b>{{ sale.invoice_number }}<br>
-            <b>Fecha de compra:</b> {{ sale.date_joined }}<br>
-            <b>Valor de Factura:</b> ${{ sale.total|floatformat:2|intcomma }}<br>
-            <b>Saldo pendiente:</b> $ {{ pending_balance|floatformat:2|intcomma }}<br>
+          <div class="col-sm-4 invoice-col">
+            <b>Apertura de Caja: </b>{{ last.last_login }}<br>
+            <b>Cierre de Caja:</b> {{ date }}<br>
           </div>
           <!-- /.col -->
         </div>
@@ -53,15 +51,19 @@
 
         <!-- Table row -->
         <div class="row">
+          <form class="form" action="." enctype="multipart/form-data">
           <div class="col-12 table-responsive">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="{{ action }}">
             <table class="table table-striped">
               <thead>
               <tr>
                 <th>Tipo</th>
                 <th>No. Factura</th>
+                <th>Cliente</th>
                 <th>Fecha</th>
-                <th>Tipo de pago </th>
                 <th>Valor</th>
+                <th>Nota</th>
               </tr>
               </thead>
               <tbody>
@@ -69,6 +71,7 @@
                     <tr>
                         <td> Venta </td>
                         <td> {{ sale.invoice_number }}</td>
+                        <td> {{ sale.cli }} </td>
                         <td> {{ sale.date_joined }} </td>
                         <td> {{ sale.type_payment }} </td>
                         {% if sale.type_payment == "CASH" %}
@@ -76,7 +79,6 @@
                         {% elif sale.type_payment == "CREDIT" %}
                             <td> {{ sale.down_payment }}</td>
                         {% endif %}
-                        <td> {{ sale.note }}</td>
                     </tr>
                 {% endfor %}
                 {% for sale in salespayments %}
@@ -84,9 +86,8 @@
                         <td> Abono a credito </td>
                         <td> {{ sale.invoice }}</td>
                         <td> {{ sale.payment_date }} </td>
-                        <td> CASH </td>
+                        <td> CASH </td> 
                         <td> {{ sale.amount }}</td>
-                        <td> {{ sale.note }}</td>
                     </tr>
                 {% endfor %}
               </tbody>
@@ -97,61 +98,69 @@
         <!-- /.row -->
 
         <div class="row">
-          <!-- accepted payments column -->
-          <div class="col-5">
-            <p class="lead">Acuerdo de Pago: {{ sale.type_payment }} </p>
-            <div class="table-responsive">
+            <!-- accepted payments column -->
+            <div class="col-5">
+              <p class="lead">Ventas: </p>
+              <div class="table-responsive">
+                  <table class="table">
+                    <tbody><tr>
+                      <th style="width:50%">Ventas de contado:</th>
+                      <td>$ {{ total_sales_cash|floatformat:2|intcomma }}</td>
+                    </tr>
+                    <tr>
+                      <th>Ventas a credito:</th>
+                      <td>$ {{ total_sales_credit }}</td>
+                    </tr>
+                    <tr>
+                      <th>Vendido:</th>
+                      <td>$ {{ total }}</td>
+                    </tr>
+
+                    </tbody>
+                </table>
+              </div>
+  
+              <p class="text-muted well well-sm shadow-none" style="margin-top: 10px;">
+              </p>
+            </div>
+            <div class="col-1"> </div>
+            <!-- /.col -->
+            <div class="col-6">
+              <p class="lead">Detalles: </p>
+  
+              <div class="table-responsive">
                 <table class="table">
-                  <tbody><tr>
-                    <th style="width:50%">Subtotal:</th>
-                    <td> {{ total_sales_cash }}</td>
-                  </tr>
-                  <tr>
-                    <th>Primera Cuota:</th>
-                    <td>$ {{ total_sales_credit }}</td>
-                  </tr>
-                  <tr>
-                    <th>Primera Cuota:</th>
-                    <td>$ {{ total_salespayments }}</td>
-                  </tr>
+                  <tbody>
+                    <tr>
+                      <th>Abonos: </th>
+                      <td>$ {{ total_salespayments|floatformat:2|intcomma }}</td>
+                    </tr>
+                    <tr>
+                      <th>Cuentas por cobrar:</th>
+                      <td>$ {{ pending_balance|floatformat:2|intcomma }}</td>
+                    </tr>
+                    <tr>
+                      <th style="width:50%">Efectivo:</th>
+                      <td>$ {{ cash|floatformat:2|intcomma }}</td>
+                    </tr>
                   </tbody>
               </table>
+              </div>
             </div>
-
-            <p class="text-muted well well-sm shadow-none" style="margin-top: 10px;">
-            </p>
+            <div class="col-12 table-responsive form-group">
+              <label for="note">Observaciones:</label>
+              {{ form.observations}}
+            </div>  
+  
+            <!-- /.col -->
           </div>
-          <div class="col-1"> </div>
-          <!-- /.col -->
-          <div class="col-6">
-            <p class="lead">Fecha de venta {{ purchase.date }}</p>
-
-            <div class="table-responsive">
-              <table class="table">
-                <tbody><tr>
-                  <th style="width:50%">Valor de credito:</th>
-                  <td>$ {{ sale.total|floatformat:2|intcomma }}</td>
-                </tr>
-                <tr>
-                  <th>Abonado: </th>
-                  <td>$ {{ purchase_payments|floatformat:2|intcomma }}</td>
-                </tr>
-                <tr>
-                  <th>Saldo pendiente:</th>
-                  <td>$ {{ pending_balance|floatformat:2|intcomma }}</td>
-                </tr>
-                </tbody>
-            </table>
-            </div>
-          </div>
-          <!-- /.col -->
-        </div>
-        <!-- /.row -->
-
+          <!-- /.row -->
+  
         <!-- this row will not appear when printing -->
         <div class="row no-print">
           <div class="col-12">
-            <a href= {{ list_url }} type="button" class="btn btn-success float-right"><i class="far fa-credit-card"></i> Volver </a>
+            <button type="submit" class="btn btn-primary btn-flat"><i class="fas fa-save"></i> Guardar registro </button>
+            <a href="{{ list_url }}" class="btn btn-danger btn-flat"><i class="fas fa-times"></i> Cancelar</a>
           </div>
         </div>
       </div>
@@ -160,3 +169,62 @@
   </div>
 
 {% endblock app-content %}
+
+{% block script %}
+<script>
+        {% if form.errors %}
+            var errors = '';
+            {% for field in form %}
+                {% for error in field.errors %}
+                    errors += '{{ error }}\n';
+                {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+                errors += '{{ error }}\n';
+            {% endfor %}
+            Swal.fire({
+                title: 'Error!',
+                text: errors,
+                icon: 'error'
+            });
+        {% endif %}
+
+        $('form').on('submit', function (e) {
+            e.preventDefault();
+            var parameters = new FormData(this);
+            submit_with_ajax(window.location.pathname, 'Notificación', '¿Estas seguro de realizar la siguiente acción?', parameters, function () {
+                location.href = '{{ list_url }}';
+            });
+        });
+    </script>
+
+    <script>
+      function generateInvoiceNumber() {
+          // Obtener la fecha actual
+          const date = new Date();
+          const year = date.getFullYear();
+          const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Mes con dos dígitos
+          const day = date.getDate().toString().padStart(2, '0'); // Día con dos dígitos
+  
+          // Generar un identificador único (puedes usar un contador o un valor aleatorio)
+          const uniqueId = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+  
+          // Combinar los valores para formar el número de factura
+          const invoiceNumber = `INV-${year}${month}${day}-${uniqueId}`;
+  
+          // Asignar el número de factura al campo form.invoice
+          const invoiceField = document.querySelector('input[name="invoice"]');
+          if (invoiceField) {
+              invoiceField.value = invoiceNumber;
+          } else {
+              console.error('No se encontró el campo "invoice" en el formulario.');
+          }
+      }
+  
+      // Llamar a la función al cargar la página
+      document.addEventListener('DOMContentLoaded', function () {
+          generateInvoiceNumber();
+      });
+  </script>
+{% endblock script %}
+

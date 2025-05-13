@@ -44,7 +44,7 @@ class CashClosingListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, L
 class CashClosingCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, CreateView):
     model = CashClosing
     form_class = CashClosingForm
-    template_name = 'cashclosing/create copy.html'
+    template_name = 'cashclosing/create.html'
     success_url = reverse_lazy('hermes:cashclosing_list')
     permission_required = 'add_cashclosing'
     url_redirect = success_url
@@ -65,9 +65,12 @@ class CashClosingCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin,
         
         # Calcular los totales
         self.total_sales_cash = self.sales.filter(type_payment='CASH').aggregate(total=Coalesce(Sum('total'), Decimal('0.00'), output_field=DecimalField()))['total']
-        self.total_sales_credit = self.sales.filter(type_payment='CREDIT').aggregate(total=Coalesce(Sum('down_payment'), Decimal('0.00'), output_field=DecimalField()))['total']
+        self.total_downpayment_credit = self.sales.filter(type_payment='CREDIT').aggregate(total=Coalesce(Sum('down_payment'), Decimal('0.00'), output_field=DecimalField()))['total']
+        self.total_sales_credit = self.sales.filter(type_payment='CREDIT').aggregate(total=Coalesce(Sum('total'), Decimal('0.00'), output_field=DecimalField()))['total']
         self.total_salespayments = self.salespayments.aggregate(total=Coalesce(Sum('amount'), Decimal('0.00'), output_field=DecimalField()))['total']
-        self.total = self.total_sales_cash + self.total_sales_credit + self.total_salespayments
+        self.balance = self.total_sales_credit - self.total_downpayment_credit
+        self.total = self.total_sales_cash + self.total_sales_credit
+        self.cash = self.total_sales_cash + self.total_salespayments + self.total_downpayment_credit
         return super().dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
@@ -94,13 +97,16 @@ class CashClosingCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin,
         context['entity'] = 'Abono de créditos con proveedores'
         context['list_url'] = self.success_url
         context['action'] = 'add'
+        context['last'] = self.last_cash_closing
         context['date'] = datetime.now()
         context['sales'] = self.sales  # Pasar la compras al contexto
         context['salespayments'] = self.salespayments  # Pasar los pagos al contexto
         context['total_sales_cash'] = self.total_sales_cash
         context['total_sales_credit'] = self.total_sales_credit
         context['total_salespayments'] = self.total_salespayments
+        context['pending_balance'] = self.balance
         context['total'] = self.total
+        context['cash'] = self.cash
         context['comp'] = {
             'name': 'AGROINSUMOS MERKO SUR',
             'nit': '1085928681-1',
