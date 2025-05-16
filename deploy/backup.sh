@@ -4,7 +4,7 @@
 
 # Variables de entorno
 FECHA=$(date +%d_%m_%Y_%H_%M_%S)
-NAME="apolo_${FECHA}.dump"
+NAME="gaia_${FECHA}.dump"
 DIR="/home/amawta/backup"
 USER_DB="postgres"
 NAME_DB="ams"
