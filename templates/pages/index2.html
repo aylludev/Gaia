@@ -668,11 +668,11 @@
             <div class="col-12 col-sm-6 col-md-3">
               <div class="info-box">
                 <span class="info-box-icon text-bg-danger shadow-sm">
-                  <i class="bi bi-hand-thumbs-up-fill"></i>
+                  <i class="bi bi-box2-fill"></i>
                 </span>
                 <div class="info-box-content">
-                  <span class="info-box-text">Likes</span>
-                  <span class="info-box-number">41,410</span>
+                  <span class="info-box-text">Productos</span>
+                  <span class="info-box-number">{{ num_prod }}</span>
                 </div>
                 <!-- /.info-box-content -->
               </div>
@@ -751,18 +751,18 @@
                     </div>
                     <!-- /.col -->
                     <div class="col-md-4">
-                      <p class="text-center"><strong>Goal Completion</strong></p>
+                      <p class="text-center"><strong>Metas</strong></p>
                       <div class="progress-group">
-                        Add Products to Cart
-                        <span class="float-end"><b>160</b>/200</span>
+                        Ventas del mes pasado
+                        <span class="float-end"><b> </b>{{ sales_last_month }}</span>
                         <div class="progress progress-sm">
                           <div class="progress-bar text-bg-primary" style="width: 80%"></div>
                         </div>
                       </div>
                       <!-- /.progress-group -->
                       <div class="progress-group">
-                        Complete Purchase
-                        <span class="float-end"><b>310</b>/400</span>
+                        Ventas del mes
+                        <span class="float-end">{{ sales_month }}</span>
                         <div class="progress progress-sm">
                           <div class="progress-bar text-bg-danger" style="width: 75%"></div>
                         </div>

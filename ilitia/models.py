@@ -2,7 +2,7 @@ from django.db import models
 from django.forms import model_to_dict
 from ilitia.choices import GENDER
 from artemisa.models import Product
-from datetime import datetime
+from django.utils import timezone
 from hades.models import BaseModel
 
 class Client(BaseModel):
@@ -40,7 +40,7 @@ class Sale(BaseModel):
     ]
 
     cli = models.ForeignKey(Client, on_delete=models.CASCADE)
-    date_joined = models.DateTimeField(default=datetime.now)
+    date_joined = models.DateTimeField(default=timezone.now)
     invoice_number = models.CharField(max_length=50, blank=True, null=True)
     subtotal = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
     iva = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
@@ -110,7 +110,7 @@ class Cotization(BaseModel):
         ('CASH', 'Contado'),
     ]
 
-    date_joined = models.DateField(default=datetime.now)
+    date_joined = models.DateField(default=timezone.now)
     subtotal = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
     iva = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
     discountall = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
