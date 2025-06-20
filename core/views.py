@@ -73,7 +73,7 @@ class ArtemisaView(LoginRequiredMixin, TemplateView):
     def purchase_provider(self):
         data = []
         try:
-            year = timedelta.now().year
+            year = timezone.now().year
             provider_totals = defaultdict(lambda: [0] * 12)
             purchases = Purchase.objects.filter(date__year=year).select_related('provider')
 
@@ -91,5 +91,5 @@ class ArtemisaView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['chart_data'] = self.purchase_provider()  # Agregar datos de proveedores al contexto
-        context['total_purchases'] = Purchase.objects.filter(date__year=timedelta.now().year).aggregate(total=Coalesce(Sum('total'), 0, output_field=DecimalField()))['total']
+        context['total_purchases'] = Purchase.objects.filter(date__year=timezone.now().year).aggregate(total=Coalesce(Sum('total'), 0, output_field=DecimalField()))['total']
         return context
