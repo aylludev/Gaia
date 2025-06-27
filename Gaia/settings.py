@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'artemisa',
     'ilitia',
     'hermes',
+    'apolo',
 ]
 
 MIDDLEWARE = [

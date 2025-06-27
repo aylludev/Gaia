@@ -17,6 +17,8 @@ urlpatterns = [
     path('artemisa/', include('artemisa.urls', namespace='artemisa')),
     path('ilitia/', include('ilitia.urls', namespace='ilitia')),
     path('hermes/', include('hermes.urls', namespace='hermes')),
+    path('apolo/', include('apolo.urls', namespace='reports')),
+
 ]
 
 handler404 = page_not_found_view

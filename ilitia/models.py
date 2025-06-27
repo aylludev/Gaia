@@ -4,6 +4,7 @@ from ilitia.choices import GENDER
 from artemisa.models import Product
 from django.utils import timezone
 from hades.models import BaseModel
+from django.utils.timezone import localtime
 
 class Client(BaseModel):
     names = models.CharField(max_length=150, verbose_name='Nombres')
@@ -62,7 +63,7 @@ class Sale(BaseModel):
         item['iva'] = format(self.iva, '.2f')
         item['total'] = format(self.total, '.2f')
         item['discountall'] = format(self.discountall, '.2f')
-        item['date_joined'] = self.date_joined.strftime('%Y-%m-%d %H:%M')
+        item['date_joined'] = localtime(self.date_joined).strftime('%Y-%m-%d %H:%M')
         item['type_payment'] = self.type_payment
         item['down_payment'] = format(self.down_payment, '.2f')
         item['days_to_pay'] = format(self.days_to_pay, '.2f')
