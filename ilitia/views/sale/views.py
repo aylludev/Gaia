@@ -28,7 +28,7 @@ class SaleListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, ListView
             action = request.POST['action']
             if action == 'searchdata':
                 data = []
-                for i in Sale.objects.all().order_by('-date_joined')[:30]:
+                for i in Sale.objects.all().order_by('-date_joined'):
                     data.append(i.to_json())
             elif action == 'search_details_prod':
                 data = []
