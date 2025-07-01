@@ -52,7 +52,7 @@ $(function () {
                 defaultContent: ''
             },
             { data: "invoice_number" },
-            { data: "cli.names" },  // Asegúrate que esto exista
+            { data: "cli.full_name" },  // Asegúrate que esto exista
             { data: "date_joined" },
             { data: "subtotal" },
             { data: "iva" },
