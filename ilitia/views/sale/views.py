@@ -15,6 +15,8 @@ from ilitia.forms import SaleForm, ClientForm
 from hades.mixins import ValidatePermissionRequiredMixin
 from ilitia.models import Sale, Product, DetSale, Client
 from datetime import datetime
+from django.core.paginator import Paginator
+
 
 
 class SaleListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, ListView):
@@ -22,23 +24,37 @@ class SaleListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, ListView
     template_name = 'sale/list.html'
     permission_required = 'view_sale'
 
+
     def post(self, request, *args, **kwargs):
-        data = {}
         try:
-            action = request.POST['action']
+            action = request.POST.get('action', '')
             if action == 'searchdata':
-                data = []
-                for i in Sale.objects.all().order_by('-date_joined'):
-                    data.append(i.to_json())
+                start = int(request.POST.get('start', 0))
+                length = int(request.POST.get('length', 10))
+                search = request.POST.get('search[value]', '')
+    
+                queryset = Sale.objects.all().order_by('-date_joined')
+    
+                if search:
+                    queryset = queryset.filter(cli__names__icontains=search)
+    
+                paginator = Paginator(queryset, length)
+                page = paginator.get_page((start // length) + 1)
+    
+                return JsonResponse({
+                    'data': [sale.to_json() for sale in page],
+                    'recordsTotal': queryset.count(),
+                    'recordsFiltered': queryset.count(),
+                }, safe=False)
+    
             elif action == 'search_details_prod':
-                data = []
-                for i in DetSale.objects.filter(sale_id=request.POST['id']):
-                    data.append(i.to_json())
-            else:
-                data['error'] = 'Ha ocurrido un error'
+                data = [i.to_json() for i in DetSale.objects.filter(sale_id=request.POST['id'])]
+                return JsonResponse(data, safe=False)
+    
+            return JsonResponse({'error': 'Acción no válida'})
         except Exception as e:
-            data['error'] = str(e)
-        return JsonResponse(data, safe=False)
+            return JsonResponse({'error': str(e)})
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

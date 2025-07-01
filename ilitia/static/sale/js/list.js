@@ -1,161 +1,143 @@
 var tblSale;
 
 function format(d) {
-  console.log(d);
-  var html = '<table class="table">';
-  html += '<thead class="thead-dark">';
-  html += '<tr><th scope="col">Producto</th>';
-  html += '<th scope="col">Categoría</th>';
-  html += '<th scope="col">PVP</th>';
-  html += '<th scope="col">Cantidad</th>';
-  html += '<th scope="col">Descuento</th>';
-  html += '<th scope="col">Subtotal</th></tr>';
-  html += '</thead>';
-  html += '<tbody>';
-  $.each(d.det, function(key, value) {
-    html += '<tr>'
-    html += '<td>' + value.prod.name + '</td>'
-    html += '<td>' + value.prod.cat.name + '</td>'
-    html += '<td>' + value.price + '</td>'
-    html += '<td>' + value.cant + '</td>'
-    html += '<td>' + value.discount + '</td>'
-    html += '<td>' + value.subtotal + '</td>'
-    html += '</tr>';
-  });
-  html += '</tbody>';
-  return html;
+    let html = '<table class="table">';
+    html += '<thead class="thead-dark">';
+    html += '<tr><th>Producto</th><th>Categoría</th><th>PVP</th><th>Cantidad</th><th>Descuento</th><th>Subtotal</th></tr>';
+    html += '</thead><tbody>';
+    $.each(d.det, function (key, value) {
+        html += '<tr>';
+        html += '<td>' + value.prod.name + '</td>';
+        html += '<td>' + value.prod.cat.name + '</td>';
+        html += '<td>' + value.price + '</td>';
+        html += '<td>' + value.cant + '</td>';
+        html += '<td>' + value.discount + '</td>';
+        html += '<td>' + value.subtotal + '</td>';
+        html += '</tr>';
+    });
+    html += '</tbody></table>';
+    return html;
 }
 
-$(function() {
-
-  tblSale = $('#data').DataTable({
-    order: [[3, 'desc']],
-    //responsive: true,
-    scrollX: true,
-    autoWidth: false,
-    destroy: true,
-    deferRender: true,
-    ajax: {
-      url: window.location.pathname,
-      type: 'POST',
-      data: {
-        'action': 'searchdata'
-      },
-      dataSrc: "",
-      headers: {
-        'X-CSRFToken': csrftoken
-      }
-    },
-    columns: [
-      {
-        "className": 'details-control',
-        "orderable": false,
-        "data": null,
-        "defaultContent": ''
-      },
-      { "data": "invoice_number" },
-      { "data": "cli.full_name" },
-      { "data": "date_joined" },
-      { "data": "subtotal" },
-      { "data": "iva" },
-      { "data": "discountall" },
-      { "data": "total" },
-      { "data": "type_payment" },
-      { "data": "days_to_pay" },
-      { "data": "id" },
-    ],
-    columnDefs: [
-      {
-        targets: [4, 5, 6, 7],
-        class: 'text-center',
-        orderable: false,
-        render: function(data, type, row) {
-          return '$' + parseFloat(data).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        }
-      },
-      {
-        targets: [-1],
-        class: 'text-center',
-        orderable: false,
-        render: function(data, type, row) {
-          var buttons = '<a href="/ilitia/sale/delete/' + row.id + '/" class="btn btn-danger btn-xs btn-flat"><i class="fas fa-trash-alt"></i></a> ';
-          buttons += '<a href="/ilitia/sale/update/' + row.id + '/" class="btn btn-warning btn-xs btn-flat"><i class="fas fa-edit"></i></a> ';
-          buttons += '<a rel="details" class="btn btn-success btn-xs btn-flat"><i class="fas fa-search"></i></a> ';
-          buttons += '<a href="/ilitia/sale/invoice/pdf/' + row.id + '/" target="_blank" class="btn btn-info btn-xs btn-flat"><i class="fas fa-file-pdf"></i></a> ';
-          return buttons;
-        }
-      },
-    ],
-    initComplete: function(settings, json) {
-
-    }
-  });
-
-  $('#data tbody')
-    .on('click', 'a[rel="details"]', function() {
-      var tr = tblSale.cell($(this).closest('td, li')).index();
-      var data = tblSale.row(tr.row).data();
-      console.log(data);
-
-      $('#tblDet').DataTable({
-        responsive: true,
+$(function () {
+    tblSale = $('#data').DataTable({
+        processing: true,
+        serverSide: true,
+        scrollX: true,
         autoWidth: false,
         destroy: true,
         deferRender: true,
-        //data: data.det,
         ajax: {
-          url: window.location.pathname,
-          type: 'POST',
-          data: {
-            'action': 'search_details_prod',
-            'id': data.id
-          },
-          headers: {
-            'X-CSRFToken': csrftoken
-          },
-          dataSrc: ""
+            url: window.location.pathname,
+            type: 'POST',
+            headers: {
+                'X-CSRFToken': csrftoken
+            },
+            data: function (d) {
+                d.action = 'searchdata';
+            },
+            dataSrc: function (json) {
+                if (json.error) {
+                    alert(json.error);
+                    return [];
+                }
+                return json.data;
+            }
         },
         columns: [
-          { "data": "prod.name" },
-          { "data": "prod.cat.name" },
-          { "data": "price" },
-          { "data": "cant" },
-          { "data": "discount" },
-          { "data": "subtotal" },
+            {
+                className: 'details-control',
+                orderable: false,
+                data: null,
+                defaultContent: ''
+            },
+            { data: "invoice_number" },
+            { data: "cli.names" },  // Asegúrate que esto exista
+            { data: "date_joined" },
+            { data: "subtotal" },
+            { data: "iva" },
+            { data: "discountall" },
+            { data: "total" },
+            { data: "type_payment" },
+            { data: "days_to_pay" },
+            { data: "id" },
         ],
         columnDefs: [
-          {
-            targets: [-1, -2],
-            class: 'text-center',
-            render: function(data, type, row) {
-              return '$' + parseFloat(data).toFixed(2);
+            {
+                targets: [4, 5, 6, 7],
+                className: 'text-center',
+                render: function (data) {
+                    return '$' + parseFloat(data).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                }
+            },
+            {
+                targets: [-1],
+                className: 'text-center',
+                render: function (data, type, row) {
+                    let buttons = '';
+                    buttons += '<a href="/ilitia/sale/delete/' + row.id + '/" class="btn btn-danger btn-xs btn-flat"><i class="fas fa-trash-alt"></i></a> ';
+                    buttons += '<a href="/ilitia/sale/update/' + row.id + '/" class="btn btn-warning btn-xs btn-flat"><i class="fas fa-edit"></i></a> ';
+                    buttons += '<a rel="details" class="btn btn-success btn-xs btn-flat"><i class="fas fa-search"></i></a> ';
+                    buttons += '<a href="/ilitia/sale/invoice/pdf/' + row.id + '/" target="_blank" class="btn btn-info btn-xs btn-flat"><i class="fas fa-file-pdf"></i></a> ';
+                    return buttons;
+                }
             }
-          },
-          {
-            targets: [-3],
-            class: 'text-center',
-            render: function(data, type, row) {
-              return data;
-            }
-          },
-        ],
-        initComplete: function(settings, json) {
-
-        }
-      });
-
-      $('#myModelDet').modal('show');
-    })
-    .on('click', 'td.details-control', function() {
-      var tr = $(this).closest('tr');
-      var row = tblSale.row(tr);
-      if (row.child.isShown()) {
-        row.child.hide();
-        tr.removeClass('shown');
-      } else {
-        row.child(format(row.data())).show();
-        tr.addClass('shown');
-      }
+        ]
     });
 
+    // Detalles en modal
+    $('#data tbody')
+        .on('click', 'a[rel="details"]', function () {
+            let tr = tblSale.cell($(this).closest('td, li')).index();
+            let data = tblSale.row(tr.row).data();
+
+            $('#tblDet').DataTable({
+                responsive: true,
+                autoWidth: false,
+                destroy: true,
+                deferRender: true,
+                ajax: {
+                    url: window.location.pathname,
+                    type: 'POST',
+                    data: {
+                        'action': 'search_details_prod',
+                        'id': data.id
+                    },
+                    headers: {
+                        'X-CSRFToken': csrftoken
+                    },
+                    dataSrc: ""
+                },
+                columns: [
+                    { data: "prod.name" },
+                    { data: "prod.cat.name" },
+                    { data: "price" },
+                    { data: "cant" },
+                    { data: "discount" },
+                    { data: "subtotal" }
+                ],
+                columnDefs: [
+                    {
+                        targets: [-1, -2],
+                        className: 'text-center',
+                        render: function (data) {
+                            return '$' + parseFloat(data).toFixed(2);
+                        }
+                    }
+                ]
+            });
+
+            $('#myModelDet').modal('show');
+        })
+        .on('click', 'td.details-control', function () {
+            let tr = $(this).closest('tr');
+            let row = tblSale.row(tr);
+            if (row.child.isShown()) {
+                row.child.hide();
+                tr.removeClass('shown');
+            } else {
+                row.child(format(row.data())).show();
+                tr.addClass('shown');
+            }
+        });
 });
