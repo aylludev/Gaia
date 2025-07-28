@@ -16,8 +16,7 @@ from hades.mixins import ValidatePermissionRequiredMixin
 from ilitia.models import Sale, Product, DetSale, Client
 from datetime import datetime
 from django.core.paginator import Paginator
-
-
+from django.utils import timezone
 
 class SaleListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, ListView):
     model = Sale
@@ -102,11 +101,11 @@ class SaleCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Create
             elif action == 'add':
                 with transaction.atomic():
                     vents = json.loads(request.POST['vents'])
-                    print(vents)
                     sale = Sale()
                     sale.cli_id = vents['cli']
                     sale.invoice_number = vents['invoice_number']
                     sale.subtotal = float(vents['subtotal'])
+                    sale.date_joined = timezone.now()
                     sale.iva = float(vents['iva'])
                     sale.discountall = float(vents['discountall'])
                     sale.total = float(vents['total'])
