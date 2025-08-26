@@ -18,6 +18,7 @@ urlpatterns = [
     path('ilitia/', include('ilitia.urls', namespace='ilitia')),
     path('hermes/', include('hermes.urls', namespace='hermes')),
     path('apolo/', include('apolo.urls', namespace='reports')),
+    path('core/', include('core.urls', namespace='core')),
 
 ]
 

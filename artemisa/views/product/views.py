@@ -9,11 +9,11 @@ from hades.mixins import ValidatePermissionRequiredMixin
 from artemisa.models import Product
 from datetime import datetime
 from django.template.loader import get_template
-from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.conf import settings
 from weasyprint import HTML, CSS
 import os
+from core.utils import convert_price
 
 
 
@@ -151,8 +151,16 @@ class InventoryPdfView(LoginRequiredMixin, View):
             # Traemos todos los productos activos
             products = Product.objects.all()
             context = {
-                'products': [p.to_json() for p in products],
-                'total': format(sum([p.stock * p.purchase_price for p in products]), '.0f'),
+                'products': [
+                    {
+                        **p.to_json(),
+                        "purchase_price": format(convert_price(p.purchase_price, request), ".2f"),
+                        "sale_price": format(convert_price(p.sale_price, request), ".2f"),
+                        "value": format(convert_price((p.purchase_price*p.stock), request), ".2f")
+                    }
+                    for p in products
+                ],
+                'total': format(convert_price(sum([p.stock * p.purchase_price for p in products]), request), '.0f'),
                 'date': datetime.now().strftime('%Y-%m-%d'),
                 'comp': {
                     'name': 'AGROINSUMOS MERKO SUR',

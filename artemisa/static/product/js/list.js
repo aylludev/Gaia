@@ -1,3 +1,14 @@
+document.addEventListener("DOMContentLoaded", function () {
+  const table = document.getElementById("data");
+
+  if (!table) {
+      console.error("No se encontró la tabla con id='data'");
+      return;
+  }
+
+  const currencyRate = parseFloat(table.dataset.currencyRate);
+  const currencySymbol = table.dataset.currencySymbol;
+
 $(function() {
     $('#data').DataTable({
       responsive: true,
@@ -38,11 +49,12 @@ $(function() {
           }
         },
         {
-          targets: [-2],
+          targets: [-2, -4],
           class: 'text-center',
           orderable: false,
           render: function(data, type, row) {
-            return '$' + parseFloat(data).toFixed(2);
+            let converted = parseFloat(data)/currencyRate;
+            return currencySymbol + '' + converted.toFixed(2);
           }
         },
         {
@@ -61,4 +73,4 @@ $(function() {
       }
     });
   });
-  
+});

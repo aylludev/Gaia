@@ -12,6 +12,8 @@ from django.utils import timezone
 from hades.models import User
 from datetime import datetime
 from django.utils.timezone import localtime
+from core.models import Currency
+from django.shortcuts import redirect
 
 
 class DashboardView(LoginRequiredMixin, TemplateView):
@@ -130,3 +132,9 @@ class ArtemisaView(LoginRequiredMixin, TemplateView):
         context['chart_data'] = self.purchase_provider()  # Agregar datos de proveedores al contexto
         context['total_purchases'] = Purchase.objects.filter(date__year=timezone.now().year).aggregate(total=Coalesce(Sum('total'), 0, output_field=DecimalField()))['total']
         return context
+
+def set_currency(request, code):
+    currency = Currency.objects.filter(code=code).first()
+    if currency:
+        request.session['currency'] = currency.code
+    return redirect(request.META.get('HTTP_REFERER', '/'))

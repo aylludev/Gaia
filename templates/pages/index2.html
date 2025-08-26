@@ -90,6 +90,40 @@
           <!--begin::Messages Dropdown Menu-->
           <li class="nav-item dropdown">
             <a class="nav-link" data-bs-toggle="dropdown" href="#">
+              <i class="bi bi-currency-exchange"> 
+                {{ request.session.currency }}
+              </i>
+              <span class="navbar-badge badge text-bg-danger">{{ selected_currency.code }}</span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+              {% for currency in currencies %}
+              <a href="{% url 'core:set_currency' currency.code %}" class="dropdown-item">
+                <!--begin::Message-->
+                <div class="d-flex">
+                  <div class="flex-shrink-0">
+                    <img src={{ currency.get_image}} alt="User Avatar"
+                      class="img-size-50 rounded-circle me-3" />
+                  </div>
+                  <div class="flex-grow-1">
+                    <h3 class="dropdown-item-title">
+                      {{ currency.symbol}} {{ currency.code }}
+                      {% if currency.code == selected_currency.code %}
+                        <span class="float-end fs-7 text-success"><i class="bi bi-star-fill"></i></span>
+                      {% endif %}
+                    </h3>
+                    <p class="fs-7"> {{ currency.name }}</p>
+                    <p class="fs-7 text-secondary">
+                      <i class="bi bi-clock-fill me-1"></i> {{ currency.exchange_rate_to_base }}
+                    </p>
+                  </div>
+                </div>
+                <!--end::Message-->
+              </a>
+              <div class="dropdown-divider"></div>
+              {% endfor %}
+            </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link" data-bs-toggle="dropdown" href="#">
               <i class="bi bi-chat-text"></i>
               <span class="navbar-badge badge text-bg-danger">3</span>
             </a>
@@ -1207,20 +1241,7 @@
     <!--end::App Main-->
     {% endblock app-main %}
     {% block app-footer %}
-    <!--begin::Footer-->
-    <footer class="app-footer">
-      <!--begin::To the end-->
-      <div class="float-end d-none d-sm-inline">Anything you want</div>
-      <!--end::To the end-->
-      <!--begin::Copyright-->
-      <strong>
-        Copyright &copy; 2014-2024&nbsp;
-        <a href="https://adminlte.io" class="text-decoration-none">AdminLTE.io</a>.
-      </strong>
-      All rights reserved.
-      <!--end::Copyright-->
-    </footer>
-    <!--end::Footer-->
+
     {% endblock app-footer %}
   </div>
   <!--end::App Wrapper-->

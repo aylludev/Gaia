@@ -1,3 +1,13 @@
+document.addEventListener("DOMContentLoaded", function () {
+  const table = document.getElementById("data");
+
+  if (!table) {
+      console.error("No se encontró la tabla con id='data'");
+      return;
+  }
+
+  const currencyRate = parseFloat(table.dataset.currencyRate);
+  const currencySymbol = table.dataset.currencySymbol;
 var tblSale;
 
 function format(d) {
@@ -65,11 +75,12 @@ $(function() {
     ],
     columnDefs: [
       {
-        targets: [4, 6],
+        targets: [-3, -4, -6],
         class: 'text-center',
         orderable: false,
         render: function(data, type, row) {
-          return '$' + parseFloat(data).toFixed(2);
+          let converted = parseFloat(data)/currencyRate;
+          return currencySymbol + '' + converted.toFixed(2);
         }
       },
       {
@@ -123,10 +134,11 @@ $(function() {
         ],
         columnDefs: [
           {
-            targets: [-1, -2],
+            targets: [-1, -2, -4],
             class: 'text-center',
             render: function(data, type, row) {
-              return '$' + parseFloat(data).toFixed(2);
+              let converted = parseFloat(data)/currencyRate;
+              return currencySymbol + '' + converted.toFixed(2);
             }
           },
           {
@@ -156,4 +168,5 @@ $(function() {
       }
     });
 
+  });
 });

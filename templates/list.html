@@ -23,7 +23,8 @@
             </h3>
         </div>
         <div class="card-body">
-            <table class="table" id="data">
+            <table class="table" id="data" data-currency-rate="{{ selected_currency.exchange_rate_to_base }}" 
+            data-currency-symbol="{{ selected_currency.symbol }}" >
                 <thead>
                 {% block columns %}
 

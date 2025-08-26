@@ -17,6 +17,7 @@ from ilitia.models import Sale, Product, DetSale, Client
 from datetime import datetime
 from django.core.paginator import Paginator
 from django.utils import timezone
+from core.utils import convert_price
 
 class SaleListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, ListView):
     model = Sale
@@ -304,7 +305,7 @@ class SaleInvoicePdfView(LoginRequiredMixin, View):
             
             # Obtener la venta
             sale = get_object_or_404(Sale, pk=self.kwargs['pk'])
-
+            
             # Obtener detalles de venta y calcular el descuento total
             details = sale.detsale_set.all().values('prod__name', 'prod__unit__quantity', 'prod__unit__unit', 'price', 'cant', 'discount', 'subtotal')
             products_discount=0
@@ -317,16 +318,40 @@ class SaleInvoicePdfView(LoginRequiredMixin, View):
                 item['total_val'] = (item['price'] * item['cant']) # Multiplicación del descuento por la cantidad
                 products_discount += item['p_discount']
 
-            sale.discountall = sale.discountall + products_discount
-            sale.subtotal = sale.subtotal + products_discount
-            balance = sale.total - sale.down_payment
+            sale.discountall = convert_price(sale.discountall + products_discount, request)
+            sale.subtotal = convert_price(sale.subtotal + products_discount, request)
+            balance = convert_price(sale.total - sale.down_payment, request)
+            
             context = {
+                'details': [
+                    {
+                        **item,
+                        "price": convert_price(item['price'], request),
+                        "subtotal": format(convert_price(item['subtotal'], request), ".2f"),
+                        "p_discount": format(convert_price(item['p_discount'], request), ".2f"),
+                        "total_val": format(convert_price(item['total_val'], request), ".2f"),
+                        "prod__unit__quantity": item['prod__unit__quantity'],
+                        "prod__unit__unit": item['prod__unit__unit'],
+                        "products_discount": format(convert_price(products_discount, request), ".2f"),
+                    }
+                    for item in details
+                ],
                 'balance': balance,
-                'sale': sale,
-                'details':details,
+                'sale': {
+                    "cli": sale.cli,
+                    "created_by": sale.created_by,
+                    "created_at": sale.created_at.strftime('%Y-%m-%d'),
+                    "invoice_number": sale.invoice_number,
+                    "obaservation": sale.observation,
+                    "subtotal": format(convert_price(sale.subtotal, request), ".2f"),
+                    "iva": format(convert_price(sale.iva, request), ".2f"),
+                    "discountall": format(convert_price(sale.discountall, request), ".2f"),
+                    "type_payment": sale.type_payment,
+                    "down_payment": format(convert_price(sale.down_payment, request), ".2f"),
+                    "total": format(convert_price(sale.total, request), ".2f"),
+                },
                 'comp': {'name': 'AGROINSUMOS MERKO SUR', 'nit': '1085928681-1', 'address': 'La Victoria', 'city': 'Ipiales', 'vendor': 'Alexander Palles'},
             }
-
             html = template.render(context)
             css_url = os.path.join(settings.BASE_DIR, 'static/lib/bootstrap-4.6.0/css/bootstrap.min.css')
             pdf = HTML(string=html, base_url=request.build_absolute_uri()).write_pdf(stylesheets=[CSS(css_url)])
