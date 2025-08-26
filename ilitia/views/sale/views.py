@@ -343,15 +343,16 @@ class SaleInvoicePdfView(LoginRequiredMixin, View):
                     "created_at": sale.created_at.strftime('%Y-%m-%d'),
                     "invoice_number": sale.invoice_number,
                     "obaservation": sale.observation,
-                    "subtotal": format(convert_price(sale.subtotal, request), ".2f"),
+                    "subtotal": sale.subtotal,
                     "iva": format(convert_price(sale.iva, request), ".2f"),
-                    "discountall": format(convert_price(sale.discountall, request), ".2f"),
+                    "discountall": sale.discountall,
                     "type_payment": sale.type_payment,
                     "down_payment": format(convert_price(sale.down_payment, request), ".2f"),
                     "total": format(convert_price(sale.total, request), ".2f"),
                 },
                 'comp': {'name': 'AGROINSUMOS MERKO SUR', 'nit': '1085928681-1', 'address': 'La Victoria', 'city': 'Ipiales', 'vendor': 'Alexander Palles'},
             }
+            print(context)
             html = template.render(context)
             css_url = os.path.join(settings.BASE_DIR, 'static/lib/bootstrap-4.6.0/css/bootstrap.min.css')
             pdf = HTML(string=html, base_url=request.build_absolute_uri()).write_pdf(stylesheets=[CSS(css_url)])

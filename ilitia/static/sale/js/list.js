@@ -76,7 +76,7 @@ $(function () {
         ],
         columnDefs: [
             {
-                targets: [-2, -4, -5, -6, -7],
+                targets: [-4, -5, -6, -7],
                 className: 'text-center',
                 render: function (data) {
                     let converted = parseFloat(data)/currencyRate;

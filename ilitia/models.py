@@ -66,7 +66,7 @@ class Sale(BaseModel):
         item['date_joined'] = localtime(self.date_joined).strftime('%Y-%m-%d %H:%M')
         item['type_payment'] = self.type_payment
         item['down_payment'] = format(self.down_payment, '.2f')
-        item['days_to_pay'] = format(self.days_to_pay, '.2f')
+        item['days_to_pay'] = format(self.days_to_pay, '.0f')
         item['det'] = [i.to_json() for i in self.detsale_set.all()]
         return item
 
