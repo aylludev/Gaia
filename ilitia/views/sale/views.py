@@ -33,7 +33,7 @@ class SaleListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, ListView
                 length = int(request.POST.get('length', 10))
                 search = request.POST.get('search[value]', '')
     
-                queryset = Sale.objects.all().order_by('-date_joined')
+                queryset = Sale.objects.filter(created_by=self.request.user).order_by('-date_joined')
     
                 if search:
                     queryset = queryset.filter(cli__names__icontains=search)

@@ -1,4 +1,100 @@
 
+modificados:     Gaia/__pycache__/__init__.cpython-313.pyc
+        modificados:     Gaia/__pycache__/settings.cpython-313.pyc
+        modificados:     Gaia/__pycache__/urls.cpython-313.pyc
+        modificados:     Gaia/__pycache__/wsgi.cpython-313.pyc
+        modificados:     Gaia/settings.py
+        modificados:     artemisa/__pycache__/__init__.cpython-313.pyc
+        modificados:     artemisa/__pycache__/admin.cpython-313.pyc
+        modificados:     artemisa/__pycache__/apps.cpython-313.pyc
+        modificados:     artemisa/__pycache__/choices.cpython-313.pyc
+        modificados:     artemisa/__pycache__/forms.cpython-313.pyc
+        modificados:     artemisa/__pycache__/models.cpython-313.pyc
+        modificados:     artemisa/__pycache__/signals.cpython-313.pyc
+        modificados:     artemisa/__pycache__/urls.cpython-313.pyc
+        modificados:     artemisa/migrations/__pycache__/0001_initial.cpython-313.pyc
+        modificados:     artemisa/migrations/__pycache__/0002_remove_creditpurchase_purchase_and_more.cpython-313.pyc
+        modificados:     artemisa/migrations/__pycache__/0003_remove_inventoryexit_created_by_and_more.cpython-313.pyc
+        modificados:     artemisa/migrations/__pycache__/0004_alter_pricehistory_purchase_price_and_more.cpython-313.pyc
+        modificados:     artemisa/migrations/__pycache__/0005_rename_discount_purchase_discount_total.cpython-313.pyc
+        modificados:     artemisa/migrations/__pycache__/0006_alter_purchase_invoice_number.cpython-313.pyc
+        modificados:     artemisa/migrations/__pycache__/0007_alter_unitmeasure_unit.cpython-313.pyc
+        modificados:     artemisa/migrations/__pycache__/0008_product_purchase_price.cpython-313.pyc
+        modificados:     artemisa/migrations/__pycache__/0009_remove_product_unit_alter_provider_dni_and_more.cpython-313.pyc
+        modificados:     artemisa/migrations/__pycache__/0010_remove_product_presentation_product_unit_warehouse_and_more.cpython-313.pyc
+        modificados:     artemisa/migrations/__pycache__/0011_purchase_days_to_pay_alter_purchase_invoice_number_and_more.cpython-313.pyc
+        modificados:     artemisa/migrations/__pycache__/0012_alter_purchase_type_payment_delete_purchasepayment.cpython-313.pyc
+        modificados:     artemisa/migrations/__pycache__/0013_alter_purchase_options.cpython-313.pyc
+        modificados:     artemisa/migrations/__pycache__/__init__.cpython-313.pyc
+        modificados:     artemisa/views/category/__pycache__/views.cpython-313.pyc
+        modificados:     artemisa/views/product/__pycache__/views.cpython-313.pyc
+        modificados:     artemisa/views/provider/__pycache__/views.cpython-313.pyc
+        modificados:     artemisa/views/purchase/__pycache__/views.cpython-313.pyc
+        modificados:     artemisa/views/purchase/views.py
+        modificados:     artemisa/views/unit/__pycache__/views.cpython-313.pyc
+        modificados:     core/__pycache__/__init__.cpython-313.pyc
+        modificados:     core/__pycache__/admin.cpython-313.pyc
+        modificados:     core/__pycache__/apps.cpython-313.pyc
+        modificados:     core/__pycache__/models.cpython-313.pyc
+        modificados:     core/__pycache__/views.cpython-313.pyc
+        modificados:     core/migrations/__pycache__/__init__.cpython-313.pyc
+        modificados:     core/views.py
+        modificados:     hades/__pycache__/__init__.cpython-313.pyc
+        modificados:     hades/__pycache__/admin.cpython-313.pyc
+        modificados:     hades/__pycache__/apps.cpython-313.pyc
+        modificados:     hades/__pycache__/forms.cpython-313.pyc
+        modificados:     hades/__pycache__/mixins.cpython-313.pyc
+        modificados:     hades/__pycache__/models.cpython-313.pyc
+        modificados:     hades/__pycache__/urls.cpython-313.pyc
+        modificados:     hades/admin.py
+        modificados:     hades/migrations/__pycache__/0001_initial.cpython-313.pyc
+        modificados:     hades/migrations/__pycache__/0002_alter_user_options_user_created_at_user_created_by_and_more.cpython-313.pyc
+        modificados:     hades/migrations/__pycache__/0003_alter_user_options.cpython-313.pyc
+        modificados:     hades/migrations/__pycache__/0004_user_dni.cpython-313.pyc
+        modificados:     hades/migrations/__pycache__/__init__.cpython-313.pyc
+        modificados:     hades/views/login/__pycache__/views.cpython-313.pyc
+        modificados:     hades/views/user/__pycache__/views.cpython-313.pyc
+        modificados:     hermes/__pycache__/__init__.cpython-313.pyc
+        modificados:     hermes/__pycache__/admin.cpython-313.pyc
+        modificados:     hermes/__pycache__/apps.cpython-313.pyc
+        modificados:     hermes/__pycache__/forms.cpython-313.pyc
+        modificados:     hermes/__pycache__/models.cpython-313.pyc
+        modificados:     hermes/__pycache__/urls.cpython-313.pyc
+        modificados:     hermes/migrations/__pycache__/0001_initial.cpython-313.pyc
+        modificados:     hermes/migrations/__pycache__/0002_remove_purchasepayment_method_and_more.cpython-313.pyc
+        modificados:     hermes/migrations/__pycache__/0003_salepayment.cpython-313.pyc
+        modificados:     hermes/migrations/__pycache__/0004_cashclosing_detcashclosingsale_and_more.cpython-313.pyc
+        modificados:     hermes/migrations/__pycache__/0005_remove_detcashclosingsalepayment_cashclosing_and_more.cpython-313.pyc
+        modificados:     hermes/migrations/__pycache__/0006_alter_salepayment_payment_date.cpython-313.pyc
+        modificados:     hermes/migrations/__pycache__/__init__.cpython-313.pyc
+        modificados:     hermes/templates/cashclosing/create.html
+        modificados:     hermes/views/cashclosing/__pycache__/views.cpython-313.pyc
+        modificados:     hermes/views/purchasepayment/__pycache__/views.cpython-313.pyc
+        modificados:     hermes/views/salepayment/__pycache__/views.cpython-313.pyc
+        modificados:     homepage/__pycache__/__init__.cpython-313.pyc
+        modificados:     homepage/__pycache__/admin.cpython-313.pyc
+        modificados:     homepage/__pycache__/apps.cpython-313.pyc
+        modificados:     homepage/__pycache__/models.cpython-313.pyc
+        modificados:     homepage/__pycache__/views.cpython-313.pyc
+        modificados:     homepage/migrations/__pycache__/__init__.cpython-313.pyc
+        modificados:     ilitia/__pycache__/__init__.cpython-313.pyc
+        modificados:     ilitia/__pycache__/admin.cpython-313.pyc
+        modificados:     ilitia/__pycache__/apps.cpython-313.pyc
+        modificados:     ilitia/__pycache__/choices.cpython-313.pyc
+        modificados:     ilitia/__pycache__/forms.cpython-313.pyc
+        modificados:     ilitia/__pycache__/models.cpython-313.pyc
+        modificados:     ilitia/__pycache__/urls.cpython-313.pyc
+        modificados:     ilitia/migrations/__pycache__/0001_initial.cpython-313.pyc
+        modificados:     ilitia/migrations/__pycache__/0002_alter_client_dni.cpython-313.pyc
+        modificados:     ilitia/migrations/__pycache__/0003_sale_days_to_pay.cpython-313.pyc
+        modificados:     ilitia/migrations/__pycache__/0004_sale_invoice_number.cpython-313.pyc
+        modificados:     ilitia/migrations/__pycache__/0005_alter_sale_date_joined.cpython-313.pyc
+        modificados:     ilitia/migrations/__pycache__/0006_alter_sale_date_joined.cpython-313.pyc
+        modificados:     ilitia/migrations/__pycache__/0007_alter_sale_date_joined.cpython-313.pyc
+        modificados:     ilitia/migrations/__pycache__/__init__.cpython-313.pyc
+        modificados:     ilitia/views/client/__pycache__/views.cpython-313.pyc
+        modificados:     ilitia/views/sale/__pycache__/views.cpython-313.pyc
+        modificados:     ilitia/views/sale/views.py
 # Created by https://www.toptal.com/developers/gitignore/api/django
 # Edit at https://www.toptal.com/developers/gitignore?templates=django
 
@@ -14,7 +110,7 @@ media
 staticfiles/*
 .idea
 **/migrations/*
-
+**/__pycache__/*
 # If your build process includes running collectstatic, then you probably don't need or want to include staticfiles/
 # in your Git repository. Update and uncomment the following line accordingly.
 # <django-project-name>/staticfiles/

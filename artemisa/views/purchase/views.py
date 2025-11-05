@@ -21,7 +21,7 @@ class PurchaseListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, List
             action = request.POST['action']
             if action == 'searchdata':
                 data = []
-                for i in Purchase.objects.filter():
+                for i in Purchase.objects.filter(created_by=self.request.user):
                     data.append(i.to_json())
             elif action == 'search_details_prod':
                 data = []

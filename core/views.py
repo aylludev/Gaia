@@ -29,7 +29,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         first_day_this_month = today.replace(day=1)
         last_day_last_month = first_day_this_month - timedelta(days=1)
         first_day_last_month = last_day_last_month.replace(day=1)
-        data  = Sale.objects.filter(date_joined__range=(first_day_last_month, last_day_last_month)).aggregate(total=Coalesce(Sum('total'), 0, output_field=DecimalField()))['total']
+        data  = Sale.objects.filter(created_by=self.request.user, date_joined__range=(first_day_last_month, last_day_last_month)).aggregate(total=Coalesce(Sum('total'), 0, output_field=DecimalField()))['total']
         return data
 
     def sales_by_week(self):
@@ -46,7 +46,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
             tipo_pago_totales = defaultdict(lambda: [0] * 7)
 
             # Filtrar ventas entre el rango de fechas
-            ventas = Sale.objects.filter(date_joined__date__range=[inicio_semana, fin_semana])
+            ventas = Sale.objects.filter(created_by=self.request.user, date_joined__date__range=[inicio_semana, fin_semana])
 
             for venta in ventas:
                 local_fecha = localtime(venta.date_joined)
@@ -73,7 +73,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         total_pending_balance = 0
         expired_balance = 0
         try:
-            for i in Sale.objects.filter(type_payment='CREDIT'):
+            for i in Sale.objects.filter(created_by=self.request.user, type_payment='CREDIT'):
                 total_paid = (SalePayment.objects.filter(sale=i).aggregate(total=Coalesce(Sum('amount'), Decimal('0.00'), output_field=DecimalField()))['total']) + i.down_payment
                 pending_balance = i.total - total_paid
                 days_to_expiration = (i.date_joined.date() - datetime.now().date()).days + i.days_to_pay
@@ -93,7 +93,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         context['num_prod'] = Product.objects.filter().count()
         context['sales'] = self.sales_by_week()  # Agregar datos de ventas al contexto
         context['sales_last_month'] = self.sales_last_month()  # Agregar ventas del mes pasado al contexto
-        context['sales_month'] = Sale.objects.filter(date_joined__month=timezone.now().month).aggregate(total=Coalesce(Sum('total'), 0, output_field=DecimalField()))['total']
+        context['sales_month'] = Sale.objects.filter(created_by=self.request.user, date_joined__month=timezone.now().month).aggregate(total=Coalesce(Sum('total'), 0, output_field=DecimalField()))['total']
         context['sales_targets'] = sales_goal
         context['users'] = User.objects.filter(is_active=True)
         context['pending_balance'] = self.salepayment()[0]
