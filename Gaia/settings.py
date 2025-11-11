@@ -136,7 +136,7 @@ STATICFILES_DIRS = [
 
 LOGIN_REDIRECT_URL = '/dashboard'
 
-LOGOUT_REDIRECT_URL = '/hades/login'
+LOGOUT_REDIRECT_URL = 'hades/login'
 
 LOGIN_URL = '/hades/login'
 

@@ -32,8 +32,14 @@ class SaleListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, ListView
                 start = int(request.POST.get('start', 0))
                 length = int(request.POST.get('length', 10))
                 search = request.POST.get('search[value]', '')
-    
-                queryset = Sale.objects.filter(created_by=self.request.user).order_by('-date_joined')
+                
+                active_group = request.session.get('group')
+                group = active_group[0].get('name')
+                
+                if group == 'Admin GAIA':
+                    queryset = Sale.objects.all().order_by('-date_joined')
+                else:
+                    queryset = Sale.objects.filter(created_by=self.request.user).order_by('-date_joined')
     
                 if search:
                     queryset = queryset.filter(cli__names__icontains=search)
