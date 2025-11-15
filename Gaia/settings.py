@@ -170,7 +170,7 @@ CSRF_COOKIE_HTTPONLY = False  # False para permitir JavaScript acceder al token 
 # Configuraciones adicionales de seguridad para producción
 if not DEBUG:
     # SSL/HTTPS - Redirigir todo el tráfico HTTP a HTTPS
-    SECURE_SSL_REDIRECT = True
+    SECURE_SSL_REDIRECT = False
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
     # HSTS (HTTP Strict Transport Security)
