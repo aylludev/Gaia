@@ -121,7 +121,7 @@ class SalePaymentDetailView(LoginRequiredMixin, ValidatePermissionRequiredMixin,
     model = Sale
     template_name = 'salepayment/detail.html'
     permission_required = 'view_sale'
-    url_redirect = reverse_lazy('hermes:cashclosing_list')
+    url_redirect = reverse_lazy('hermes:salepayment_list')
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

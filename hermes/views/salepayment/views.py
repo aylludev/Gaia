@@ -27,8 +27,7 @@ class SalePaymentListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, L
                     total_paid = (SalePayment.objects.filter(sale=i).aggregate(total=Coalesce(Sum('amount'), Decimal('0.00'), output_field=DecimalField()))['total']) + i.down_payment
                     pending_balance = i.total - total_paid
                     days_to_expiration = (i.date_joined.date() - datetime.now().date()).days + i.days_to_pay
-                    if pending_balance > 0:
-                        data.append({**i.to_json(), 'total_paid': total_paid, 'pending_balance': pending_balance, 'days_to_expiration': days_to_expiration})
+                    data.append({**i.to_json(), 'total_paid': total_paid, 'pending_balance': pending_balance, 'days_to_expiration': days_to_expiration})
             elif action == 'search_details_prod':
                 data = []
                 sale_id = request.POST.get('id')
@@ -45,10 +44,10 @@ class SalePaymentListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, L
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Listado de Cuentas por Pagar'
+        context['title'] = 'Listado de Cuentas por Cobrar'
         context['create_url'] = reverse_lazy('artemisa:purchase_create')
         context['list_url'] = reverse_lazy('hermes:salepayment_list')
-        context['entity'] = 'Cuentas por pagar'
+        context['entity'] = 'Cuentas por Cobrar'
         return context
 
 class SalePaymentCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, CreateView):
