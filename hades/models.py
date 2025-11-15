@@ -19,9 +19,9 @@ class BaseModel(models.Model):
     def to_json(self):
         item = model_to_dict(self)
         item['created_by'] = self.created_by.to_json() if self.created_by else None
-        item['create_at'] = self.created_at.strftime('%Y-%m-%d')
-        item['update_by'] = self.updated_by.to_json() if self.created_by else None
-        item['update_by'] = self.updated_by.strftime('%Y-%m-%d')
+        item['created_at'] = self.created_at.strftime('%Y-%m-%d')
+        item['updated_by'] = self.updated_by.to_json() if self.updated_by else None
+        item['updated_at'] = self.updated_at.strftime('%Y-%m-%d')
         return item
 
 

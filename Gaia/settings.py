@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import os
 from Gaia import db
+from decouple import config, Csv
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -21,12 +23,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-4)6oxk!ptf90741=m6t*qtf-&lbxwnrm1+=vrjk+chx4wtg#a='
+SECRET_KEY = config('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = config('DJANGO_DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = ['138.197.36.105']
+ALLOWED_HOSTS = config('DJANGO_ALLOWED_HOSTS', cast=Csv())
 
 
 # Application definition
@@ -154,6 +156,34 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 
-CSRF_COOKIE_SECURE = True  # ← esto solo debe estar en producción
+# ========================================
+# SECURITY SETTINGS
+# ========================================
 
+# Cookies seguras (solo HTTPS)
+CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_HTTPONLY = False  # False para permitir JavaScript acceder al token CSRF
+
+# Configuraciones adicionales de seguridad para producción
+if not DEBUG:
+    # SSL/HTTPS - Redirigir todo el tráfico HTTP a HTTPS
+    SECURE_SSL_REDIRECT = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+    # HSTS (HTTP Strict Transport Security)
+    # Fuerza a los navegadores a usar HTTPS durante 1 año
+    SECURE_HSTS_SECONDS = 31536000  # 1 año en segundos
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+
+    # Security Headers
+    SECURE_CONTENT_TYPE_NOSNIFF = True  # Previene MIME sniffing
+    SECURE_BROWSER_XSS_FILTER = True  # Protección XSS (navegadores antiguos)
+    X_FRAME_OPTIONS = 'DENY'  # Previene clickjacking
+    SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
+
+    # Cross-Origin Opener Policy
+    SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin'

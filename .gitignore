@@ -217,7 +217,9 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-# .env
+.env
+.env.*
+!.env.example
 .env/
 .venv/
 env/
@@ -226,6 +228,12 @@ ENV/
 env.bak/
 venv.bak/
 pythonenv*
+
+# Security - sensitive files
+*.key
+*.pem
+secrets/
+logs/
 
 # Spyder project settings
 .spyderproject
