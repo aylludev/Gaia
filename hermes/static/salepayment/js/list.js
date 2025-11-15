@@ -29,6 +29,8 @@ function format(d) {
 $(function() {
 
   tblSale = $('#data').DataTable({
+    serverSide: true,
+    processing: true,
     order: [[3, 'desc']],
     //responsive: true,
     scrollX: true,
@@ -38,12 +40,16 @@ $(function() {
     ajax: {
       url: window.location.pathname,
       type: 'POST',
-      data: {
-        'action': 'searchdata'
+      data: function(d) {
+        d.action = 'searchdata';
+        return d;
       },
-      dataSrc: "",
       headers: {
         'X-CSRFToken': csrftoken
+      },
+      error: function(xhr, error, code) {
+        console.log('Error AJAX:', xhr, error, code);
+        console.log('Response:', xhr.responseText);
       }
     },
     columns: [

@@ -1091,7 +1091,7 @@
               <!-- /.info-box -->
               <div class="card mb-4">
                 <div class="card-header">
-                  <h3 class="card-title">Browser Usage</h3>
+                  <h3 class="card-title">Productos Foliares</h3>
                   <div class="card-tools">
                     <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
                       <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
@@ -1116,31 +1116,23 @@
                 <!-- /.card-body -->
                 <div class="card-footer p-0">
                   <ul class="nav nav-pills flex-column">
+                    {% for item in foliar_products.items|slice:":3" %}
                     <li class="nav-item">
                       <a href="#" class="nav-link">
-                        United States of America
-                        <span class="float-end text-danger">
-                          <i class="bi bi-arrow-down fs-7"></i>
-                          12%
+                        {{ item.name }}
+                        <span class="float-end text-primary">
+                          <i class="bi bi-cart-check fs-7"></i>
+                          {{ item.sales }} ventas
                         </span>
                       </a>
                     </li>
+                    {% empty %}
                     <li class="nav-item">
                       <a href="#" class="nav-link">
-                        India
-                        <span class="float-end text-success">
-                          <i class="bi bi-arrow-up fs-7"></i> 4%
-                        </span>
+                        No hay productos foliares con ventas
                       </a>
                     </li>
-                    <li class="nav-item">
-                      <a href="#" class="nav-link">
-                        China
-                        <span class="float-end text-info">
-                          <i class="bi bi-arrow-left fs-7"></i> 0%
-                        </span>
-                      </a>
-                    </li>
+                    {% endfor %}
                   </ul>
                 </div>
                 <!-- /.footer -->
@@ -1422,11 +1414,11 @@
     //-------------
 
     const pie_chart_options = {
-      series: [700, 500, 400, 600, 300, 100],
+      series: {{ foliar_products.sales_json|safe }},
       chart: {
         type: 'donut',
       },
-      labels: ['Chrome', 'Edge', 'FireFox', 'Safari', 'Opera', 'IE'],
+      labels: {{ foliar_products.products_json|safe }},
       dataLabels: {
         enabled: false,
       },

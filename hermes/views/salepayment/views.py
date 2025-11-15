@@ -6,7 +6,7 @@ from ilitia.models import Sale
 from hermes.models import SalePayment
 from hermes.forms import SalePaymentForm
 from hades.mixins import ValidatePermissionRequiredMixin
-from django.db.models import Sum, DecimalField
+from django.db.models import Sum, DecimalField, Q
 from django.db.models.functions import Coalesce
 from decimal import Decimal
 from django.shortcuts import get_object_or_404
@@ -18,29 +18,91 @@ class SalePaymentListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, L
     permission_required = 'view_salepayment'
 
     def post(self, request, *args, **kwargs):
-        data = {}
         try:
             action = request.POST.get('action', '')
             if action == 'searchdata':
-                data = []
-                for i in Sale.objects.filter(type_payment='CREDIT'):
+                # Parámetros de paginación de DataTables
+                start = int(request.POST.get('start', 0))
+                length = int(request.POST.get('length', 10))
+                search_value = request.POST.get('search[value]', '')
+                draw = int(request.POST.get('draw', 1))
+
+                # Parámetros de ordenamiento
+                order_column_index = int(request.POST.get('order[0][column]', 3))
+                order_dir = request.POST.get('order[0][dir]', 'desc')
+
+                # Mapeo de columnas para ordenamiento
+                columns = ['id', 'invoice_number', 'cli__names', 'date_joined', 'total', 'id', 'id', 'id', 'id']
+                order_column = columns[order_column_index] if order_column_index < len(columns) else 'date_joined'
+
+                if order_dir == 'desc':
+                    order_column = '-' + order_column
+
+                # Queryset base
+                queryset = Sale.objects.filter(type_payment='CREDIT').select_related('cli')
+
+                # Filtro de búsqueda
+                if search_value:
+                    queryset = queryset.filter(
+                        Q(invoice_number__icontains=search_value) |
+                        Q(cli__names__icontains=search_value) |
+                        Q(cli__last_names__icontains=search_value)
+                    )
+
+                # Total de registros
+                records_total = Sale.objects.filter(type_payment='CREDIT').count()
+                records_filtered = queryset.count()
+
+                # Aplicar ordenamiento
+                queryset = queryset.order_by(order_column)
+
+                # Aplicar paginación
+                queryset = queryset[start:start + length]
+
+                # Preparar datos
+                result_data = []
+                for i in queryset:
                     total_paid = (SalePayment.objects.filter(sale=i).aggregate(total=Coalesce(Sum('amount'), Decimal('0.00'), output_field=DecimalField()))['total']) + i.down_payment
                     pending_balance = i.total - total_paid
                     days_to_expiration = (i.date_joined.date() - datetime.now().date()).days + i.days_to_pay
-                    data.append({**i.to_json(), 'total_paid': total_paid, 'pending_balance': pending_balance, 'days_to_expiration': days_to_expiration})
+                    result_data.append({
+                        **i.to_json(),
+                        'total_paid': format(total_paid, '.2f'),
+                        'pending_balance': format(pending_balance, '.2f'),
+                        'days_to_expiration': days_to_expiration
+                    })
+
+                # Respuesta para DataTables
+                data = {
+                    'draw': draw,
+                    'recordsTotal': records_total,
+                    'recordsFiltered': records_filtered,
+                    'data': result_data
+                }
+                return JsonResponse(data, safe=False)
             elif action == 'search_details_prod':
                 data = []
                 sale_id = request.POST.get('id')
                 if sale_id:
                     for i in SalePayment.objects.filter(sale_id=sale_id):
                         data.append(i.to_json())
-                else:
-                    data = {'error': 'ID de compra no proporcionado'}
+                return JsonResponse(data, safe=False)
             else:
                 data = {'error': 'Acción no válida'}
+                return JsonResponse(data, safe=False)
         except Exception as e:
-            data = {'error': str(e)}
-        return JsonResponse(data, safe=False)
+            # Para searchdata, retornar formato DataTables
+            if request.POST.get('action', '') == 'searchdata':
+                data = {
+                    'draw': int(request.POST.get('draw', 1)),
+                    'recordsTotal': 0,
+                    'recordsFiltered': 0,
+                    'data': [],
+                    'error': str(e)
+                }
+            else:
+                data = {'error': str(e)}
+            return JsonResponse(data, safe=False)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

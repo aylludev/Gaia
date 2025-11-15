@@ -1,11 +1,11 @@
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from artemisa.models import Purchase, Product
-from django.db.models import Sum, DecimalField
+from artemisa.models import Purchase, Product, Category
+from django.db.models import Sum, DecimalField, Count
 from django.db.models.functions import Coalesce
 from datetime import timedelta
 from collections import defaultdict
-from ilitia.models import Sale, Client
+from ilitia.models import Sale, Client, DetSale
 from hermes.models import SalePayment
 from decimal import Decimal
 from django.utils import timezone
@@ -63,9 +63,8 @@ class DashboardView(LoginRequiredMixin, TemplateView):
             )['total']
             
             return float(result) if result else 0.0
-            
+
         except Exception as e:
-            print(f"Error en sales_last_month: {e}")
             return 0.0
 
     def sales_by_week(self):
@@ -81,8 +80,6 @@ class DashboardView(LoginRequiredMixin, TemplateView):
                 date_joined__date__range=[inicio_semana, fin_semana]
             ).select_related('created_by')
 
-            print(ventas)
-            
             tipo_pago_totales = defaultdict(lambda: [0] * 7)
 
             for venta in ventas:
@@ -98,11 +95,9 @@ class DashboardView(LoginRequiredMixin, TemplateView):
                     tipo_pago_totales["CREDIT"][dia_semana] += float(venta.total - venta.down_payment)
 
             data = [{'name': tipo, 'data': dias} for tipo, dias in tipo_pago_totales.items()]
-            print(data)
-            return data 
+            return data
 
         except Exception as e:
-            print(f"Error en sales_by_week: {e}")
             return [data]
 
     def salepayment(self):
@@ -118,9 +113,47 @@ class DashboardView(LoginRequiredMixin, TemplateView):
                     if days_to_expiration < 0:
                         expired_balance += pending_balance
         except Exception as e:
-            print(f"Error al obtener cuentas por pagar: {e}")
+            pass
         return total_pending_balance, expired_balance
-    
+
+    def foliar_products_sales(self):
+        """Obtiene productos de categoría foliares y su número de ventas"""
+        import json
+        data = {'products': [], 'sales': [], 'products_json': '[]', 'sales_json': '[]', 'items': []}
+        try:
+            # Buscar categoría foliares (case-insensitive)
+            category = Category.objects.filter(name__icontains='foliar').first()
+
+            if category:
+                # Obtener productos de esta categoría
+                products = Product.objects.filter(cat=category).annotate(
+                    sales_count=Count('detsale')
+                ).filter(sales_count__gt=0).order_by('-sales_count')[:6]  # Top 6 productos
+
+                # Preparar datos para el gráfico
+                products_list = []
+                sales_list = []
+                items_list = []
+
+                for product in products:
+                    products_list.append(product.name)
+                    sales_list.append(product.sales_count)
+                    items_list.append({
+                        'name': product.name,
+                        'sales': product.sales_count
+                    })
+
+                data['products'] = products_list
+                data['sales'] = sales_list
+                data['products_json'] = json.dumps(products_list)
+                data['sales_json'] = json.dumps(sales_list)
+                data['items'] = items_list
+
+        except Exception as e:
+            pass
+
+        return data
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update({
@@ -135,6 +168,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
             'pending_balance': self.salepayment()[0],
             'expired_balance' : self.salepayment()[1],
             'users': User.objects.filter(is_active=True),
+            'foliar_products': self.foliar_products_sales(),
         })
         return context
 
@@ -152,12 +186,11 @@ class ArtemisaView(LoginRequiredMixin, TemplateView):
             for purchase in purchases:
                 month = purchase.date.month - 1
                 provider_totals[purchase.provider.names][month] += float(purchase.total)
-            
+
             data = [{'name': provider, 'data': total} for provider, total in provider_totals.items()]
-            print(f"Datos de compras mensuales por proveedor: {data}")
             return data
         except Exception as e:
-            print(f"Error al obtener las compras mensuales por proveedor: {e}")
+            pass
         return data
 
     def get_context_data(self, **kwargs):
