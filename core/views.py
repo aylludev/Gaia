@@ -182,8 +182,8 @@ class DashboardView(LoginRequiredMixin, TemplateView):
                 total_liters = float(det.cant) * liters_per_unit
                 product_liters[base_name] += total_liters
 
-            # Ordenar por litros vendidos (descendente) y tomar top 6
-            sorted_products = sorted(product_liters.items(), key=lambda x: x[1], reverse=True)[:6]
+            # Ordenar por litros vendidos (descendente)
+            sorted_products = sorted(product_liters.items(), key=lambda x: x[1], reverse=True)
 
             # Preparar datos para el gráfico
             products_list = []
@@ -367,7 +367,7 @@ class AdminDashboardView(LoginRequiredMixin, TemplateView):
                 total_liters = float(det.cant) * liters_per_unit
                 product_liters[base_name] += total_liters
 
-            sorted_products = sorted(product_liters.items(), key=lambda x: x[1], reverse=True)[:6]
+            sorted_products = sorted(product_liters.items(), key=lambda x: x[1], reverse=True)
 
             products_list = []
             sales_list = []

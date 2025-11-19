@@ -1427,8 +1427,19 @@
     // - PIE CHART -
     //-------------
 
+    // Generar colores dinámicamente según cantidad de productos
+    function generateColors(count) {
+      const baseColors = ['#0d6efd', '#20c997', '#ffc107', '#d63384', '#6f42c1', '#adb5bd', '#fd7e14', '#198754', '#0dcaf0', '#dc3545'];
+      const colors = [];
+      for (let i = 0; i < count; i++) {
+        colors.push(baseColors[i % baseColors.length]);
+      }
+      return colors;
+    }
+
+    const foliarSeries = {{ foliar_products.sales_json|safe }};
     const pie_chart_options = {
-      series: {{ foliar_products.sales_json|safe }},
+      series: foliarSeries,
       chart: {
         type: 'donut',
       },
@@ -1436,7 +1447,7 @@
       dataLabels: {
         enabled: false,
       },
-      colors: ['#0d6efd', '#20c997', '#ffc107', '#d63384', '#6f42c1', '#adb5bd'],
+      colors: generateColors(foliarSeries.length),
     };
 
     const pie_chart = new ApexCharts(document.querySelector('#pie-chart'), pie_chart_options);
