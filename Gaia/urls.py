@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
 from homepage.views import IndexView, page_not_found_view
-from core.views import DashboardView, ArtemisaView
+from core.views import DashboardView, ArtemisaView, AdminDashboardView
 from django.conf import settings
 from django.conf.urls.static import static
 from django.conf.urls import handler404
@@ -11,6 +11,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', IndexView.as_view(), name='homepage'),
     path('dashboard', DashboardView.as_view(), name='dashboard'),
+    path('admin-dashboard', AdminDashboardView.as_view(), name='admin_dashboard'),
     path('hades/', include('hades.urls', namespace='hades')),
     #Artemisa
     path('artemisa/', ArtemisaView.as_view(), name='artemisa'),

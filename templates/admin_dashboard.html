@@ -1,0 +1,269 @@
+{% extends 'pages/index2.html' %}
+{% load humanize %}
+
+{% block app-content %}
+<!-- Info boxes -->
+<div class="row">
+  <div class="col-12 col-sm-6 col-md-3">
+    <div class="info-box">
+      <span class="info-box-icon text-bg-primary shadow-sm">
+        <i class="bi bi-shield-check"></i>
+      </span>
+      <div class="info-box-content">
+        <span class="info-box-text">Admin Dashboard</span>
+        <span class="info-box-number">Global</span>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-sm-6 col-md-3">
+    <div class="info-box">
+      <span class="info-box-icon text-bg-danger shadow-sm">
+        <i class="bi bi-box2-fill"></i>
+      </span>
+      <div class="info-box-content">
+        <span class="info-box-text">Productos</span>
+        <span class="info-box-number">{{ num_prod }}</span>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-sm-6 col-md-3">
+    <div class="info-box">
+      <span class="info-box-icon text-bg-success shadow-sm">
+        <i class="bi bi-cart-fill"></i>
+      </span>
+      <div class="info-box-content">
+        <span class="info-box-text">Ventas Totales</span>
+        <span class="info-box-number">{{ num_sales }}</span>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-sm-6 col-md-3">
+    <div class="info-box">
+      <span class="info-box-icon text-bg-warning shadow-sm">
+        <i class="bi bi-people-fill"></i>
+      </span>
+      <div class="info-box-content">
+        <span class="info-box-text">Clientes</span>
+        <span class="info-box-number">{{ num_cli }}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Ventas de la Semana y Metas -->
+<div class="row">
+  <div class="col-md-12">
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5 class="card-title">Resumen Global del Mes</h5>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-8">
+            <p class="text-center">
+              <strong>Ventas de la Semana (Todas las Sucursales)</strong>
+            </p>
+            <div id="sales-chart"></div>
+          </div>
+          <div class="col-md-4">
+            <p class="text-center"><strong>Metas Globales</strong></p>
+            <div class="progress-group">
+              Ventas del mes pasado
+              <span class="float-end"><b>${{ sales_last_month|floatformat:0|intcomma }}</b> / ${{ sales_targets|floatformat:0|intcomma }}</span>
+              <div class="progress progress-sm">
+                <div class="progress-bar text-bg-primary" style="width: 80%"></div>
+              </div>
+            </div>
+            <div class="progress-group">
+              Ventas del mes actual
+              <span class="float-end"><b>${{ sales_month|floatformat:0|intcomma }}</b> / ${{ sales_targets|floatformat:0|intcomma }}</span>
+              <div class="progress progress-sm">
+                <div class="progress-bar text-bg-danger" style="width: 75%"></div>
+              </div>
+            </div>
+            <div class="progress-group">
+              <span class="progress-text">Cuentas por cobrar</span>
+              <span class="float-end"><b>${{ pending_balance|floatformat:0|intcomma }}</b></span>
+              <div class="progress progress-sm">
+                <div class="progress-bar text-bg-success" style="width: 60%"></div>
+              </div>
+            </div>
+            <div class="progress-group">
+              Cuentas por cobrar vencidas
+              <span class="float-end"><b>${{ expired_balance|floatformat:0|intcomma }}</b></span>
+              <div class="progress progress-sm">
+                <div class="progress-bar text-bg-warning" style="width: 50%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Ventas por Vendedor y Productos Foliares -->
+<div class="row">
+  <div class="col-md-6">
+    <!-- Ventas por Vendedor -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Ventas por Vendedor (Mes Actual)</h3>
+      </div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table m-0">
+            <thead>
+              <tr>
+                <th>Vendedor</th>
+                <th>Ventas</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for seller in sales_by_user %}
+              <tr>
+                <td>{{ seller.name }}</td>
+                <td><span class="badge text-bg-info">{{ seller.count }}</span></td>
+                <td><strong class="text-success">${{ seller.total|floatformat:0|intcomma }}</strong></td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="3" class="text-center">No hay ventas este mes</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <!-- Productos Foliares -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Productos Foliares (Mes Actual)</h3>
+      </div>
+      <div class="card-body">
+        <div id="pie-chart"></div>
+      </div>
+      <div class="card-footer p-0">
+        <ul class="nav nav-pills flex-column">
+          {% for item in foliar_products.items %}
+          <li class="nav-item">
+            <a href="#" class="nav-link {% if item.is_total %}bg-success text-white fw-bold{% endif %}">
+              {{ item.name }}
+              <span class="float-end {% if item.is_total %}text-white{% else %}text-primary{% endif %}">
+                <i class="bi bi-{% if item.is_total %}calculator{% else %}droplet{% endif %} fs-7"></i>
+                {{ item.sales }}
+              </span>
+            </a>
+          </li>
+          {% empty %}
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              No hay productos foliares con ventas
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Usuarios Activos -->
+<div class="row mt-4">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Usuarios Activos</h3>
+      </div>
+      <div class="card-body p-0">
+        <div class="row text-center m-1">
+          {% for user in users %}
+          <div class="col-2 p-2">
+            <img class="img-fluid rounded-circle" src="{{ user.get_image }}" alt="User Image" style="max-width: 50px;" />
+            <a class="btn fw-bold fs-7 text-secondary text-truncate w-100 p-0" href="#">
+              {{ user.username }}
+            </a>
+            <div class="fs-8">{{ user.last_login.date }}</div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock app-content %}
+
+{% block script %}
+<!-- apexcharts -->
+<script src="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.min.js"
+  integrity="sha256-+vh8GkaU7C9/wbSLIcwq82tQ2wTf44aOHA8HlBMwRI8=" crossorigin="anonymous"></script>
+<script>
+  // Gráfico de ventas semanales
+  const sales = {{ sales|safe }};
+  const sales_chart_options = {
+    series: sales,
+    chart: {
+      height: 180,
+      type: 'area',
+      toolbar: {
+        show: false,
+      },
+    },
+    legend: {
+      show: false,
+    },
+    colors: ['#0d6efd', '#20c997'],
+    dataLabels: {
+      enabled: false,
+    },
+    stroke: {
+      curve: 'smooth',
+    },
+    xaxis: {
+      type: 'category',
+      categories: [
+        'Lunes',
+        'Martes',
+        'Miércoles',
+        'Jueves',
+        'Viernes',
+        'Sábado',
+        'Domingo',
+      ],
+    },
+    tooltip: {
+      x: {
+        format: 'dd',
+      },
+    },
+  };
+
+  const sales_chart = new ApexCharts(
+    document.querySelector('#sales-chart'),
+    sales_chart_options,
+  );
+  sales_chart.render();
+
+  // Gráfico de productos foliares
+  const pie_chart_options = {
+    series: {{ foliar_products.sales_json|safe }},
+    chart: {
+      type: 'donut',
+    },
+    labels: {{ foliar_products.products_json|safe }},
+    dataLabels: {
+      enabled: false,
+    },
+    colors: ['#0d6efd', '#20c997', '#ffc107', '#d63384', '#6f42c1', '#adb5bd'],
+  };
+
+  const pie_chart = new ApexCharts(document.querySelector('#pie-chart'), pie_chart_options);
+  pie_chart.render();
+</script>
+{% endblock script %}

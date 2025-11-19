@@ -317,19 +317,21 @@
                 <li class="nav-item">
                   <a href={% url 'dashboard' %} class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active bg-primary {% endif %}">
                     <i class="nav-icon bi bi-circle"></i>
-                    <p>Dashboard v1</p>
+                    <p>Mi Dashboard</p>
                   </a>
                 </li>
+                {% if request.session.group.0.name == 'Admin GAIA' %}
+                <li class="nav-item">
+                  <a href={% url 'admin_dashboard' %} class="nav-link {% if request.resolver_match.url_name == 'admin_dashboard' %}active bg-primary {% endif %}">
+                    <i class="nav-icon bi bi-circle"></i>
+                    <p>Dashboard Admin</p>
+                  </a>
+                </li>
+                {% endif %}
                 <li class="nav-item">
                   <a href={% url 'apolo:sale_report' %} class="nav-link">
                     <i class="nav-icon bi bi-circle"></i>
-                    <p>Dashboard v2</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="./index3.html" class="nav-link">
-                    <i class="nav-icon bi bi-circle"></i>
-                    <p>Dashboard v3</p>
+                    <p>Reportes</p>
                   </a>
                 </li>
               </ul>
@@ -1128,13 +1130,13 @@
                 <!-- /.card-body -->
                 <div class="card-footer p-0">
                   <ul class="nav nav-pills flex-column">
-                    {% for item in foliar_products.items|slice:":3" %}
+                    {% for item in foliar_products.items %}
                     <li class="nav-item">
-                      <a href="#" class="nav-link">
+                      <a href="#" class="nav-link {% if item.is_total %}bg-success text-white fw-bold{% endif %}">
                         {{ item.name }}
-                        <span class="float-end text-primary">
-                          <i class="bi bi-cart-check fs-7"></i>
-                          {{ item.sales }} ventas
+                        <span class="float-end {% if item.is_total %}text-white{% else %}text-primary{% endif %}">
+                          <i class="bi bi-{% if item.is_total %}calculator{% else %}droplet{% endif %} fs-7"></i>
+                          {{ item.sales }}
                         </span>
                       </a>
                     </li>
