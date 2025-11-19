@@ -45,8 +45,8 @@
             <b>Factura No. </b>{{ sale.invoice_number }}<br>
             <b>Fecha de compra:</b> {{ sale.date_joined }}<br>
             <b>Valor de Factura:</b> ${{ sale.total|floatformat:2|intcomma }}<br>
-            <b>Saldo pendiente:</b> $ {{ pending_balance|floatformat:2|intcomma }}<br>
-
+            <b>Saldo pendiente:</b> <span id="pending-balance">$ {{ pending_balance|floatformat:2|intcomma }}</span><br>
+            <input type="hidden" id="pending-balance-value" value="{{ pending_balance }}">
           </div>
           <!-- /.col -->
         </div>
@@ -114,11 +114,61 @@
 
         $('form').on('submit', function (e) {
             e.preventDefault();
+
+            // Validar monto antes de enviar
+            var amount = parseFloat($('input[name="amount"]').val()) || 0;
+            var pendingBalance = parseFloat($('#pending-balance-value').val()) || 0;
+
+            if (amount <= 0) {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'El monto del pago debe ser mayor a cero',
+                    icon: 'error'
+                });
+                return;
+            }
+
+            if (amount > pendingBalance) {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'El monto del pago ($' + amount.toFixed(2) + ') no puede ser mayor al saldo pendiente ($' + pendingBalance.toFixed(2) + ')',
+                    icon: 'error'
+                });
+                return;
+            }
+
             var parameters = new FormData(this);
             submit_with_ajax(window.location.pathname, 'Notificación', '¿Estas seguro de realizar la siguiente acción?', parameters, function () {
                 location.href = '{{ list_url }}';
             });
         });
+    </script>
+
+    <script>
+      // Configurar validaciones del campo amount al cargar
+      $(document).ready(function() {
+          var pendingBalance = parseFloat($('#pending-balance-value').val()) || 0;
+          var amountInput = $('input[name="amount"]');
+
+          // Establecer atributos min y max
+          amountInput.attr('min', '0.01');
+          amountInput.attr('max', pendingBalance.toFixed(2));
+          amountInput.attr('step', '0.01');
+
+          // Validación en tiempo real
+          amountInput.on('input', function() {
+              var value = parseFloat($(this).val()) || 0;
+
+              if (value <= 0) {
+                  $(this).addClass('is-invalid');
+              } else if (value > pendingBalance) {
+                  $(this).addClass('is-invalid');
+              } else {
+                  $(this).removeClass('is-invalid');
+                  $(this).addClass('is-valid');
+              }
+          });
+      });
     </script>
 
     <script>

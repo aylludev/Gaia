@@ -22,11 +22,11 @@
           <div class="col-sm-4 invoice-col">
             Cliente
             <address>
-              <strong>{{ sale.cli.names }} {{ sale.cli.last_names }}</strong><br>
-              NIT: {{ sale.cli.dni }}<br>
-              Dirección: {{ sale.cli.address }}<br>
-              Teléfono: {{ sale.cli.cellphone }}<br>
-              Email: {{ sale.cli.email}}
+              <strong>{{ object.cli.names }} {{ object.cli.last_names }}</strong><br>
+              NIT: {{ object.cli.dni }}<br>
+              Direccion: {{ object.cli.address }}<br>
+              Telefono: {{ object.cli.cellphone }}<br>
+              Email: {{ object.cli.email}}
             </address>
           </div>
           <!-- /.col -->
@@ -35,17 +35,17 @@
             <address>
               <strong>{{ comp.name }}</strong><br>
               NIT: {{ comp.nit }}<br>
-              Dirección: {{ comp.address }} - {{ comp.city }} <br>
+              Direccion: {{ comp.address }} - {{ comp.city }} <br>
               Phone: {{ comp.tel }}<br>
               Administrador: {{ comp.vendor }}
             </address>
           </div>
           <!-- /.col -->
           <div class="col-sm-5 invoice-col"> <br>
-            <b>Factura No. </b>{{ sale.invoice_number }}<br>
-            <b>Fecha de compra:</b> {{ sale.date_joined }}<br>
-            <b>Valor de Factura:</b> ${{ sale.total|floatformat:2|intcomma }}<br>
-            <b>Saldo pendiente:</b> $ {{ pending_balance|floatformat:2|intcomma }}<br>
+            <b>Factura No. </b>{{ object.invoice_number }}<br>
+            <b>Fecha de compra:</b> {{ object.date_joined }}<br>
+            <b>Valor de Factura:</b> ${{ object.total|floatformat:2|intcomma }}<br>
+            <b>Estado:</b> <span class="badge badge-success">Pagado</span><br>
           </div>
           <!-- /.col -->
         </div>
@@ -68,29 +68,29 @@
               </tr>
               </thead>
               <tbody>
-                {% if sale.down_payment > 0 %}
+                {% if object.down_payment > 0 %}
                 <tr>
-                  <td> {{ sale.invoice_number }}</td>
-                  <td> {{ sale.date_joined }}</td>
+                  <td> {{ object.invoice_number }}</td>
+                  <td> {{ object.date_joined }}</td>
                   <td> Primera cuota </td>
-                  <td> {{ sale.down_payment|floatformat:2|intcomma }}</td>
+                  <td> {{ object.down_payment|floatformat:2|intcomma }}</td>
                   <td> --- </td>
                   {% if request.user.is_superuser %}
                   <td> --- </td>
                   {% endif %}
               </tr>
               {% endif %}
-                {% for prod in purchase_payment %}
+                {% for payment in sale_payment_list %}
                     <tr>
-                        <td> {{ prod.invoice }}</td>
-                        <td> {{ prod.payment_date }}</td>
-                        <td> {{ prod.days_to_expiration }}</td>
-                        <td> {{ prod.amount|floatformat:2|intcomma }}</td>
-                        <td> {{ prod.note }}</td>
+                        <td> {{ payment.invoice }}</td>
+                        <td> {{ payment.payment_date }}</td>
+                        <td> {{ payment.days_to_expiration }}</td>
+                        <td> {{ payment.amount|floatformat:2|intcomma }}</td>
+                        <td> {{ payment.note }}</td>
                         {% if request.user.is_superuser %}
                         <td class="text-center">
-                            <a href="{% url 'hermes:salepayment_update' prod.id %}" class="btn btn-warning btn-xs"><i class="fas fa-edit"></i></a>
-                            <a href="{% url 'hermes:salepayment_delete' prod.id %}" class="btn btn-danger btn-xs"><i class="fas fa-trash-alt"></i></a>
+                            <a href="{% url 'hermes:salepayment_update' payment.id %}" class="btn btn-warning btn-xs"><i class="fas fa-edit"></i></a>
+                            <a href="{% url 'hermes:salepayment_delete' payment.id %}" class="btn btn-danger btn-xs"><i class="fas fa-trash-alt"></i></a>
                         </td>
                         {% endif %}
                     </tr>
@@ -105,16 +105,16 @@
         <div class="row">
           <!-- accepted payments column -->
           <div class="col-5">
-            <p class="lead">Acuerdo de Pago: {{ sale.type_payment }} </p>
+            <p class="lead">Acuerdo de Pago: {{ object.type_payment }} </p>
             <div class="table-responsive">
                 <table class="table">
                   <tbody><tr>
-                    <th style="width:50%">Subtotal:</th>
-                    <td> {{ sale.type_payment }}</td>
+                    <th style="width:50%">Tipo de Pago:</th>
+                    <td> {{ object.type_payment }}</td>
                   </tr>
                   <tr>
                     <th>Primera Cuota:</th>
-                    <td>$ {{ sale.down_payment }}</td>
+                    <td>$ {{ object.down_payment|floatformat:2|intcomma }}</td>
                   </tr>
                   </tbody>
               </table>
@@ -126,17 +126,17 @@
           <div class="col-1"> </div>
           <!-- /.col -->
           <div class="col-6">
-            <p class="lead">Fecha de venta {{ purchase.date }}</p>
+            <p class="lead">Fecha de venta: {{ object.date_joined }}</p>
 
             <div class="table-responsive">
               <table class="table">
                 <tbody><tr>
                   <th style="width:50%">Valor de credito:</th>
-                  <td>$ {{ sale.total|floatformat:2|intcomma }}</td>
+                  <td>$ {{ object.total|floatformat:2|intcomma }}</td>
                 </tr>
                 <tr>
-                  <th>Abonado: </th>
-                  <td>$ {{ purchase_payments|floatformat:2|intcomma }}</td>
+                  <th>Total Abonado: </th>
+                  <td>$ {{ total_paid|floatformat:2|intcomma }}</td>
                 </tr>
                 <tr>
                   <th>Saldo pendiente:</th>
@@ -153,7 +153,7 @@
         <!-- this row will not appear when printing -->
         <div class="row no-print">
           <div class="col-12">
-            <a href= {{ list_url }} type="button" class="btn btn-success float-right"><i class="far fa-credit-card"></i> Volver </a>
+            <a href="{{ list_url }}" type="button" class="btn btn-success float-right"><i class="far fa-credit-card"></i> Volver </a>
           </div>
         </div>
       </div>

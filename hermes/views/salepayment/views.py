@@ -1,12 +1,13 @@
 from django.urls import reverse_lazy
 from django.http import JsonResponse
-from django.views.generic import ListView, CreateView, DetailView
+from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from ilitia.models import Sale
 from hermes.models import SalePayment
 from hermes.forms import SalePaymentForm
-from hades.mixins import ValidatePermissionRequiredMixin
-from django.db.models import Sum, DecimalField, Q
+from hades.mixins import ValidatePermissionRequiredMixin, IsSuperuserMixin
+from django.db import models
+from django.db.models import Sum, DecimalField, Q, F
 from django.db.models.functions import Coalesce
 from decimal import Decimal
 from django.shortcuts import get_object_or_404
@@ -38,8 +39,11 @@ class SalePaymentListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, L
                 if order_dir == 'desc':
                     order_column = '-' + order_column
 
-                # Queryset base
-                queryset = Sale.objects.filter(type_payment='CREDIT').select_related('cli')
+                # Queryset base - filtrar solo ventas a crédito con saldo pendiente > 0
+                queryset = Sale.objects.filter(type_payment='CREDIT').select_related('cli').annotate(
+                    total_payments=Coalesce(Sum('payments__amount'), Decimal('0.00'), output_field=DecimalField()),
+                    pending=F('total') - F('down_payment') - F('total_payments')
+                ).filter(pending__gt=0)
 
                 # Filtro de búsqueda
                 if search_value:
@@ -49,8 +53,12 @@ class SalePaymentListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, L
                         Q(cli__last_names__icontains=search_value)
                     )
 
-                # Total de registros
-                records_total = Sale.objects.filter(type_payment='CREDIT').count()
+                # Total de registros (también con saldo pendiente > 0)
+                base_queryset = Sale.objects.filter(type_payment='CREDIT').annotate(
+                    total_payments=Coalesce(Sum('payments__amount'), Decimal('0.00'), output_field=DecimalField()),
+                    pending=F('total') - F('down_payment') - F('total_payments')
+                ).filter(pending__gt=0)
+                records_total = base_queryset.count()
                 records_filtered = queryset.count()
 
                 # Aplicar ordenamiento
@@ -187,4 +195,80 @@ class SalePaymentDetailView(LoginRequiredMixin, ValidatePermissionRequiredMixin,
             'vendor': 'Alexander Palles',
             'tel': '3156692427',
         }
+        return context
+
+
+class SalePaymentUpdateView(LoginRequiredMixin, IsSuperuserMixin, UpdateView):
+    model = SalePayment
+    form_class = SalePaymentForm
+    template_name = 'salepayment/update.html'
+
+    def get_redirect_url(self):
+        # Detectar si viene de cartera recuperada o cuentas por cobrar
+        referer = self.request.META.get('HTTP_REFERER', '')
+        if 'recovered' in referer:
+            return reverse_lazy('hermes:recovered_portfolio_detail', kwargs={'pk': self.object.sale.pk})
+        return reverse_lazy('hermes:salepayment_detail', kwargs={'pk': self.object.sale.pk})
+
+    def get_success_url(self):
+        return self.get_redirect_url()
+
+    def dispatch(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        try:
+            action = request.POST['action']
+            if action == 'edit':
+                form = self.get_form()
+                form.instance.updated_by = request.user
+                data = form.save()
+            else:
+                data['error'] = 'No ha ingresado a ninguna opción'
+        except Exception as e:
+            data['error'] = str(e)
+        return JsonResponse(data)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Edición de Pago'
+        context['entity'] = 'Pagos de Crédito'
+        context['list_url'] = self.get_redirect_url()
+        context['action'] = 'edit'
+        return context
+
+
+class SalePaymentDeleteView(LoginRequiredMixin, IsSuperuserMixin, DeleteView):
+    model = SalePayment
+    template_name = 'salepayment/delete.html'
+
+    def get_redirect_url(self):
+        # Detectar si viene de cartera recuperada o cuentas por cobrar
+        referer = self.request.META.get('HTTP_REFERER', '')
+        if 'recovered' in referer:
+            return reverse_lazy('hermes:recovered_portfolio_detail', kwargs={'pk': self.object.sale.pk})
+        return reverse_lazy('hermes:salepayment_detail', kwargs={'pk': self.object.sale.pk})
+
+    def get_success_url(self):
+        return self.get_redirect_url()
+
+    def dispatch(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        try:
+            self.object.delete()
+        except Exception as e:
+            data['error'] = str(e)
+        return JsonResponse(data)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Eliminación de Pago'
+        context['entity'] = 'Pagos de Crédito'
+        context['list_url'] = self.get_redirect_url()
         return context
