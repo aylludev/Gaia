@@ -1,0 +1,505 @@
+{% extends 'pages/index2.html' %}
+{% load humanize %}
+
+{% block app-content %}
+<!-- Encabezado del Informe -->
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">
+          <i class="bi bi-bar-chart-line-fill"></i>
+          Informe de Ventas por Vendedor - Año {{ current_year }}
+        </h3>
+      </div>
+      <div class="card-body">
+        <p class="text-muted">
+          Este informe muestra las ventas mensuales de cada vendedor durante el año {{ current_year }}.
+          Utilice el gráfico para visualizar tendencias y comparar el desempeño entre vendedores.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Gráfico de Ventas Totales por Tipo de Pago -->
+<div class="row mt-3">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title">Ventas Totales por Mes - Discriminación por Tipo de Pago</h5>
+      </div>
+      <div class="card-body">
+        <div class="row mb-3">
+          <div class="col-md-4">
+            <p class="d-flex flex-column">
+              <span class="fw-bold fs-5 text-success">${{ payment_type_data.total_cash|floatformat:0|intcomma }}</span>
+              <span class="text-muted small">Ventas de Contado</span>
+            </p>
+          </div>
+          <div class="col-md-4">
+            <p class="d-flex flex-column">
+              <span class="fw-bold fs-5 text-info">${{ payment_type_data.total_recovered|floatformat:0|intcomma }}</span>
+              <span class="text-muted small">Cartera Recuperada</span>
+            </p>
+          </div>
+          <div class="col-md-4">
+            <p class="d-flex flex-column">
+              <span class="fw-bold fs-5 text-warning">${{ payment_type_data.total_not_recovered|floatformat:0|intcomma }}</span>
+              <span class="text-muted small">Cartera No Recuperada</span>
+            </p>
+          </div>
+        </div>
+        <div id="payment-type-chart"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Gráfico de Ventas por Vendedor -->
+<div class="row mt-3">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title">Ventas Mensuales por Vendedor</h5>
+      </div>
+      <div class="card-body">
+        <div id="sales-by-seller-chart"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Gráfico de Litros FA por Vendedor -->
+<div class="row mt-3">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Litros de Productos Foliares (FA) por Vendedor</h3>
+      </div>
+      <div class="card-body">
+        <div class="row mb-3">
+          <div class="col-md-3">
+            <p class="d-flex flex-column">
+              <span class="fw-bold fs-5 text-success">{{ foliar_data.total_cash }} L</span>
+              <span class="text-muted small">Contado</span>
+            </p>
+          </div>
+          <div class="col-md-3">
+            <p class="d-flex flex-column">
+              <span class="fw-bold fs-5 text-info">{{ foliar_data.total_credit_paid }} L</span>
+              <span class="text-muted small">Crédito Pagado</span>
+            </p>
+          </div>
+          <div class="col-md-3">
+            <p class="d-flex flex-column">
+              <span class="fw-bold fs-5 text-warning">{{ foliar_data.total_credit_pending }} L</span>
+              <span class="text-muted small">Crédito Pendiente</span>
+            </p>
+          </div>
+          <div class="col-md-3">
+            <p class="d-flex flex-column">
+              <span class="fw-bold fs-5 text-primary">{{ foliar_data.total_liters }} L</span>
+              <span class="text-muted small">Total {{ current_year }}</span>
+            </p>
+          </div>
+        </div>
+        <div id="foliar-chart"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Resumen por Vendedor -->
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Resumen de Ventas por Vendedor ({{ current_year }})</h3>
+      </div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-striped m-0">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Vendedor</th>
+                <th class="text-center">Cantidad de Ventas</th>
+                <th class="text-end">Total Vendido</th>
+                <th class="text-end">Promedio por Venta</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for seller in sellers_summary %}
+              <tr>
+                <td>{{ forloop.counter }}</td>
+                <td><strong>{{ seller.name }}</strong></td>
+                <td class="text-center">
+                  <span class="badge text-bg-info">{{ seller.count }}</span>
+                </td>
+                <td class="text-end">
+                  <strong class="text-success">${{ seller.total|floatformat:0|intcomma }}</strong>
+                </td>
+                <td class="text-end">
+                  <span class="text-primary">${{ seller.average|floatformat:0|intcomma }}</span>
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="5" class="text-center">No hay ventas registradas para este año</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+            {% if sellers_summary %}
+            <tfoot>
+              <tr class="fw-bold bg-light">
+                <td colspan="2" class="text-end">TOTAL:</td>
+                <td class="text-center">
+                  <span class="badge text-bg-primary">
+                    {{ sellers_summary|length }} vendedor{{ sellers_summary|length|pluralize:"es" }}
+                  </span>
+                </td>
+                <td class="text-end text-success" id="total-sales">
+                  <!-- Calculado con JavaScript -->
+                </td>
+                <td></td>
+              </tr>
+            </tfoot>
+            {% endif %}
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Botón de exportar (para futura implementación) -->
+<div class="row mt-3">
+  <div class="col-md-12 text-end">
+    <button class="btn btn-outline-primary" onclick="window.print()">
+      <i class="bi bi-printer"></i> Imprimir Informe
+    </button>
+  </div>
+</div>
+
+{% endblock app-content %}
+
+{% block script %}
+<!-- apexcharts -->
+<script src="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.min.js"
+  integrity="sha256-+vh8GkaU7C9/wbSLIcwq82tQ2wTf44aOHA8HlBMwRI8=" crossorigin="anonymous"></script>
+<script>
+  // Gráfico de ventas por vendedor
+  const salesData = {{ sales_data|safe }};
+
+  // Debug: Ver qué datos se están recibiendo
+  console.log('Sales Data:', salesData);
+  console.log('Type:', typeof salesData);
+
+  const salesBySellerChartOptions = {
+    series: salesData,
+    chart: {
+      height: 450,
+      type: 'area',
+      toolbar: {
+        show: true,
+        tools: {
+          download: true,
+          zoom: true,
+          zoomin: true,
+          zoomout: true,
+          pan: true,
+          reset: true
+        }
+      },
+    },
+    legend: {
+      show: true,
+      position: 'top',
+      horizontalAlign: 'left',
+      floating: false,
+    },
+    colors: ['#0d6efd', '#20c997', '#ffc107', '#d63384', '#6f42c1', '#fd7e14', '#198754', '#0dcaf0', '#dc3545', '#adb5bd'],
+    dataLabels: {
+      enabled: false,
+    },
+    stroke: {
+      curve: 'smooth',
+      width: 2,
+    },
+    xaxis: {
+      type: 'category',
+      categories: [
+        'Enero',
+        'Febrero',
+        'Marzo',
+        'Abril',
+        'Mayo',
+        'Junio',
+        'Julio',
+        'Agosto',
+        'Septiembre',
+        'Octubre',
+        'Noviembre',
+        'Diciembre',
+      ],
+    },
+    yaxis: {
+      labels: {
+        formatter: function(value) {
+          return '$' + value.toLocaleString('es-CO', { maximumFractionDigits: 0 });
+        }
+      }
+    },
+    tooltip: {
+      y: {
+        formatter: function(value) {
+          return '$' + value.toLocaleString('es-CO', { maximumFractionDigits: 0 });
+        }
+      }
+    },
+    fill: {
+      type: 'gradient',
+      gradient: {
+        shadeIntensity: 1,
+        opacityFrom: 0.7,
+        opacityTo: 0.3,
+        stops: [0, 90, 100]
+      }
+    },
+  };
+
+  const salesBySellerChart = new ApexCharts(
+    document.querySelector('#sales-by-seller-chart'),
+    salesBySellerChartOptions,
+  );
+  salesBySellerChart.render();
+
+  // Calcular total para el footer
+  function calculateTotal() {
+    const totalElement = document.querySelector('#total-sales');
+    if (totalElement) {
+      let total = 0;
+      {% for seller in sellers_summary %}
+        total += {{ seller.total }};
+      {% endfor %}
+      totalElement.textContent = '$' + total.toLocaleString('es-CO', { maximumFractionDigits: 0 });
+    }
+  }
+
+  // Ejecutar al cargar la página
+  document.addEventListener('DOMContentLoaded', calculateTotal);
+
+  // Gráfico de litros FA por vendedor (barras apiladas agrupadas por mes)
+  const foliarRawData = {{ foliar_data.series_json|safe }};
+  const foliarSellers = {{ foliar_data.sellers_json|safe }};
+
+  console.log('Foliar Raw Data:', foliarRawData);
+  console.log('Foliar Sellers:', foliarSellers);
+
+  // Transformar datos para ApexCharts
+  // Necesitamos una serie por cada vendedor, con datos mensuales apilados por tipo de pago
+  const foliarSeries = [];
+  const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+
+  foliarSellers.forEach((seller, sellerIndex) => {
+    // Para cada vendedor, crear una serie con la suma de los 3 tipos de pago por mes
+    const monthlyData = [];
+
+    for (let monthIdx = 0; monthIdx < 12; monthIdx++) {
+      const cash = foliarRawData.cash[monthIdx][sellerIndex];
+      const creditPaid = foliarRawData.credit_paid[monthIdx][sellerIndex];
+      const creditPending = foliarRawData.credit_pending[monthIdx][sellerIndex];
+      const total = cash + creditPaid + creditPending;
+      monthlyData.push(total);
+    }
+
+    foliarSeries.push({
+      name: seller,
+      data: monthlyData,
+      // Metadata para el tooltip
+      meta: {
+        cash: foliarRawData.cash.map(m => m[sellerIndex]),
+        credit_paid: foliarRawData.credit_paid.map(m => m[sellerIndex]),
+        credit_pending: foliarRawData.credit_pending.map(m => m[sellerIndex])
+      }
+    });
+  });
+
+  console.log('Foliar Series:', foliarSeries);
+
+  // Generar colores por vendedor
+  const sellerColors = ['#0d6efd', '#28a745', '#ffc107', '#d63384', '#6f42c1', '#fd7e14', '#198754', '#0dcaf0', '#dc3545', '#adb5bd'];
+
+  const foliarChartOptions = {
+    series: foliarSeries,
+    chart: {
+      type: 'bar',
+      height: 400,
+      stacked: false,
+      toolbar: {
+        show: true,
+        tools: {
+          download: true,
+          zoom: false
+        }
+      }
+    },
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        columnWidth: '70%',
+        endingShape: 'rounded',
+      },
+    },
+    colors: sellerColors,
+    dataLabels: {
+      enabled: false,
+    },
+    stroke: {
+      show: true,
+      width: 2,
+      colors: ['transparent'],
+    },
+    xaxis: {
+      categories: months,
+      labels: {
+        style: {
+          fontSize: '11px'
+        }
+      }
+    },
+    yaxis: {
+      title: {
+        text: 'Litros'
+      },
+      labels: {
+        formatter: function(value) {
+          return value.toFixed(0) + ' L';
+        }
+      }
+    },
+    fill: {
+      opacity: 1,
+    },
+    legend: {
+      show: true,
+      position: 'top',
+      horizontalAlign: 'left',
+      fontSize: '11px',
+      markers: {
+        width: 12,
+        height: 12,
+      }
+    },
+    tooltip: {
+      shared: true,
+      intersect: false,
+      y: {
+        formatter: function (val, { seriesIndex, dataPointIndex, w }) {
+          const serie = w.config.series[seriesIndex];
+          if (serie.meta) {
+            const cash = serie.meta.cash[dataPointIndex];
+            const creditPaid = serie.meta.credit_paid[dataPointIndex];
+            const creditPending = serie.meta.credit_pending[dataPointIndex];
+            return `
+              Total: ${val.toFixed(2)} L
+              • Contado: ${cash.toFixed(2)} L
+              • Crédito Pagado: ${creditPaid.toFixed(2)} L
+              • Crédito Pendiente: ${creditPending.toFixed(2)} L
+            `;
+          }
+          return val.toFixed(2) + ' Litros';
+        },
+      },
+    },
+  };
+
+  const foliarChart = new ApexCharts(
+    document.querySelector('#foliar-chart'),
+    foliarChartOptions,
+  );
+  foliarChart.render();
+
+  // Gráfico de Ventas Totales por Tipo de Pago (barras apiladas)
+  const paymentTypeData = {{ payment_type_data.series_json|safe }};
+
+  console.log('Payment Type Data:', paymentTypeData);
+  console.log('Payment Type Data type:', typeof paymentTypeData);
+  console.log('Payment Type Data length:', paymentTypeData ? paymentTypeData.length : 'null');
+
+  const paymentTypeChartOptions = {
+    series: paymentTypeData,
+    chart: {
+      type: 'bar',
+      height: 350,
+      stacked: false,
+      toolbar: {
+        show: true,
+        tools: {
+          download: true,
+          zoom: false
+        }
+      }
+    },
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        columnWidth: '75%',
+        endingShape: 'rounded',
+        dataLabels: {
+          position: 'top',
+        }
+      },
+    },
+    colors: ['#28a745', '#17a2b8', '#ffc107'],  // Verde (Contado), Azul (Recuperada), Amarillo (No Recuperada)
+    dataLabels: {
+      enabled: false,
+    },
+    stroke: {
+      show: true,
+      width: 2,
+      colors: ['transparent'],
+    },
+    xaxis: {
+      categories: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+    },
+    yaxis: {
+      title: {
+        text: 'Valor ($)'
+      },
+      labels: {
+        formatter: function(value) {
+          return '$' + value.toLocaleString('es-CO', { maximumFractionDigits: 0 });
+        }
+      }
+    },
+    fill: {
+      opacity: 1,
+    },
+    legend: {
+      show: true,
+      position: 'top',
+      horizontalAlign: 'center',
+      fontSize: '12px',
+      markers: {
+        width: 12,
+        height: 12,
+      }
+    },
+    tooltip: {
+      y: {
+        formatter: function (val) {
+          return '$' + val.toLocaleString('es-CO', { maximumFractionDigits: 0 });
+        },
+      },
+      shared: true,
+      intersect: false,
+    },
+  };
+
+  const paymentTypeChart = new ApexCharts(
+    document.querySelector('#payment-type-chart'),
+    paymentTypeChartOptions,
+  );
+  paymentTypeChart.render();
+</script>
+{% endblock script %}

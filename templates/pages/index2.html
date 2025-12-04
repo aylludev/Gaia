@@ -327,6 +327,12 @@
                     <p>Dashboard Admin</p>
                   </a>
                 </li>
+                <li class="nav-item">
+                  <a href={% url 'core:sales_report_by_seller' %} class="nav-link {% if request.resolver_match.url_name == 'sales_report_by_seller' %}active bg-primary {% endif %}">
+                    <i class="nav-icon bi bi-circle"></i>
+                    <p>Ventas por Vendedor</p>
+                  </a>
+                </li>
                 {% endif %}
                 <li class="nav-item">
                   <a href={% url 'apolo:sale_report' %} class="nav-link">

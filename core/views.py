@@ -447,6 +447,380 @@ class AdminDashboardView(LoginRequiredMixin, TemplateView):
         return context
 
 
+class SalesReportBySellerView(LoginRequiredMixin, TemplateView):
+    """Informe de ventas por mes de cada usuario vendedor"""
+    template_name = 'sales_report_by_seller.html'
+
+    def sales_by_seller_month(self):
+        """Obtiene ventas por vendedor agrupadas por mes del año actual o anterior"""
+        import json
+        data = []
+        try:
+            year = timezone.now().year
+
+            # Para cada vendedor, obtener sus ventas mensuales
+            seller_totals = defaultdict(lambda: [0] * 12)
+            total_monthly = [0] * 12
+
+            # Intentar con el año actual
+            sales = Sale.objects.filter(
+                date_joined__year=year
+            ).select_related('created_by')
+
+            # Si no hay ventas en el año actual, intentar con el año anterior
+            if sales.count() == 0:
+                year = year - 1
+                sales = Sale.objects.filter(
+                    date_joined__year=year
+                ).select_related('created_by')
+
+            print(f"Total sales found for year {year}: {sales.count()}")
+
+            for sale in sales:
+                month = sale.date_joined.month - 1  # Índice 0-11
+                seller_name = f"{sale.created_by.first_name} {sale.created_by.last_name}".strip()
+                if not seller_name:
+                    seller_name = sale.created_by.username
+                seller_totals[seller_name][month] += float(sale.total)
+                total_monthly[month] += float(sale.total)
+
+            # Convertir a formato para ApexCharts
+            data = [{'name': seller, 'data': totals} for seller, totals in seller_totals.items()]
+
+            # Agregar serie de TOTAL
+            data.append({'name': 'TOTAL', 'data': total_monthly})
+
+            print(f"Data generated: {data}")
+
+        except Exception as e:
+            print(f"Error in sales_by_seller_month: {e}")
+
+        return json.dumps(data)
+
+    def get_year_with_data(self):
+        """Obtiene el año con datos (actual o anterior)"""
+        year = timezone.now().year
+        if Sale.objects.filter(date_joined__year=year).count() == 0:
+            year = year - 1
+        return year
+
+    def convert_to_liters(self, quantity, unit):
+        """Convierte una cantidad a litros según la unidad de medida"""
+        quantity = float(quantity)
+        conversions = {
+            'Lt': 1,
+            'mL': 0.001,
+            'cc': 0.001,
+            'Gl': 4,
+        }
+        if unit in conversions:
+            return quantity * conversions[unit]
+        return 0
+
+    def foliar_products_by_seller(self):
+        """Obtiene litros de productos FA vendidos por cada vendedor, discriminado por mes,
+        tipo de pago (contado/crédito) y recuperación de cartera"""
+        import json
+        from decimal import Decimal
+        data = []
+        try:
+            year = self.get_year_with_data()
+
+            # Obtener detalles de venta de productos con código FA del año
+            det_sales = DetSale.objects.filter(
+                prod__code__startswith='FA',
+                sale__date_joined__year=year
+            ).select_related('prod', 'prod__unit', 'sale', 'sale__created_by')
+
+            # Agrupar por vendedor, mes y tipo de pago
+            # cash_liters[vendedor][mes] = litros de contado
+            # credit_paid_liters[vendedor][mes] = litros de crédito pagados
+            # credit_pending_liters[vendedor][mes] = litros de crédito pendientes
+
+            seller_cash_liters = defaultdict(lambda: [0] * 12)
+            seller_credit_paid_liters = defaultdict(lambda: [0] * 12)
+            seller_credit_pending_liters = defaultdict(lambda: [0] * 12)
+
+            total_cash = [0] * 12
+            total_credit_paid = [0] * 12
+            total_credit_pending = [0] * 12
+
+            for det in det_sales:
+                # Nombre del vendedor
+                seller_name = f"{det.sale.created_by.first_name} {det.sale.created_by.last_name}".strip()
+                if not seller_name:
+                    seller_name = det.sale.created_by.username
+
+                # Mes (0-11)
+                month = det.sale.date_joined.month - 1
+
+                # Convertir a litros según la unidad de medida
+                liters_per_unit = self.convert_to_liters(
+                    det.prod.unit.quantity,
+                    det.prod.unit.unit
+                )
+
+                # Calcular litros totales de este producto
+                total_liters = float(det.cant) * liters_per_unit
+
+                # Verificar tipo de pago
+                if det.sale.type_payment == 'CASH':
+                    # Venta de contado
+                    seller_cash_liters[seller_name][month] += total_liters
+                    total_cash[month] += total_liters
+                else:
+                    # Venta a crédito - calcular proporción pagada
+                    # Total de la venta
+                    sale_total = float(det.sale.total)
+
+                    # Calcular total pagado (cuota inicial + pagos)
+                    down_payment = float(det.sale.down_payment)
+                    payments = SalePayment.objects.filter(sale=det.sale).aggregate(
+                        total=Coalesce(Sum('amount'), Decimal('0.00'), output_field=DecimalField())
+                    )['total']
+                    total_paid = down_payment + float(payments)
+
+                    # Calcular porcentaje pagado
+                    if sale_total > 0:
+                        percentage_paid = total_paid / sale_total
+                    else:
+                        percentage_paid = 0
+
+                    # Distribuir litros según porcentaje pagado
+                    liters_paid = total_liters * percentage_paid
+                    liters_pending = total_liters * (1 - percentage_paid)
+
+                    seller_credit_paid_liters[seller_name][month] += liters_paid
+                    seller_credit_pending_liters[seller_name][month] += liters_pending
+                    total_credit_paid[month] += liters_paid
+                    total_credit_pending[month] += liters_pending
+
+            # Convertir a formato para ApexCharts
+            # Estrategia: Crear un objeto con la estructura correcta para barras apiladas agrupadas
+            # Necesitamos que ApexCharts agrupe por vendedor, con cada segmento de la barra mostrando tipo de pago
+
+            series_data = []
+            grand_total_cash = 0
+            grand_total_credit_paid = 0
+            grand_total_credit_pending = 0
+
+            # Obtener lista única de vendedores
+            all_sellers = set()
+            all_sellers.update(seller_cash_liters.keys())
+            all_sellers.update(seller_credit_paid_liters.keys())
+            all_sellers.update(seller_credit_pending_liters.keys())
+
+            # Ordenar vendedores alfabéticamente
+            sorted_sellers = sorted(all_sellers)
+
+            # Agregar vendedor TOTAL
+            sorted_sellers.append('TOTAL')
+
+            # Crear 3 series (una por tipo de pago)
+            # Cada serie tiene datos para todos los vendedores en cada mes
+
+            # Para cada mes, crear un array con [vendedor1_cash, vendedor2_cash, ..., total_cash]
+            cash_series = []
+            credit_paid_series = []
+            credit_pending_series = []
+
+            for month_idx in range(12):
+                month_cash = []
+                month_credit_paid = []
+                month_credit_pending = []
+
+                for seller in sorted_sellers:
+                    if seller == 'TOTAL':
+                        month_cash.append(round(total_cash[month_idx], 2))
+                        month_credit_paid.append(round(total_credit_paid[month_idx], 2))
+                        month_credit_pending.append(round(total_credit_pending[month_idx], 2))
+                    else:
+                        month_cash.append(round(seller_cash_liters[seller][month_idx], 2))
+                        month_credit_paid.append(round(seller_credit_paid_liters[seller][month_idx], 2))
+                        month_credit_pending.append(round(seller_credit_pending_liters[seller][month_idx], 2))
+
+                cash_series.append(month_cash)
+                credit_paid_series.append(month_credit_paid)
+                credit_pending_series.append(month_credit_pending)
+
+            # Calcular totales
+            for seller in sorted_sellers:
+                if seller != 'TOTAL':
+                    grand_total_cash += sum(seller_cash_liters[seller])
+                    grand_total_credit_paid += sum(seller_credit_paid_liters[seller])
+                    grand_total_credit_pending += sum(seller_credit_pending_liters[seller])
+
+            # Estructura de datos para el frontend
+            data = {
+                'series_json': json.dumps({
+                    'cash': cash_series,
+                    'credit_paid': credit_paid_series,
+                    'credit_pending': credit_pending_series
+                }),
+                'sellers_json': json.dumps(sorted_sellers),
+                'total_liters': round(grand_total_cash + grand_total_credit_paid + grand_total_credit_pending, 2),
+                'total_cash': round(grand_total_cash, 2),
+                'total_credit_paid': round(grand_total_credit_paid, 2),
+                'total_credit_pending': round(grand_total_credit_pending, 2)
+            }
+
+        except Exception as e:
+            print(f"Error in foliar_products_by_seller: {e}")
+            import traceback
+            traceback.print_exc()
+            data = {
+                'series_json': json.dumps([]),
+                'total_liters': 0,
+                'total_cash': 0,
+                'total_credit_paid': 0,
+                'total_credit_pending': 0
+            }
+
+        return data
+
+    def sales_by_payment_type(self):
+        """Obtiene ventas totales por mes discriminadas por tipo de pago y cartera recuperada/no recuperada
+        basado únicamente en la fecha de la venta"""
+        import json
+        from decimal import Decimal
+
+        data = {
+            'series_json': json.dumps([]),
+            'total_cash': 0,
+            'total_recovered': 0,
+            'total_not_recovered': 0
+        }
+
+        try:
+            year = self.get_year_with_data()
+
+            print(f"sales_by_payment_type - Year: {year}")
+
+            # Arrays para datos mensuales
+            monthly_cash = [0] * 12
+            monthly_recovered = [0] * 12
+            monthly_not_recovered = [0] * 12
+
+            # Obtener todas las ventas del año
+            sales = Sale.objects.filter(
+                date_joined__year=year
+            )
+
+            print(f"Total sales found: {sales.count()}")
+
+            for sale in sales:
+                month = sale.date_joined.month - 1
+
+                if sale.type_payment == 'CASH':
+                    # Venta de contado - todo el monto va a contado
+                    monthly_cash[month] += float(sale.total)
+                else:
+                    # Venta a crédito - calcular cuánto se ha pagado (cuota inicial + abonos)
+                    down_payment = float(sale.down_payment)
+
+                    # Obtener total de pagos realizados (sin importar la fecha)
+                    payments = SalePayment.objects.filter(sale=sale).aggregate(
+                        total=Coalesce(Sum('amount'), Decimal('0.00'), output_field=DecimalField())
+                    )['total']
+                    total_paid = down_payment + float(payments)
+
+                    # Calcular saldo pendiente
+                    pending = float(sale.total) - total_paid
+
+                    # Asignar a cartera recuperada y no recuperada del mes de la venta
+                    monthly_recovered[month] += total_paid
+                    monthly_not_recovered[month] += pending
+
+            # Calcular totales
+            total_cash = sum(monthly_cash)
+            total_recovered = sum(monthly_recovered)
+            total_not_recovered = sum(monthly_not_recovered)
+
+            print(f"Total cash: {total_cash}")
+            print(f"Total recovered: {total_recovered}")
+            print(f"Total not recovered: {total_not_recovered}")
+
+            # Crear series para ApexCharts
+            series = [
+                {
+                    'name': 'Contado',
+                    'data': [round(val, 2) for val in monthly_cash]
+                },
+                {
+                    'name': 'Cartera Recuperada',
+                    'data': [round(val, 2) for val in monthly_recovered]
+                },
+                {
+                    'name': 'Cartera No Recuperada',
+                    'data': [round(val, 2) for val in monthly_not_recovered]
+                }
+            ]
+
+            print(f"Series data: {series}")
+
+            data = {
+                'series_json': json.dumps(series),
+                'total_cash': round(total_cash, 2),
+                'total_recovered': round(total_recovered, 2),
+                'total_not_recovered': round(total_not_recovered, 2)
+            }
+
+        except Exception as e:
+            print(f"Error in sales_by_payment_type: {e}")
+            import traceback
+            traceback.print_exc()
+
+        return data
+
+    def get_sellers_summary(self):
+        """Obtiene resumen de ventas por vendedor para el año con datos"""
+        summary = []
+        try:
+            year = self.get_year_with_data()
+
+            sellers_data = Sale.objects.filter(
+                date_joined__year=year
+            ).values(
+                'created_by__first_name',
+                'created_by__last_name',
+                'created_by__username'
+            ).annotate(
+                total_sales=Sum('total'),
+                count_sales=Count('id')
+            ).order_by('-total_sales')
+
+            for seller in sellers_data:
+                name = f"{seller['created_by__first_name']} {seller['created_by__last_name']}".strip()
+                if not name:
+                    name = seller['created_by__username']
+
+                summary.append({
+                    'name': name,
+                    'total': float(seller['total_sales']),
+                    'count': seller['count_sales'],
+                    'average': float(seller['total_sales']) / seller['count_sales'] if seller['count_sales'] > 0 else 0
+                })
+
+        except Exception as e:
+            pass
+
+        return summary
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        year = self.get_year_with_data()
+        context.update({
+            'title': 'Informe de Ventas por Vendedor',
+            'entity': 'Informe de Ventas por Vendedor',
+            'sales_data': self.sales_by_seller_month(),
+            'sellers_summary': self.get_sellers_summary(),
+            'foliar_data': self.foliar_products_by_seller(),
+            'payment_type_data': self.sales_by_payment_type(),
+            'current_year': year,
+        })
+        return context
+
+
 class ArtemisaView(LoginRequiredMixin, TemplateView):
     template_name = 'artemisa/index.html'
 
