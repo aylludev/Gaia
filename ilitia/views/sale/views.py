@@ -111,6 +111,7 @@ class SaleCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Create
                     sale = Sale()
                     sale.cli_id = vents['cli']
                     sale.invoice_number = vents['invoice_number']
+                    sale.price_list = vents.get('price_list', 'sale_price')
                     sale.subtotal = float(vents['subtotal'])
                     sale.date_joined = timezone.now()
                     sale.iva = float(vents['iva'])
@@ -127,7 +128,10 @@ class SaleCreateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Create
                         det.sale_id = sale.id
                         det.prod_id = i['id']
                         det.cant = int(i['cant'])
-                        det.price = float(i['sale_price'])
+                        # Obtener el precio según el tipo de precio seleccionado
+                        price_type = i.get('price_type', 'sale_price')
+                        det.price = float(i.get(price_type, i['sale_price']))
+                        det.price_type = price_type
                         det.discount = float(i['discount'])
                         det.subtotal = float(i['subtotal'])
                         det.save()
@@ -211,6 +215,7 @@ class SaleUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Update
                     sale = self.get_object()
                     sale.cli_id = vents['cli']
                     sale.invoice_number = vents['invoice_number']
+                    sale.price_list = vents.get('price_list', 'sale_price')
                     sale.subtotal = float(vents['subtotal'])
                     sale.iva = float(vents['iva'])
                     sale.discountall = float(vents['discountall'])
@@ -228,7 +233,10 @@ class SaleUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Update
                         det.sale_id = sale.id
                         det.prod_id = i['id']
                         det.cant = int(i['cant'])
-                        det.price = float(i['sale_price'])
+                        # Obtener el precio según el tipo de precio seleccionado
+                        price_type = i.get('price_type', 'sale_price')
+                        det.price = float(i.get(price_type, i['sale_price']))
+                        det.price_type = price_type
                         det.discount = float(i['discount'])
                         det.subtotal = float(i['subtotal'])
                         det.save()
@@ -261,6 +269,7 @@ class SaleUpdateView(LoginRequiredMixin, ValidatePermissionRequiredMixin, Update
                 item = i.prod.to_json()
                 item['cant'] = i.cant
                 item['discount'] = i.discount
+                item['price_type'] = i.price_type
                 data.append(item)
         except:
             pass

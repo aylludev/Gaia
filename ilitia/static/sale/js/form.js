@@ -4,6 +4,7 @@ var vents = {
   items: {
     cli: '',
     invoice_number: '',
+    price_list: 'sale_price',
     subtotal: 0.00,
     iva: 0.00,
     discountall: 0.00,
@@ -32,7 +33,9 @@ var vents = {
     $.each(this.items.products, function(pos, dict) {
       dict.pos = pos;
       var discount = dict.discount || 0;
-      var subtotalproduct = dict.cant * parseFloat(dict.sale_price)
+      // Obtener el precio según el tipo de precio seleccionado
+      var price = dict[dict.price_type || 'sale_price'];
+      var subtotalproduct = dict.cant * parseFloat(price);
       dict.subtotal = subtotalproduct - ((discount / 100) * subtotalproduct);
       subtotal += dict.subtotal;
     });
@@ -84,6 +87,7 @@ var vents = {
         { "data": "id" },
         { "data": "name" },
         { "data": "stock" },
+        { "data": "price_type" },
         { "data": "sale_price" },
         { "data": "cant" },
         { "data": "discount" },
@@ -91,7 +95,7 @@ var vents = {
       ],
       columnDefs: [
         {
-          targets: [-5],
+          targets: [-6],
           class: 'text-center',
           render: function(data, type, row) {
             return '<span class="badge badge-secondary">' + data + '</span>';
@@ -106,11 +110,29 @@ var vents = {
           }
         },
         {
+          targets: [-5],
+          class: 'text-center',
+          orderable: false,
+          render: function(data, type, row) {
+            var selected_sale_price = row.price_type === 'sale_price' || !row.price_type ? 'selected' : '';
+            var selected_precio1 = row.price_type === 'precio1' ? 'selected' : '';
+            var selected_precio2 = row.price_type === 'precio2' ? 'selected' : '';
+            var selected_precio3 = row.price_type === 'precio3' ? 'selected' : '';
+            return '<select name="price_type" class="form-control form-control-sm">' +
+              '<option value="sale_price" ' + selected_sale_price + '>PVP ($' + parseFloat(row.sale_price).toFixed(0) + ')</option>' +
+              '<option value="precio1" ' + selected_precio1 + '>P1 ($' + parseFloat(row.precio1).toFixed(0) + ')</option>' +
+              '<option value="precio2" ' + selected_precio2 + '>P2 ($' + parseFloat(row.precio2).toFixed(0) + ')</option>' +
+              '<option value="precio3" ' + selected_precio3 + '>P3 ($' + parseFloat(row.precio3).toFixed(0) + ')</option>' +
+              '</select>';
+          }
+        },
+        {
           targets: [-4],
           class: 'text-center',
           orderable: false,
           render: function(data, type, row) {
-            return '$' + parseFloat(data).toFixed(2);
+            var price = row[row.price_type || 'sale_price'];
+            return '$' + parseFloat(price).toFixed(2);
           }
         },
         {
@@ -130,7 +152,7 @@ var vents = {
           }
         },
         {
-          targets: [6],
+          targets: [7],
           class: 'text-center',
           orderable: false,
           render: function(data, type, row) {
@@ -190,6 +212,9 @@ $(function() {
   // Asignar un número de factura al cargar la página
   vents.assign_invoice_number();
 
+  // Inicializar la lista de precios
+  vents.items.price_list = $('select[name="price_list"]').val() || 'sale_price';
+
   $('.select2').select2({
     theme: "bootstrap4",
     language: 'es'
@@ -213,14 +238,36 @@ $(function() {
     vents.calculate_invoice();
   })
 
+  // Ocultar campos de crédito al inicio si el tipo de pago es CASH
+  if ($('select[name="type_payment"]').val() === "CASH") {
+    $("#down_payment").hide();
+    $("#form\\.days_to_pay").hide();
+  }
+
   $('select[name="type_payment"]').on('change', function() {
     console.log($(this).val());
     if ($(this).val() === "CASH") {
-      $("#down_payment").fadeOut();  // Muestra el campo con animación
+      $("#down_payment").fadeOut();
+      $("#form\\.days_to_pay").fadeOut();
     } else {
-      $("#down_payment").fadeIn();// Oculta el campo con animación
+      $("#down_payment").fadeIn();
+      $("#form\\.days_to_pay").fadeIn();
     }
     vents.calculate_invoice()
+  });
+
+  // Evento para cambiar la lista de precios
+  $('select[name="price_list"]').on('change', function() {
+    var selected_price_list = $(this).val();
+    vents.items.price_list = selected_price_list;
+
+    // Actualizar todos los productos existentes con la nueva lista de precios
+    $.each(vents.items.products, function(index, product) {
+      product.price_type = selected_price_list;
+    });
+
+    // Recalcular y redibujar la tabla
+    vents.list();
   });
 
   $("input[name='down_payment']").on('change', function() {
@@ -336,7 +383,7 @@ $(function() {
       var tr = tblProducts.cell($(this).closest('td, li')).index();
       vents.items.products[tr.row].cant = cant;
       vents.calculate_invoice();
-      $('td:eq(6)', tblProducts.row(tr.row).node()).html('$' + vents.items.products[tr.row].subtotal.toFixed(2));
+      $('td:eq(7)', tblProducts.row(tr.row).node()).html('$' + vents.items.products[tr.row].subtotal.toFixed(2));
     })
     .on('change', 'input[name="discount"]', function() {
       console.clear();
@@ -344,7 +391,17 @@ $(function() {
       var tr = tblProducts.cell($(this).closest('td, li')).index();
       vents.items.products[tr.row].discount = discount;
       vents.calculate_invoice();
-      $('td:eq(6)', tblProducts.row(tr.row).node()).html('$' + vents.items.products[tr.row].subtotal.toFixed(2));
+      $('td:eq(7)', tblProducts.row(tr.row).node()).html('$' + vents.items.products[tr.row].subtotal.toFixed(2));
+    })
+    .on('change', 'select[name="price_type"]', function() {
+      console.clear();
+      var price_type = $(this).val();
+      var tr = tblProducts.cell($(this).closest('td, li')).index();
+      vents.items.products[tr.row].price_type = price_type;
+      vents.calculate_invoice();
+      var price = vents.items.products[tr.row][price_type];
+      $('td:eq(4)', tblProducts.row(tr.row).node()).html('$' + parseFloat(price).toFixed(2));
+      $('td:eq(7)', tblProducts.row(tr.row).node()).html('$' + vents.items.products[tr.row].subtotal.toFixed(2));
     });
 
   $('.btnClearSearch').on('click', function() {
@@ -423,7 +480,9 @@ $(function() {
       var tr = tblSearchProducts.cell($(this).closest('td, li')).index();
       var product = tblSearchProducts.row(tr.row).data();
       product.cant = 1;
+      product.discount = 0;
       product.subtotal = 0.00;
+      product.price_type = vents.items.price_list || 'sale_price';
       vents.add(product);
       tblSearchProducts.row($(this).parents('tr')).remove().draw();
     });
@@ -439,6 +498,7 @@ $(function() {
 
     var down_payment = (($('input[name="down_payment"]').val()) || 0).replace(/\./g, '').replace(/,/g, '.');  // Quita puntos y cambia la coma decimal
     vents.items.cli = $('select[name="cli"]').val();
+    vents.items.price_list = $('select[name="price_list"]').val();
     vents.items.down_payment = down_payment;
     vents.items.observation = $('input[name="observation"]').val();
 
@@ -490,6 +550,7 @@ $(function() {
     data.cant = 1;
     data.discount = 0;
     data.subtotal = 0.00;
+    data.price_type = vents.items.price_list || 'sale_price';
     vents.add(data);
     $(this).val('').trigger('change.select2');
   });

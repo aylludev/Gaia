@@ -64,6 +64,9 @@ class Product(BaseModel):
     stock = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name='Stock')
     purchase_price = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name='Precio de compra')
     sale_price = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name='Precio de venta')
+    precio1 = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name='Precio 1')
+    precio2 = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name='Precio 2')
+    precio3 = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name='Precio 3')
 
     def __str__(self):
         return f"{self.name} ({self.unit})"
@@ -81,6 +84,9 @@ class Product(BaseModel):
         item['cat'] = self.cat.to_json()
         item['stock'] = format(self.stock, '.0f')
         item['sale_price'] = format(self.sale_price, '.0f')
+        item['precio1'] = format(self.precio1, '.0f')
+        item['precio2'] = format(self.precio2, '.0f')
+        item['precio3'] = format(self.precio3, '.0f')
         item['purchase_price'] = format(self.purchase_price, '.0f')
         item['value'] = format(self.stock * self.purchase_price, '.0f')
         return item
@@ -89,19 +95,25 @@ class PriceHistory(BaseModel):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='price_history')
     purchase_price = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     sale_price = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    precio1 = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    precio2 = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    precio3 = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     effective_date = models.DateField(default=timezone.now)
 
     class Meta:
         ordering = ['-effective_date']
 
     def __str__(self):
-        return f'{self.product.name} - Compra: {self.purchase_price}, Venta: {self.sale_price}'
-    
+        return f'{self.product.name} - Compra: {self.purchase_price}, Venta: {self.sale_price}, P1: {self.precio1}, P2: {self.precio2}, P3: {self.precio3}'
+
     def to_json(self):
         item = model_to_dict(self)
         item['product'] = self.product.to_json()
         item['purchase_price'] = format(self.purchase_price, '%.2f')
         item['sale_price'] = format(self.sale_price, '%.2f')
+        item['precio1'] = format(self.precio1, '%.2f')
+        item['precio2'] = format(self.precio2, '%.2f')
+        item['precio3'] = format(self.precio3, '%.2f')
         item['effective_date'] = self.effective_date.strftime('%Y-%m-%d')
         return item
 

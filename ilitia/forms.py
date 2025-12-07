@@ -43,10 +43,11 @@ class SaleForm(ModelForm):
 
     class Meta:
         model = Sale
-        fields = '__all__'
+        fields = ['cli', 'invoice_number', 'price_list', 'subtotal', 'iva', 'discountall', 'total', 'type_payment', 'days_to_pay', 'down_payment', 'observation']
         widgets = {
             'cli': forms.Select(attrs={'class': 'custom-select select2',}),
             'invoice_number': forms.TextInput(attrs={'readonly': True, 'class': 'form-control', }),
+            'price_list': forms.Select(attrs={'class': 'form-control select2', }),
             'iva': forms.TextInput(attrs={'class': 'form-control', }),
             'subtotal': forms.TextInput(attrs={'readonly': True, 'class': 'form-control', }),
             'discountall': forms.TextInput(attrs={ 'class': 'form-control', }),

@@ -34,11 +34,14 @@ $(function() {
         { "data": "purchase_price" },
         { "data": "stock" },
         { "data": "sale_price" },
+        { "data": "precio1" },
+        { "data": "precio2" },
+        { "data": "precio3" },
         { "data": "id" },
       ],
       columnDefs: [
         {
-          targets: [-3],
+          targets: [-6],
           class: 'text-center',
           orderable: false,
           render: function(data, type, row) {
@@ -49,7 +52,7 @@ $(function() {
           }
         },
         {
-          targets: [-2, -4],
+          targets: [-7, -5, -4, -3, -2],
           class: 'text-center',
           orderable: false,
           render: function(data, type, row) {

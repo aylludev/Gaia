@@ -40,14 +40,22 @@ class Sale(BaseModel):
         ('CASH', 'Contado'),
     ]
 
+    PRICE_LIST_CHOICES = [
+        ('sale_price', 'Precio de Venta'),
+        ('precio1', 'Precio 1'),
+        ('precio2', 'Precio 2'),
+        ('precio3', 'Precio 3'),
+    ]
+
     cli = models.ForeignKey(Client, on_delete=models.CASCADE)
     date_joined = models.DateTimeField(default=timezone.now)
     invoice_number = models.CharField(max_length=50, blank=True, null=True)
+    price_list = models.CharField(max_length=15, choices=PRICE_LIST_CHOICES, default='sale_price', verbose_name='Lista de Precios')
     subtotal = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
     iva = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
     discountall = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
     total = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
-    type_payment = models.CharField(max_length=10, choices=TYPE_PAYMENT, default='CREDIT')
+    type_payment = models.CharField(max_length=10, choices=TYPE_PAYMENT, default='CASH')
     down_payment = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
     days_to_pay = models.IntegerField(default=0)
     observation = models.CharField(max_length=254, null=True, blank=True)
@@ -59,6 +67,7 @@ class Sale(BaseModel):
         item = model_to_dict(self)
         item['cli'] = self.cli.to_json()
         item['invoice_number'] = self.invoice_number
+        item['price_list'] = self.price_list
         item['subtotal'] = format(self.subtotal, '.2f')
         item['iva'] = format(self.iva, '.2f')
         item['total'] = format(self.total, '.2f')
@@ -82,9 +91,17 @@ class Sale(BaseModel):
         ordering = ['date_joined']
 
 class DetSale(BaseModel):
+    PRICE_TYPE_CHOICES = [
+        ('sale_price', 'Precio de Venta'),
+        ('precio1', 'Precio 1'),
+        ('precio2', 'Precio 2'),
+        ('precio3', 'Precio 3'),
+    ]
+
     sale = models.ForeignKey(Sale, on_delete=models.CASCADE)
     prod = models.ForeignKey(Product, on_delete=models.CASCADE)
     price = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
+    price_type = models.CharField(max_length=15, choices=PRICE_TYPE_CHOICES, default='sale_price', verbose_name='Tipo de Precio')
     cant = models.IntegerField(0)
     discount = models.IntegerField(0)
     subtotal = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
@@ -96,6 +113,7 @@ class DetSale(BaseModel):
         item = model_to_dict(self, exclude=['sale'])
         item['prod'] = self.prod.to_json()
         item['price'] = format(self.price, '.2f')
+        item['price_type'] = self.price_type
         item['subtotal'] = format(self.subtotal, '.2f')
         return item
 
@@ -111,7 +129,15 @@ class Cotization(BaseModel):
         ('CASH', 'Contado'),
     ]
 
+    PRICE_LIST_CHOICES = [
+        ('sale_price', 'Precio de Venta'),
+        ('precio1', 'Precio 1'),
+        ('precio2', 'Precio 2'),
+        ('precio3', 'Precio 3'),
+    ]
+
     date_joined = models.DateField(default=timezone.now)
+    price_list = models.CharField(max_length=15, choices=PRICE_LIST_CHOICES, default='sale_price', verbose_name='Lista de Precios')
     subtotal = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
     iva = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
     discountall = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
@@ -147,9 +173,17 @@ class Cotization(BaseModel):
         ordering = ['date_joined']
 
 class CotizationDetail(BaseModel):
+    PRICE_TYPE_CHOICES = [
+        ('sale_price', 'Precio de Venta'),
+        ('precio1', 'Precio 1'),
+        ('precio2', 'Precio 2'),
+        ('precio3', 'Precio 3'),
+    ]
+
     cotization = models.ForeignKey(Sale, on_delete=models.CASCADE)
     prod = models.ForeignKey(Product, on_delete=models.CASCADE)
     price = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
+    price_type = models.CharField(max_length=15, choices=PRICE_TYPE_CHOICES, default='sale_price', verbose_name='Tipo de Precio')
     cant = models.IntegerField(0)
     discount = models.IntegerField(0)
     subtotal = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
@@ -161,6 +195,7 @@ class CotizationDetail(BaseModel):
         item = model_to_dict(self, exclude=['cotization'])
         item['prod'] = self.prod.to_json()
         item['price'] = format(self.price, '.2f')
+        item['price_type'] = self.price_type
         item['subtotal'] = format(self.subtotal, '.2f')
         return item
 

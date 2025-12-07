@@ -61,7 +61,7 @@ class ProductForm(ModelForm):
 
     class Meta:
         model = Product
-        fields = 'code', 'name', 'unit', 'cat', 'stock', 'purchase_price', 'sale_price'
+        fields = 'code', 'name', 'unit', 'cat', 'stock', 'purchase_price', 'sale_price', 'precio1', 'precio2', 'precio3'
         widgets = {
             'name': forms.TextInput(attrs={'placeholder': 'Ingrese un nombre',}),
             'cat': forms.Select(attrs={'class': 'select2', 'style': 'width: 100%'}),
