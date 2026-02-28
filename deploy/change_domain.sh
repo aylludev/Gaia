@@ -6,7 +6,7 @@
 # Ejecutar en el droplet como root o con sudo
 # ===========================================================
 
-set -euo pipefail
+set -eu
 
 # ── CONFIGURACIÓN ──────────────────────────────────────────
 # Ajustá estas variables antes de ejecutar el script
@@ -184,6 +184,10 @@ log_ok "Nginx recargado"
 
 # ── 7. Reiniciar Gaia via Supervisor ──────────────────────
 log_head "7. Reiniciando Gaia"
+
+# Asegurar que los scripts de deploy sean ejecutables
+find "${PROJECT_PATH}/deploy" -name "*.sh" -exec chmod +x {} \;
+log_ok "Permisos de ejecución aplicados a deploy/*.sh"
 
 if supervisorctl status "${SUPERVISOR_PROGRAM}" &> /dev/null 2>&1; then
     supervisorctl restart "${SUPERVISOR_PROGRAM}"
