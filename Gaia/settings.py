@@ -151,8 +151,8 @@ MEDIA_URL = '/media/'
 AUTH_USER_MODEL = 'hades.User'
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://agroinsumosmerkosur.com",
-    "https://www.agroinsumosmerkosur.com",
+    "https://fermagrisas.com",
+    "https://www.fermagrisas.com",
 ]
 
 
