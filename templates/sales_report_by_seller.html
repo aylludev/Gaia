@@ -9,12 +9,12 @@
       <div class="card-header">
         <h3 class="card-title">
           <i class="bi bi-bar-chart-line-fill"></i>
-          Informe de Ventas por Vendedor - Año {{ current_year }}
+          Informe de Ventas por Vendedor - {{ period_label }}
         </h3>
       </div>
       <div class="card-body">
         <p class="text-muted">
-          Este informe muestra las ventas mensuales de cada vendedor durante el año {{ current_year }}.
+          Este informe muestra las ventas mensuales de cada vendedor durante los últimos 12 meses ({{ period_label }}).
           Utilice el gráfico para visualizar tendencias y comparar el desempeño entre vendedores.
         </p>
       </div>
@@ -100,7 +100,7 @@
           <div class="col-md-3">
             <p class="d-flex flex-column">
               <span class="fw-bold fs-5 text-primary">{{ foliar_data.total_liters }} L</span>
-              <span class="text-muted small">Total {{ current_year }}</span>
+              <span class="text-muted small">Total {{ period_label }}</span>
             </p>
           </div>
         </div>
@@ -113,7 +113,7 @@
   <div class="col-md-6">
     <div class="card">
       <div class="card-header">
-        <h3 class="card-title">Resumen de Ventas por Vendedor ({{ current_year }})</h3>
+        <h3 class="card-title">Resumen de Ventas por Vendedor ({{ period_label }})</h3>
       </div>
       <div class="card-body p-0">
         <div class="table-responsive">
@@ -187,6 +187,8 @@
 <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.min.js"
   integrity="sha256-+vh8GkaU7C9/wbSLIcwq82tQ2wTf44aOHA8HlBMwRI8=" crossorigin="anonymous"></script>
 <script>
+  const monthLabels = {{ month_labels|safe }};
+
   // Gráfico de ventas por vendedor
   const salesData = {{ sales_data|safe }};
 
@@ -227,20 +229,7 @@
     },
     xaxis: {
       type: 'category',
-      categories: [
-        'Enero',
-        'Febrero',
-        'Marzo',
-        'Abril',
-        'Mayo',
-        'Junio',
-        'Julio',
-        'Agosto',
-        'Septiembre',
-        'Octubre',
-        'Noviembre',
-        'Diciembre',
-      ],
+      categories: monthLabels,
     },
     yaxis: {
       labels: {
@@ -298,7 +287,7 @@
   // Transformar datos para ApexCharts
   // Necesitamos una serie por cada vendedor, con datos mensuales apilados por tipo de pago
   const foliarSeries = [];
-  const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+  const months = monthLabels;
 
   foliarSellers.forEach((seller, sellerIndex) => {
     // Para cada vendedor, crear una serie con la suma de los 3 tipos de pago por mes
@@ -460,7 +449,7 @@
       colors: ['transparent'],
     },
     xaxis: {
-      categories: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+      categories: monthLabels,
     },
     yaxis: {
       title: {

@@ -3,14 +3,14 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from artemisa.models import Purchase, Product, Category
 from django.db.models import Sum, DecimalField, Count
 from django.db.models.functions import Coalesce
-from datetime import timedelta
+from datetime import timedelta, datetime, date
+import json
 from collections import defaultdict
 from ilitia.models import Sale, Client, DetSale
 from hermes.models import SalePayment
 from decimal import Decimal
 from django.utils import timezone
 from hades.models import User
-from datetime import datetime
 from django.utils.timezone import localtime
 from core.models import Currency
 from django.shortcuts import redirect
@@ -452,57 +452,56 @@ class SalesReportBySellerView(LoginRequiredMixin, TemplateView):
     template_name = 'sales_report_by_seller.html'
 
     def sales_by_seller_month(self):
-        """Obtiene ventas por vendedor agrupadas por mes del año actual o anterior"""
-        import json
+        """Ventas por vendedor agrupadas por mes — últimos 12 meses"""
         data = []
         try:
-            year = timezone.now().year
+            months = self.get_last_12_months()
+            month_index = {(y, m): i for i, (y, m) in enumerate(months)}
+            start_date = date(months[0][0], months[0][1], 1)
 
-            # Para cada vendedor, obtener sus ventas mensuales
             seller_totals = defaultdict(lambda: [0] * 12)
             total_monthly = [0] * 12
 
-            # Intentar con el año actual
             sales = Sale.objects.filter(
-                date_joined__year=year
+                date_joined__date__gte=start_date
             ).select_related('created_by')
 
-            # Si no hay ventas en el año actual, intentar con el año anterior
-            if sales.count() == 0:
-                year = year - 1
-                sales = Sale.objects.filter(
-                    date_joined__year=year
-                ).select_related('created_by')
-
-            print(f"Total sales found for year {year}: {sales.count()}")
-
             for sale in sales:
-                month = sale.date_joined.month - 1  # Índice 0-11
+                key = (sale.date_joined.year, sale.date_joined.month)
+                if key not in month_index:
+                    continue
+                idx = month_index[key]
                 seller_name = f"{sale.created_by.first_name} {sale.created_by.last_name}".strip()
                 if not seller_name:
                     seller_name = sale.created_by.username
-                seller_totals[seller_name][month] += float(sale.total)
-                total_monthly[month] += float(sale.total)
+                seller_totals[seller_name][idx] += float(sale.total)
+                total_monthly[idx] += float(sale.total)
 
-            # Convertir a formato para ApexCharts
             data = [{'name': seller, 'data': totals} for seller, totals in seller_totals.items()]
-
-            # Agregar serie de TOTAL
             data.append({'name': 'TOTAL', 'data': total_monthly})
-
-            print(f"Data generated: {data}")
 
         except Exception as e:
             print(f"Error in sales_by_seller_month: {e}")
 
         return json.dumps(data)
 
-    def get_year_with_data(self):
-        """Obtiene el año con datos (actual o anterior)"""
-        year = timezone.now().year
-        if Sale.objects.filter(date_joined__year=year).count() == 0:
-            year = year - 1
-        return year
+    def get_last_12_months(self):
+        """Returns list of (year, month) tuples for the last 12 months, oldest first"""
+        today = timezone.localdate()
+        months = []
+        year, month = today.year, today.month
+        for _ in range(12):
+            months.insert(0, (year, month))
+            month -= 1
+            if month == 0:
+                month = 12
+                year -= 1
+        return months
+
+    def get_month_labels(self, months):
+        """Returns short labels like 'Mar 2025' for the given (year, month) tuples"""
+        names = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
+        return [f"{names[m-1]} {y}" for y, m in months]
 
     def convert_to_liters(self, quantity, unit):
         """Convierte una cantidad a litros según la unidad de medida"""
@@ -518,18 +517,17 @@ class SalesReportBySellerView(LoginRequiredMixin, TemplateView):
         return 0
 
     def foliar_products_by_seller(self):
-        """Obtiene litros de productos FA vendidos por cada vendedor, discriminado por mes,
-        tipo de pago (contado/crédito) y recuperación de cartera"""
-        import json
+        """Litros de productos FA por vendedor, discriminado por mes — últimos 12 meses"""
         from decimal import Decimal
         data = []
         try:
-            year = self.get_year_with_data()
+            months = self.get_last_12_months()
+            month_index = {(y, m): i for i, (y, m) in enumerate(months)}
+            start_date = date(months[0][0], months[0][1], 1)
 
-            # Obtener detalles de venta de productos con código FA del año
             det_sales = DetSale.objects.filter(
                 prod__code__startswith='FA',
-                sale__date_joined__year=year
+                sale__date_joined__date__gte=start_date
             ).select_related('prod', 'prod__unit', 'sale', 'sale__created_by')
 
             # Agrupar por vendedor, mes y tipo de pago
@@ -546,26 +544,23 @@ class SalesReportBySellerView(LoginRequiredMixin, TemplateView):
             total_credit_pending = [0] * 12
 
             for det in det_sales:
-                # Nombre del vendedor
+                key = (det.sale.date_joined.year, det.sale.date_joined.month)
+                if key not in month_index:
+                    continue
+                month = month_index[key]
+
                 seller_name = f"{det.sale.created_by.first_name} {det.sale.created_by.last_name}".strip()
                 if not seller_name:
                     seller_name = det.sale.created_by.username
 
-                # Mes (0-11)
-                month = det.sale.date_joined.month - 1
-
-                # Convertir a litros según la unidad de medida
                 liters_per_unit = self.convert_to_liters(
                     det.prod.unit.quantity,
                     det.prod.unit.unit
                 )
 
-                # Calcular litros totales de este producto
                 total_liters = float(det.cant) * liters_per_unit
 
-                # Verificar tipo de pago
                 if det.sale.type_payment == 'CASH':
-                    # Venta de contado
                     seller_cash_liters[seller_name][month] += total_liters
                     total_cash[month] += total_liters
                 else:
@@ -679,9 +674,7 @@ class SalesReportBySellerView(LoginRequiredMixin, TemplateView):
         return data
 
     def sales_by_payment_type(self):
-        """Obtiene ventas totales por mes discriminadas por tipo de pago y cartera recuperada/no recuperada
-        basado únicamente en la fecha de la venta"""
-        import json
+        """Ventas totales por mes discriminadas por tipo de pago — últimos 12 meses"""
         from decimal import Decimal
 
         data = {
@@ -692,77 +685,45 @@ class SalesReportBySellerView(LoginRequiredMixin, TemplateView):
         }
 
         try:
-            year = self.get_year_with_data()
+            months = self.get_last_12_months()
+            month_index = {(y, m): i for i, (y, m) in enumerate(months)}
+            start_date = date(months[0][0], months[0][1], 1)
 
-            print(f"sales_by_payment_type - Year: {year}")
-
-            # Arrays para datos mensuales
             monthly_cash = [0] * 12
             monthly_recovered = [0] * 12
             monthly_not_recovered = [0] * 12
 
-            # Obtener todas las ventas del año
-            sales = Sale.objects.filter(
-                date_joined__year=year
-            )
-
-            print(f"Total sales found: {sales.count()}")
+            sales = Sale.objects.filter(date_joined__date__gte=start_date)
 
             for sale in sales:
-                month = sale.date_joined.month - 1
+                key = (sale.date_joined.year, sale.date_joined.month)
+                if key not in month_index:
+                    continue
+                idx = month_index[key]
 
                 if sale.type_payment == 'CASH':
-                    # Venta de contado - todo el monto va a contado
-                    monthly_cash[month] += float(sale.total)
+                    monthly_cash[idx] += float(sale.total)
                 else:
-                    # Venta a crédito - calcular cuánto se ha pagado (cuota inicial + abonos)
                     down_payment = float(sale.down_payment)
-
-                    # Obtener total de pagos realizados (sin importar la fecha)
                     payments = SalePayment.objects.filter(sale=sale).aggregate(
                         total=Coalesce(Sum('amount'), Decimal('0.00'), output_field=DecimalField())
                     )['total']
                     total_paid = down_payment + float(payments)
-
-                    # Calcular saldo pendiente
                     pending = float(sale.total) - total_paid
+                    monthly_recovered[idx] += total_paid
+                    monthly_not_recovered[idx] += pending
 
-                    # Asignar a cartera recuperada y no recuperada del mes de la venta
-                    monthly_recovered[month] += total_paid
-                    monthly_not_recovered[month] += pending
-
-            # Calcular totales
-            total_cash = sum(monthly_cash)
-            total_recovered = sum(monthly_recovered)
-            total_not_recovered = sum(monthly_not_recovered)
-
-            print(f"Total cash: {total_cash}")
-            print(f"Total recovered: {total_recovered}")
-            print(f"Total not recovered: {total_not_recovered}")
-
-            # Crear series para ApexCharts
             series = [
-                {
-                    'name': 'Contado',
-                    'data': [round(val, 2) for val in monthly_cash]
-                },
-                {
-                    'name': 'Cartera Recuperada',
-                    'data': [round(val, 2) for val in monthly_recovered]
-                },
-                {
-                    'name': 'Cartera No Recuperada',
-                    'data': [round(val, 2) for val in monthly_not_recovered]
-                }
+                {'name': 'Contado', 'data': [round(v, 2) for v in monthly_cash]},
+                {'name': 'Cartera Recuperada', 'data': [round(v, 2) for v in monthly_recovered]},
+                {'name': 'Cartera No Recuperada', 'data': [round(v, 2) for v in monthly_not_recovered]},
             ]
-
-            print(f"Series data: {series}")
 
             data = {
                 'series_json': json.dumps(series),
-                'total_cash': round(total_cash, 2),
-                'total_recovered': round(total_recovered, 2),
-                'total_not_recovered': round(total_not_recovered, 2)
+                'total_cash': round(sum(monthly_cash), 2),
+                'total_recovered': round(sum(monthly_recovered), 2),
+                'total_not_recovered': round(sum(monthly_not_recovered), 2),
             }
 
         except Exception as e:
@@ -773,13 +734,14 @@ class SalesReportBySellerView(LoginRequiredMixin, TemplateView):
         return data
 
     def get_sellers_summary(self):
-        """Obtiene resumen de ventas por vendedor para el año con datos"""
+        """Resumen de ventas por vendedor — últimos 12 meses"""
         summary = []
         try:
-            year = self.get_year_with_data()
+            months = self.get_last_12_months()
+            start_date = date(months[0][0], months[0][1], 1)
 
             sellers_data = Sale.objects.filter(
-                date_joined__year=year
+                date_joined__date__gte=start_date
             ).values(
                 'created_by__first_name',
                 'created_by__last_name',
@@ -808,7 +770,8 @@ class SalesReportBySellerView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        year = self.get_year_with_data()
+        months = self.get_last_12_months()
+        labels = self.get_month_labels(months)
         context.update({
             'title': 'Informe de Ventas por Vendedor',
             'entity': 'Informe de Ventas por Vendedor',
@@ -816,7 +779,8 @@ class SalesReportBySellerView(LoginRequiredMixin, TemplateView):
             'sellers_summary': self.get_sellers_summary(),
             'foliar_data': self.foliar_products_by_seller(),
             'payment_type_data': self.sales_by_payment_type(),
-            'current_year': year,
+            'month_labels': json.dumps(labels),
+            'period_label': f"{labels[0]} - {labels[-1]}",
         })
         return context
 

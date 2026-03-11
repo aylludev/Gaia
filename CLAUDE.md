@@ -31,7 +31,19 @@ python manage.py collectstatic
 - `gunicorn.sh` — production WSGI (5 workers, Unix socket)
 - `backup.sh` — PostgreSQL backup
 
-**Environment variables** managed via `python-decouple`. Key var: `DEFAULT_CURRENCY_CODE` (auto-set in session on login via `hades/signals.py`).
+**Environment variables** managed via `python-decouple` from a `.env` file (see `.env.example`):
+
+| Variable | Default | Required |
+|---|---|---|
+| `DJANGO_SECRET_KEY` | — | Yes |
+| `DJANGO_DEBUG` | `False` | No |
+| `DJANGO_ALLOWED_HOSTS` | — | Yes |
+| `DB_PASSWORD` | — | Yes |
+| `DB_NAME` | `ams` | No |
+| `DB_USER` | `postgres` | No |
+| `DB_HOST` | `localhost` | No |
+| `DB_PORT` | `5432` | No |
+| `DEFAULT_CURRENCY_CODE` | `COP` | No |
 
 ## Architecture Overview
 
@@ -47,15 +59,14 @@ python manage.py collectstatic
 
 ### Views Directory Structure
 
-Complex apps organize views in subdirectories, NOT a single `views.py`:
+Complex apps organize views in subdirectories, NOT a single `views.py`. Apps that follow this pattern: **artemisa**, **ilitia**, **hermes**.
 
 ```
-artemisa/
-└── views/
-    ├── product/views.py
-    ├── purchase/views.py
-    ├── provider/views.py
-    └── ...
+artemisa/views/product/views.py
+artemisa/views/purchase/views.py
+hermes/views/cashclosing/views.py
+hermes/views/credits/views.py
+ilitia/views/sale/views.py
 ```
 
 When adding a new view to an existing app, check if it uses the subdirectory pattern first.
@@ -214,8 +225,8 @@ WeasyPrint runs synchronously — no background task queue exists in this projec
 
 ## Configuration Notes
 
-- **Database**: Settings in `Gaia/db.py`, imported in `settings.py`. DB name: `ams`
-- **Django secret key and DB credentials** are stored in the repo (not environment-managed) — be careful not to expose them
+- **Database**: Settings in `Gaia/db.py`, imported in `settings.py`. DB name defaults to `ams`.
+- **All secrets** (`DJANGO_SECRET_KEY`, `DB_PASSWORD`, etc.) live in `.env` — never commit it.
 - **Localization**: `LANGUAGE_CODE = 'es-co'`, `TIME_ZONE = 'America/Bogota'`
 - **No test suite** — all `tests.py` files are empty stubs. No pytest, no CI.
 
